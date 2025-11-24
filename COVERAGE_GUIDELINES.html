@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Guide de Couverture de Tests - Project8 - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Guide de Couverture de Tests - Project8"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#vue-d-ensemble">&#128203; Vue d&#8217;ensemble</a></li>
+<li><a class="reference internal" href="#seuils-de-couverture">&#127919; Seuils de Couverture</a><ul>
+<li><a class="reference internal" href="#couverture-globale">Couverture Globale</a></li>
+<li><a class="reference internal" href="#couverture-api-critique">Couverture API (Critique)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilisation">&#128640; Utilisation</a><ul>
+<li><a class="reference internal" href="#verifier-la-couverture-globale">1. V&#233;rifier la couverture globale</a></li>
+<li><a class="reference internal" href="#verifier-la-couverture-de-l-api">2. V&#233;rifier la couverture de l&#8217;API</a></li>
+<li><a class="reference internal" href="#utiliser-le-script-de-verification">3. Utiliser le script de v&#233;rification</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration">&#128295; Configuration</a><ul>
+<li><a class="reference internal" href="#pyproject-toml">pyproject.toml</a></li>
+<li><a class="reference internal" href="#github-workflows-cicd-yml">.github/workflows/cicd.yml</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bonnes-pratiques">&#127891; Bonnes Pratiques</a><ul>
+<li><a class="reference internal" href="#avant-de-committer">1. Avant de Committer</a></li>
+<li><a class="reference internal" href="#installation-du-pre-commit-hook-recommande">2. Installation du Pre-commit Hook (Recommand&#233;)</a></li>
+<li><a class="reference internal" href="#lors-d-une-pull-request">3. Lors d&#8217;une Pull Request</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#interpreter-les-resultats">&#128202; Interpr&#233;ter les R&#233;sultats</a><ul>
+<li><a class="reference internal" href="#exemple-de-rapport-console">Exemple de Rapport Console</a></li>
+<li><a class="reference internal" href="#fichiers-avec-faible-couverture">Fichiers avec Faible Couverture</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ajouter-des-tests">&#128736;&#65039; Ajouter des Tests</a><ul>
+<li><a class="reference internal" href="#exemple-augmenter-la-couverture-de-middleware-py">Exemple : Augmenter la couverture de <code class="docutils literal notranslate">py</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exclusions-de-couverture">&#128221; Exclusions de Couverture</a><ul>
+<li><a class="reference internal" href="#lignes-a-exclure">Lignes &#224; Exclure</a></li>
+<li><a class="reference internal" href="#blocs-a-exclure">Blocs &#224; Exclure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#que-faire-si-le-ci-cd-echoue">&#128680; Que Faire si le CI/CD &#201;choue ?</a><ul>
+<li><a class="reference internal" href="#erreur-couverture-insuffisante">Erreur : &#8220;Couverture insuffisante&#8221;</a></li>
+<li><a class="reference internal" href="#erreur-tests-echoues">Erreur : &#8220;Tests &#233;chou&#233;s&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#objectifs-de-couverture">&#128200; Objectifs de Couverture</a><ul>
+<li><a class="reference internal" href="#court-terme">Court Terme</a></li>
+<li><a class="reference internal" href="#moyen-terme">Moyen Terme</a></li>
+<li><a class="reference internal" href="#long-terme">Long Terme</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ressources">&#128279; Ressources</a></li>
+<li><a class="reference internal" href="#conseils">&#128161; Conseils</a><ul>
+<li><a class="reference internal" href="#test-driven-development-tdd">1. Test-Driven Development (TDD)</a></li>
+<li><a class="reference internal" href="#tests-unitaires-vs-tests-d-integration">2. Tests Unitaires vs Tests d&#8217;Int&#233;gration</a></li>
+<li><a class="reference internal" href="#mock-et-fixtures">3. Mock et Fixtures</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#support">&#128222; Support</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Guide de Couverture de Tests - Project8</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="guide-de-couverture-de-tests-project8">
+<h1>Guide de Couverture de Tests - Project8<a class="headerlink" href="#guide-de-couverture-de-tests-project8" title="Link to this heading">¶</a></h1>
+<section id="vue-d-ensemble">
+<h2>📋 Vue d’ensemble<a class="headerlink" href="#vue-d-ensemble" title="Link to this heading">¶</a></h2>
+<p>Ce projet implémente un contrôle automatique de la couverture de tests pour garantir la qualité du code, particulièrement pour l’API qui est le composant critique du système.</p>
+</section>
+<section id="seuils-de-couverture">
+<h2>🎯 Seuils de Couverture<a class="headerlink" href="#seuils-de-couverture" title="Link to this heading">¶</a></h2>
+<section id="couverture-globale">
+<h3>Couverture Globale<a class="headerlink" href="#couverture-globale" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Seuil minimum</strong>: 80%</p></li>
+<li><p><strong>Scope</strong>: Tous les modules (<code class="docutils literal notranslate"><span class="pre">src/</span></code>)</p></li>
+<li><p><strong>Commande</strong>: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test-coverage</span></code></p></li>
+</ul>
+</section>
+<section id="couverture-api-critique">
+<h3>Couverture API (Critique)<a class="headerlink" href="#couverture-api-critique" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Seuil minimum</strong>: 85%</p></li>
+<li><p><strong>Scope</strong>: Module API uniquement (<code class="docutils literal notranslate"><span class="pre">src/api/</span></code>)</p></li>
+<li><p><strong>Commande</strong>: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test-api-coverage</span></code></p></li>
+<li><p><strong>Raison</strong>: L’API est le composant le plus critique et doit être rigoureusement testée</p></li>
+</ul>
+</section>
+</section>
+<section id="utilisation">
+<h2>🚀 Utilisation<a class="headerlink" href="#utilisation" title="Link to this heading">¶</a></h2>
+<section id="verifier-la-couverture-globale">
+<h3>1. Vérifier la couverture globale<a class="headerlink" href="#verifier-la-couverture-globale" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Lance tous les tests avec rapport de couverture</span>
+</span><span data-line="2">make<span class="w"> </span>test-coverage
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Ouvrir le rapport HTML</span>
+</span><span data-line="5">open<span class="w"> </span>htmlcov/index.html
+</span></pre></div>
+</div>
+</section>
+<section id="verifier-la-couverture-de-l-api">
+<h3>2. Vérifier la couverture de l’API<a class="headerlink" href="#verifier-la-couverture-de-l-api" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Lance les tests API avec vérification stricte (≥85%)</span>
+</span><span data-line="2">make<span class="w"> </span>test-api-coverage
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Ouvrir le rapport HTML spécifique à l&#39;API</span>
+</span><span data-line="5">open<span class="w"> </span>htmlcov-api/index.html
+</span></pre></div>
+</div>
+</section>
+<section id="utiliser-le-script-de-verification">
+<h3>3. Utiliser le script de vérification<a class="headerlink" href="#utiliser-le-script-de-verification" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vérification avec seuil par défaut (85%)</span>
+</span><span data-line="2">python<span class="w"> </span>scripts/check_api_coverage.py
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Vérification avec seuil personnalisé</span>
+</span><span data-line="5">python<span class="w"> </span>scripts/check_api_coverage.py<span class="w"> </span>--min-coverage<span class="w"> </span><span class="m">90</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Mode strict (échoue immédiatement)</span>
+</span><span data-line="8">python<span class="w"> </span>scripts/check_api_coverage.py<span class="w"> </span>--strict
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="configuration">
+<h2>🔧 Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
+<section id="pyproject-toml">
+<h3>pyproject.toml<a class="headerlink" href="#pyproject-toml" title="Link to this heading">¶</a></h3>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">[tool.coverage.run]</span>
+</span><span data-line="2"><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">]</span>
+</span><span data-line="3"><span class="n">omit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+</span><span data-line="4"><span class="w">    </span><span class="s2">&quot;src/ui/*&quot;</span><span class="p">,</span><span class="w">              </span><span class="c1"># UI Gradio exclue</span>
+</span><span data-line="5"><span class="w">    </span><span class="s2">&quot;src/simulator/*&quot;</span><span class="p">,</span><span class="w">       </span><span class="c1"># Simulateur exclu</span>
+</span><span data-line="6"><span class="w">    </span><span class="s2">&quot;src/logs_pipeline/*&quot;</span><span class="p">,</span><span class="w">   </span><span class="c1"># Pipeline logs exclu</span>
+</span><span data-line="7"><span class="p">]</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="k">[tool.coverage.report]</span>
+</span><span data-line="10"><span class="n">fail_under</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">80</span><span class="w">              </span><span class="c1"># Seuil global</span>
+</span><span data-line="11"><span class="n">show_missing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">          </span><span class="c1"># Afficher les lignes manquantes</span>
+</span><span data-line="12"><span class="n">precision</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w">                </span><span class="c1"># Précision à 2 décimales</span>
+</span></pre></div>
+</div>
+</section>
+<section id="github-workflows-cicd-yml">
+<h3>.github/workflows/cicd.yml<a class="headerlink" href="#github-workflows-cicd-yml" title="Link to this heading">¶</a></h3>
+<p>Le workflow CI/CD inclut plusieurs étapes de vérification :</p>
+<ol class="arabic simple">
+<li><p><strong>Tests globaux</strong> avec couverture ≥80%</p></li>
+<li><p><strong>Tests API</strong> avec couverture ≥85%</p></li>
+<li><p><strong>Upload vers Codecov</strong> (optionnel)</p></li>
+<li><p><strong>Affichage du résumé</strong> dans les logs</p></li>
+</ol>
+</section>
+</section>
+<section id="bonnes-pratiques">
+<h2>🎓 Bonnes Pratiques<a class="headerlink" href="#bonnes-pratiques" title="Link to this heading">¶</a></h2>
+<section id="avant-de-committer">
+<h3>1. Avant de Committer<a class="headerlink" href="#avant-de-committer" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vérifier que tous les tests passent</span>
+</span><span data-line="2">make<span class="w"> </span><span class="nb">test</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Vérifier la couverture globale</span>
+</span><span data-line="5">make<span class="w"> </span>test-coverage
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Vérifier la couverture API si vous avez modifié src/api/</span>
+</span><span data-line="8">make<span class="w"> </span>test-api-coverage
+</span></pre></div>
+</div>
+</section>
+<section id="installation-du-pre-commit-hook-recommande">
+<h3>2. Installation du Pre-commit Hook (Recommandé)<a class="headerlink" href="#installation-du-pre-commit-hook-recommande" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Installer pre-commit</span>
+</span><span data-line="2">pip<span class="w"> </span>install<span class="w"> </span>pre-commit
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Installer les hooks</span>
+</span><span data-line="5">pre-commit<span class="w"> </span>install
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Tester manuellement</span>
+</span><span data-line="8">pre-commit<span class="w"> </span>run<span class="w"> </span>--all-files
+</span></pre></div>
+</div>
+<p>Avec le hook installé, la couverture sera vérifiée <strong>automatiquement</strong> avant chaque commit.</p>
+</section>
+<section id="lors-d-une-pull-request">
+<h3>3. Lors d’une Pull Request<a class="headerlink" href="#lors-d-une-pull-request" title="Link to this heading">¶</a></h3>
+<p>Le CI/CD vérifiera automatiquement :</p>
+<ul class="simple">
+<li><p>✅ Tous les tests passent</p></li>
+<li><p>✅ Couverture globale ≥ 80%</p></li>
+<li><p>✅ Couverture API ≥ 85%</p></li>
+<li><p>✅ Flake8 compliance</p></li>
+<li><p>✅ Aucun test manquant</p></li>
+</ul>
+</section>
+</section>
+<section id="interpreter-les-resultats">
+<h2>📊 Interpréter les Résultats<a class="headerlink" href="#interpreter-les-resultats" title="Link to this heading">¶</a></h2>
+<section id="exemple-de-rapport-console">
+<h3>Exemple de Rapport Console<a class="headerlink" href="#exemple-de-rapport-console" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">=================================================
+</span><span data-line="2">📈 Résumé de la couverture de l&#39;API
+</span><span data-line="3">=================================================
+</span><span data-line="4">Couverture totale API: 87.42%
+</span><span data-line="5">
+</span><span data-line="6">Détail par fichier:
+</span><span data-line="7">  main.py: 92.15%
+</span><span data-line="8">  __init__.py: 100.00%
+</span><span data-line="9">  routes.py: 85.30%
+</span><span data-line="10">  middleware.py: 82.45%  ⚠️ (&lt; 85%)
+</span><span data-line="11">=================================================
+</span></pre></div>
+</div>
+</section>
+<section id="fichiers-avec-faible-couverture">
+<h3>Fichiers avec Faible Couverture<a class="headerlink" href="#fichiers-avec-faible-couverture" title="Link to this heading">¶</a></h3>
+<p>Si un fichier a une couverture &lt; 85%, vous verrez :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">⚠️  FICHIERS AVEC COUVERTURE INSUFFISANTE:
+</span><span data-line="2">------------------------------------------------------------
+</span><span data-line="3">  • middleware.py: 82.45% (manque 2.55%)
+</span><span data-line="4">------------------------------------------------------------
+</span></pre></div>
+</div>
+<p><strong>Action requise</strong> : Ajouter des tests pour <code class="docutils literal notranslate"><span class="pre">middleware.py</span></code></p>
+</section>
+</section>
+<section id="ajouter-des-tests">
+<h2>🛠️ Ajouter des Tests<a class="headerlink" href="#ajouter-des-tests" title="Link to this heading">¶</a></h2>
+<section id="exemple-augmenter-la-couverture-de-middleware-py">
+<h3>Exemple : Augmenter la couverture de <code class="docutils literal notranslate"><span class="pre">middleware.py</span></code><a class="headerlink" href="#exemple-augmenter-la-couverture-de-middleware-py" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p><strong>Identifier les lignes non couvertes</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>test-api-coverage
+</span><span data-line="2"><span class="c1"># Ouvrir htmlcov-api/index.html</span>
+</span><span data-line="3"><span class="c1"># Cliquer sur middleware.py</span>
+</span><span data-line="4"><span class="c1"># Les lignes rouges ne sont pas testées</span>
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Créer ou compléter le fichier de test</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># tests/test_middleware.py</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">def</span><span class="w"> </span><span class="nf">test_middleware_fonction_non_testée</span><span class="p">():</span>
+</span><span data-line="4"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Test de la fonction précédemment non couverte.&quot;&quot;&quot;</span>
+</span><span data-line="5">    <span class="c1"># Arrange</span>
+</span><span data-line="6">    <span class="o">...</span>
+</span><span data-line="7">    <span class="c1"># Act</span>
+</span><span data-line="8">    <span class="o">...</span>
+</span><span data-line="9">    <span class="c1"># Assert</span>
+</span><span data-line="10">    <span class="o">...</span>
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Vérifier l’amélioration</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>test-api-coverage
+</span><span data-line="2"><span class="c1"># La couverture de middleware.py devrait augmenter</span>
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<section id="exclusions-de-couverture">
+<h2>📝 Exclusions de Couverture<a class="headerlink" href="#exclusions-de-couverture" title="Link to this heading">¶</a></h2>
+<section id="lignes-a-exclure">
+<h3>Lignes à Exclure<a class="headerlink" href="#lignes-a-exclure" title="Link to this heading">¶</a></h3>
+<p>Utilisez <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">pragma:</span> <span class="pre">no</span> <span class="pre">cover</span></code> pour exclure des lignes :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">def</span><span class="w"> </span><span class="nf">fonction_debug</span><span class="p">():</span>  <span class="c1"># pragma: no cover</span>
+</span><span data-line="2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Fonction de debug non testée.&quot;&quot;&quot;</span>
+</span><span data-line="3">    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Debug info&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="blocs-a-exclure">
+<h3>Blocs à Exclure<a class="headerlink" href="#blocs-a-exclure" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+</span><span data-line="2">    <span class="c1"># Code de point d&#39;entrée non testé</span>
+</span><span data-line="3">    <span class="n">main</span><span class="p">()</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="que-faire-si-le-ci-cd-echoue">
+<h2>🚨 Que Faire si le CI/CD Échoue ?<a class="headerlink" href="#que-faire-si-le-ci-cd-echoue" title="Link to this heading">¶</a></h2>
+<section id="erreur-couverture-insuffisante">
+<h3>Erreur : “Couverture insuffisante”<a class="headerlink" href="#erreur-couverture-insuffisante" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">❌ Tests API échoués ou couverture &lt; 85%
+</span></pre></div>
+</div>
+<p><strong>Solution</strong> :</p>
+<ol class="arabic simple">
+<li><p>Exécuter localement <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test-api-coverage</span></code></p></li>
+<li><p>Identifier les fichiers avec faible couverture</p></li>
+<li><p>Ajouter des tests pour ces fichiers</p></li>
+<li><p>Relancer <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test-api-coverage</span></code></p></li>
+<li><p>Committer les nouveaux tests</p></li>
+</ol>
+</section>
+<section id="erreur-tests-echoues">
+<h3>Erreur : “Tests échoués”<a class="headerlink" href="#erreur-tests-echoues" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">❌ Tests échoués
+</span></pre></div>
+</div>
+<p><strong>Solution</strong> :</p>
+<ol class="arabic simple">
+<li><p>Exécuter localement <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code></p></li>
+<li><p>Corriger les tests qui échouent</p></li>
+<li><p>Vérifier que les changements n’ont pas cassé d’anciens tests</p></li>
+<li><p>Relancer <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code></p></li>
+<li><p>Committer les corrections</p></li>
+</ol>
+</section>
+</section>
+<section id="objectifs-de-couverture">
+<h2>📈 Objectifs de Couverture<a class="headerlink" href="#objectifs-de-couverture" title="Link to this heading">¶</a></h2>
+<section id="court-terme">
+<h3>Court Terme<a class="headerlink" href="#court-terme" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>✅ Couverture globale : 80%</p></li>
+<li><p>✅ Couverture API : 85%</p></li>
+</ul>
+</section>
+<section id="moyen-terme">
+<h3>Moyen Terme<a class="headerlink" href="#moyen-terme" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>🎯 Couverture globale : 85%</p></li>
+<li><p>🎯 Couverture API : 90%</p></li>
+</ul>
+</section>
+<section id="long-terme">
+<h3>Long Terme<a class="headerlink" href="#long-terme" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>🚀 Couverture globale : 90%</p></li>
+<li><p>🚀 Couverture API : 95%</p></li>
+</ul>
+</section>
+</section>
+<section id="ressources">
+<h2>🔗 Ressources<a class="headerlink" href="#ressources" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pytest-cov.readthedocs.io/">pytest-cov documentation</a></p></li>
+<li><p><a class="reference external" href="https://coverage.readthedocs.io/">Coverage.py documentation</a></p></li>
+<li><p><a class="reference external" href="https://pre-commit.com/">pre-commit documentation</a></p></li>
+</ul>
+</section>
+<section id="conseils">
+<h2>💡 Conseils<a class="headerlink" href="#conseils" title="Link to this heading">¶</a></h2>
+<section id="test-driven-development-tdd">
+<h3>1. Test-Driven Development (TDD)<a class="headerlink" href="#test-driven-development-tdd" title="Link to this heading">¶</a></h3>
+<p>Écrivez les tests <strong>avant</strong> le code :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># 1. Créer le test (qui échoue)</span>
+</span><span data-line="2"><span class="c1"># 2. Écrire le code (le test passe)</span>
+</span><span data-line="3"><span class="c1"># 3. Vérifier la couverture</span>
+</span><span data-line="4">make<span class="w"> </span>test-api-coverage
+</span></pre></div>
+</div>
+</section>
+<section id="tests-unitaires-vs-tests-d-integration">
+<h3>2. Tests Unitaires vs Tests d’Intégration<a class="headerlink" href="#tests-unitaires-vs-tests-d-integration" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Tests unitaires</strong> : Testent une fonction/classe isolée</p></li>
+<li><p><strong>Tests d’intégration</strong> : Testent plusieurs composants ensemble</p></li>
+</ul>
+<p>Privilégiez les tests unitaires pour augmenter rapidement la couverture.</p>
+</section>
+<section id="mock-et-fixtures">
+<h3>3. Mock et Fixtures<a class="headerlink" href="#mock-et-fixtures" title="Link to this heading">¶</a></h3>
+<p>Utilisez <code class="docutils literal notranslate"><span class="pre">pytest</span></code> fixtures et <code class="docutils literal notranslate"><span class="pre">unittest.mock</span></code> pour isoler les tests :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">unittest.mock</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mock</span><span class="p">,</span> <span class="n">patch</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="nd">@patch</span><span class="p">(</span><span class="s1">&#39;src.api.main.get_redis_client&#39;</span><span class="p">)</span>
+</span><span data-line="4"><span class="k">def</span><span class="w"> </span><span class="nf">test_api_endpoint</span><span class="p">(</span><span class="n">mock_redis</span><span class="p">):</span>
+</span><span data-line="5">    <span class="n">mock_redis</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+</span><span data-line="6">    <span class="c1"># Test isolé sans dépendance Redis réelle</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="support">
+<h2>📞 Support<a class="headerlink" href="#support" title="Link to this heading">¶</a></h2>
+<p>Si vous rencontrez des problèmes avec la couverture :</p>
+<ol class="arabic simple">
+<li><p>Vérifiez les logs du CI/CD</p></li>
+<li><p>Exécutez <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test-api-coverage</span></code> localement</p></li>
+<li><p>Consultez le rapport HTML pour les détails</p></li>
+<li><p>Demandez de l’aide à l’équipe</p></li>
+</ol>
+<hr class="docutils" />
+<p><strong>Dernière mise à jour</strong> : 2025-01-21
+<strong>Mainteneur</strong> : Project8 Team</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

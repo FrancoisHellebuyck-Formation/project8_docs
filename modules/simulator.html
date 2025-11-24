@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Simulator Module - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Logs Pipeline Module" href="logs_pipeline.html" /><link rel="prev" title="UI Module" href="ui.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Simulator Module"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ui.html">UI Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#documentation-du-module">Documentation du module</a><ul>
+<li><a class="reference internal" href="#simulateur-d-utilisateurs-api-de-prediction-ml">Simulateur d&#8217;Utilisateurs - API de Pr&#233;diction ML</a><ul>
+<li><a class="reference internal" href="#fonctionnalites">&#127919; Fonctionnalit&#233;s</a></li>
+<li><a class="reference internal" href="#prerequis">&#128203; Pr&#233;requis</a></li>
+<li><a class="reference internal" href="#configuration">&#9881;&#65039; Configuration</a><ul>
+<li><a class="reference internal" href="#variables-d-environnement-disponibles">Variables d&#8217;environnement disponibles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">&#128640; Usage</a><ul>
+<li><a class="reference internal" href="#mode-fastapi-par-defaut">Mode FastAPI (par d&#233;faut)</a></li>
+<li><a class="reference internal" href="#mode-gradio">&#128268; Mode Gradio</a></li>
+<li><a class="reference internal" href="#mode-gradio-avec-data-drift">&#128268;&#128260; Mode Gradio avec Data Drift</a></li>
+<li><a class="reference internal" href="#simulation-de-data-drift">&#128260; Simulation de Data Drift</a></li>
+<li><a class="reference internal" href="#options-disponibles">Options disponibles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exemple-de-sortie">&#128202; Exemple de sortie</a></li>
+<li><a class="reference internal" href="#usage-programmatique">&#128295; Usage programmatique</a><ul>
+<li><a class="reference internal" href="#mode-fastapi">Mode FastAPI</a></li>
+<li><a class="reference internal" href="#id1">Mode Gradio</a></li>
+<li><a class="reference internal" href="#utilisation-asynchrone-fastapi-uniquement">Utilisation asynchrone (FastAPI uniquement)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cas-d-usage">&#128200; Cas d&#8217;usage</a><ul>
+<li><a class="reference internal" href="#mode-fastapi-local">Mode FastAPI (local)</a><ul>
+<li><a class="reference internal" href="#test-de-charge-basique">1. Test de charge basique</a></li>
+<li><a class="reference internal" href="#test-de-performance">2. Test de performance</a></li>
+<li><a class="reference internal" href="#test-de-stress">3. Test de stress</a></li>
+<li><a class="reference internal" href="#test-de-stabilite">4. Test de stabilit&#233;</a></li>
+<li><a class="reference internal" href="#comparaison-des-endpoints">5. Comparaison des endpoints</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mode-gradio-production">Mode Gradio (production)</a><ul>
+<li><a class="reference internal" href="#test-de-production-huggingface-spaces">6. Test de production HuggingFace Spaces</a></li>
+<li><a class="reference internal" href="#test-de-robustesse-avec-drift">7. Test de robustesse avec drift</a></li>
+<li><a class="reference internal" href="#validation-de-deploiement">8. Validation de d&#233;ploiement</a></li>
+<li><a class="reference internal" href="#comparaison-local-vs-production">9. Comparaison local vs production</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tests-avec-l-api-locale">&#129514; Tests avec l&#8217;API locale</a></li>
+<li><a class="reference internal" href="#metriques-collectees">&#128202; M&#233;triques collect&#233;es</a></li>
+<li><a class="reference internal" href="#donnees-generees">&#127912; Donn&#233;es g&#233;n&#233;r&#233;es</a></li>
+<li><a class="reference internal" href="#notes-importantes">&#9888;&#65039; Notes importantes</a></li>
+<li><a class="reference internal" href="#depannage">&#128027; D&#233;pannage</a><ul>
+<li><a class="reference internal" href="#l-api-ne-repond-pas">L&#8217;API ne r&#233;pond pas</a></li>
+<li><a class="reference internal" href="#trop-d-erreurs-de-timeout">Trop d&#8217;erreurs de timeout</a></li>
+<li><a class="reference internal" href="#erreurs-de-connexion">Erreurs de connexion</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ressources">&#128218; Ressources</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api-reference">API Reference</a><ul>
+<li><a class="reference internal" href="#module-src.simulator.simulator">Simulator</a><ul>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig"><code class="docutils literal notranslate"><span class="pre">SimulationConfig</span></code></a><ul>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.api_url"><code class="docutils literal notranslate">api_url</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.num_requests"><code class="docutils literal notranslate">num_requests</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.concurrent_users"><code class="docutils literal notranslate">concurrent_users</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.delay_between_requests"><code class="docutils literal notranslate">delay_between_requests</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.timeout"><code class="docutils literal notranslate">timeout</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.endpoint"><code class="docutils literal notranslate">endpoint</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.verbose"><code class="docutils literal notranslate">verbose</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.use_gradio"><code class="docutils literal notranslate">use_gradio</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.gradio_url"><code class="docutils literal notranslate">gradio_url</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.hf_token"><code class="docutils literal notranslate">hf_token</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.enable_age_drift"><code class="docutils literal notranslate">enable_age_drift</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.age_drift_target_mean"><code class="docutils literal notranslate">age_drift_target_mean</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.age_drift_start_pct"><code class="docutils literal notranslate">age_drift_start_pct</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.age_drift_end_pct"><code class="docutils literal notranslate">age_drift_end_pct</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.Config"><code class="docutils literal notranslate">Config</span></code></a><ul>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.Config.arbitrary_types_allowed"><code class="docutils literal notranslate">Config.arbitrary_types_allowed</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationConfig.model_config"><code class="docutils literal notranslate">model_config</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult"><code class="docutils literal notranslate"><span class="pre">SimulationResult</span></code></a><ul>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult.total_requests"><code class="docutils literal notranslate">total_requests</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult.successful_requests"><code class="docutils literal notranslate">successful_requests</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult.failed_requests"><code class="docutils literal notranslate">failed_requests</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult.total_duration"><code class="docutils literal notranslate">total_duration</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult.avg_response_time"><code class="docutils literal notranslate">avg_response_time</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult.min_response_time"><code class="docutils literal notranslate">min_response_time</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult.max_response_time"><code class="docutils literal notranslate">max_response_time</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult.requests_per_second"><code class="docutils literal notranslate">requests_per_second</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult.response_times"><code class="docutils literal notranslate">response_times</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult.errors"><code class="docutils literal notranslate">errors</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult.status_codes"><code class="docutils literal notranslate">status_codes</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult.__str__"><code class="docutils literal notranslate">__str__()</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.SimulationResult.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#src.simulator.simulator.UserSimulator"><code class="docutils literal notranslate"><span class="pre">UserSimulator</span></code></a><ul>
+<li><a class="reference internal" href="#src.simulator.simulator.UserSimulator.__init__"><code class="docutils literal notranslate">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.UserSimulator.generate_patient_data"><code class="docutils literal notranslate">generate_patient_data()</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.UserSimulator.send_request_gradio"><code class="docutils literal notranslate">send_request_gradio()</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.UserSimulator.send_request"><code class="docutils literal notranslate">send_request()</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.UserSimulator.run_batch"><code class="docutils literal notranslate">run_batch()</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.UserSimulator.run_batch_gradio"><code class="docutils literal notranslate">run_batch_gradio()</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.UserSimulator.run_simulation_gradio"><code class="docutils literal notranslate">run_simulation_gradio()</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.UserSimulator.run_simulation"><code class="docutils literal notranslate">run_simulation()</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.simulator.UserSimulator.run"><code class="docutils literal notranslate">run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-src.simulator.drift_analyzer">Drift Analyzer</a><ul>
+<li><a class="reference internal" href="#src.simulator.drift_analyzer.analyze_age_drift"><code class="docutils literal notranslate"><span class="pre">analyze_age_drift()</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.drift_analyzer.print_age_statistics"><code class="docutils literal notranslate"><span class="pre">print_age_statistics()</span></code></a></li>
+<li><a class="reference internal" href="#src.simulator.drift_analyzer.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Simulator Module</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="simulator-module">
+<h1>Simulator Module<a class="headerlink" href="#simulator-module" title="Link to this heading">¶</a></h1>
+<p>Module de simulation de charge et de data drift.</p>
+<section id="documentation-du-module">
+<h2>Documentation du module<a class="headerlink" href="#documentation-du-module" title="Link to this heading">¶</a></h2>
+<section id="simulateur-d-utilisateurs-api-de-prediction-ml">
+<h3>Simulateur d’Utilisateurs - API de Prédiction ML<a class="headerlink" href="#simulateur-d-utilisateurs-api-de-prediction-ml" title="Link to this heading">¶</a></h3>
+<p>Outil de simulation de charge pour tester les performances et la robustesse de l’API FastAPI et Gradio.</p>
+<section id="fonctionnalites">
+<h4>🎯 Fonctionnalités<a class="headerlink" href="#fonctionnalites" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Génération de données aléatoires</strong> : Crée automatiquement des données de patients valides</p></li>
+<li><p><strong>Requêtes concurrentes</strong> : Simule plusieurs utilisateurs simultanés</p></li>
+<li><p><strong>Métriques détaillées</strong> : Temps de réponse, taux de succès, requêtes/seconde</p></li>
+<li><p><strong>Modes de test</strong> : <code class="docutils literal notranslate"><span class="pre">/predict</span></code> et <code class="docutils literal notranslate"><span class="pre">/predict_proba</span></code></p></li>
+<li><p><strong>Configuration flexible</strong> : Paramètres personnalisables via CLI</p></li>
+<li><p><strong>Rapports visuels</strong> : Affichage formaté des résultats</p></li>
+<li><p><strong>🆕 Simulation de data drift</strong> : Génère un drift progressif sur l’âge des patients pour tester la robustesse du modèle</p></li>
+<li><p><strong>🔌 Mode Gradio</strong> : Supporte les API Gradio (local et HuggingFace Spaces)</p></li>
+</ul>
+</section>
+<section id="prerequis">
+<h4>📋 Prérequis<a class="headerlink" href="#prerequis" title="Link to this heading">¶</a></h4>
+<p>Le simulateur utilise :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">httpx</span></code> pour les requêtes HTTP asynchrones (mode FastAPI)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gradio_client</span></code> pour les requêtes Gradio (mode Gradio)</p></li>
+</ul>
+<p>Ces dépendances sont déjà incluses dans le projet.</p>
+</section>
+<section id="configuration">
+<h4>⚙️ Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h4>
+<p>Le simulateur peut être configuré via des variables d’environnement dans le fichier <code class="docutils literal notranslate"><span class="pre">.env</span></code>. Les valeurs par défaut peuvent être modifiées sans avoir à spécifier les arguments en ligne de commande.</p>
+<section id="variables-d-environnement-disponibles">
+<h5>Variables d’environnement disponibles<a class="headerlink" href="#variables-d-environnement-disponibles" title="Link to this heading">¶</a></h5>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Configuration du Simulateur</span>
+</span><span data-line="2"><span class="nv">SIMULATOR_API_URL</span><span class="o">=</span>http://localhost:8000<span class="w">      </span><span class="c1"># URL de l&#39;API</span>
+</span><span data-line="3"><span class="nv">SIMULATOR_NUM_REQUESTS</span><span class="o">=</span><span class="m">100</span><span class="w">                    </span><span class="c1"># Nombre de requêtes</span>
+</span><span data-line="4"><span class="nv">SIMULATOR_CONCURRENT_USERS</span><span class="o">=</span><span class="m">10</span><span class="w">                 </span><span class="c1"># Utilisateurs concurrents</span>
+</span><span data-line="5"><span class="nv">SIMULATOR_DELAY</span><span class="o">=</span><span class="m">0</span>.0<span class="w">                           </span><span class="c1"># Délai entre requêtes (s)</span>
+</span><span data-line="6"><span class="nv">SIMULATOR_TIMEOUT</span><span class="o">=</span><span class="m">30</span>.0<span class="w">                        </span><span class="c1"># Timeout par requête (s)</span>
+</span><span data-line="7"><span class="nv">SIMULATOR_ENDPOINT</span><span class="o">=</span>/predict<span class="w">                   </span><span class="c1"># Endpoint à tester</span>
+</span><span data-line="8"><span class="nv">SIMULATOR_VERBOSE</span><span class="o">=</span><span class="nb">false</span><span class="w">                       </span><span class="c1"># Mode verbeux</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Configuration du Data Drift</span>
+</span><span data-line="11"><span class="nv">SIMULATOR_ENABLE_AGE_DRIFT</span><span class="o">=</span><span class="nb">false</span><span class="w">              </span><span class="c1"># Activer le drift</span>
+</span><span data-line="12"><span class="nv">SIMULATOR_AGE_DRIFT_TARGET</span><span class="o">=</span><span class="m">70</span>.0<span class="w">               </span><span class="c1"># Âge cible du drift</span>
+</span><span data-line="13"><span class="nv">SIMULATOR_AGE_DRIFT_START</span><span class="o">=</span><span class="m">0</span>.0<span class="w">                 </span><span class="c1"># Début du drift (%)</span>
+</span><span data-line="14"><span class="nv">SIMULATOR_AGE_DRIFT_END</span><span class="o">=</span><span class="m">100</span>.0<span class="w">                 </span><span class="c1"># Fin du drift (%)</span>
+</span></pre></div>
+</div>
+<p><strong>Note</strong> : Les arguments de la ligne de commande ont priorité sur les variables d’environnement.</p>
+</section>
+</section>
+<section id="usage">
+<h4>🚀 Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h4>
+<section id="mode-fastapi-par-defaut">
+<h5>Mode FastAPI (par défaut)<a class="headerlink" href="#mode-fastapi-par-defaut" title="Link to this heading">¶</a></h5>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Simulation avec la configuration du .env</span>
+</span><span data-line="2">python<span class="w"> </span>-m<span class="w"> </span>src.simulator
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Ou utiliser la commande Makefile</span>
+</span><span data-line="5">make<span class="w"> </span>simulate
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Spécifier le nombre de requêtes et d&#39;utilisateurs (override .env)</span>
+</span><span data-line="8">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--requests<span class="w"> </span><span class="m">200</span><span class="w"> </span>--users<span class="w"> </span><span class="m">20</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Version courte</span>
+</span><span data-line="11">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">500</span><span class="w"> </span>-u<span class="w"> </span><span class="m">50</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1"># API distante</span>
+</span><span data-line="14">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--url<span class="w"> </span>http://api.example.com:8000<span class="w"> </span>-r<span class="w"> </span><span class="m">100</span><span class="w"> </span>-u<span class="w"> </span><span class="m">10</span>
+</span><span data-line="15">
+</span><span data-line="16"><span class="c1"># Avec délai entre les requêtes (en secondes)</span>
+</span><span data-line="17">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">100</span><span class="w"> </span>-u<span class="w"> </span><span class="m">10</span><span class="w"> </span>--delay<span class="w"> </span><span class="m">0</span>.1
+</span><span data-line="18">
+</span><span data-line="19"><span class="c1"># Tester l&#39;endpoint predict_proba</span>
+</span><span data-line="20">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--endpoint<span class="w"> </span>/predict_proba<span class="w"> </span>-r<span class="w"> </span><span class="m">50</span><span class="w"> </span>-u<span class="w"> </span><span class="m">5</span>
+</span><span data-line="21">
+</span><span data-line="22"><span class="c1"># Mode verbose (affiche chaque requête)</span>
+</span><span data-line="23">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">50</span><span class="w"> </span>-u<span class="w"> </span><span class="m">5</span><span class="w"> </span>-v
+</span><span data-line="24">
+</span><span data-line="25"><span class="c1"># Test de charge intensif</span>
+</span><span data-line="26">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">1000</span><span class="w"> </span>-u<span class="w"> </span><span class="m">100</span><span class="w"> </span>--timeout<span class="w"> </span><span class="m">60</span>
+</span></pre></div>
+</div>
+</section>
+<section id="mode-gradio">
+<h5>🔌 Mode Gradio<a class="headerlink" href="#mode-gradio" title="Link to this heading">¶</a></h5>
+<p>Le simulateur peut cibler l’API Gradio au lieu de l’API FastAPI directe. Ce mode est compatible avec HuggingFace Spaces.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Simulation via Gradio en local</span>
+</span><span data-line="2">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--use-gradio<span class="w"> </span>--gradio-url<span class="w"> </span>http://localhost:7860<span class="w"> </span>-r<span class="w"> </span><span class="m">50</span><span class="w"> </span>-u<span class="w"> </span><span class="m">5</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Ou utiliser le Makefile</span>
+</span><span data-line="5">make<span class="w"> </span>simulate-gradio-local
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Simulation via HuggingFace Spaces (Space public)</span>
+</span><span data-line="8">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--use-gradio<span class="w"> </span><span class="se">\</span>
+</span><span data-line="9"><span class="w">    </span>--gradio-url<span class="w"> </span>https://francoisformation-oc-project8.hf.space<span class="w"> </span><span class="se">\</span>
+</span><span data-line="10"><span class="w">    </span>-r<span class="w"> </span><span class="m">50</span><span class="w"> </span>-u<span class="w"> </span><span class="m">5</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="c1"># Simulation via HuggingFace Spaces (Space privé avec token)</span>
+</span><span data-line="13">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--use-gradio<span class="w"> </span><span class="se">\</span>
+</span><span data-line="14"><span class="w">    </span>--gradio-url<span class="w"> </span>https://francoisformation-oc-project8.hf.space<span class="w"> </span><span class="se">\</span>
+</span><span data-line="15"><span class="w">    </span>--hf-token<span class="w"> </span>hf_xxxxxxxxxxxxxxxxxxxxx<span class="w"> </span><span class="se">\</span>
+</span><span data-line="16"><span class="w">    </span>-r<span class="w"> </span><span class="m">50</span><span class="w"> </span>-u<span class="w"> </span><span class="m">5</span>
+</span><span data-line="17">
+</span><span data-line="18"><span class="c1"># Ou utiliser le Makefile (charge automatiquement HF_TOKEN depuis .env)</span>
+</span><span data-line="19">make<span class="w"> </span>simulate-gradio-hf
+</span><span data-line="20">
+</span><span data-line="21"><span class="c1"># Mode verbose pour voir chaque requête Gradio</span>
+</span><span data-line="22">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--use-gradio<span class="w"> </span>--gradio-url<span class="w"> </span>http://localhost:7860<span class="w"> </span>-r<span class="w"> </span><span class="m">20</span><span class="w"> </span>-u<span class="w"> </span><span class="m">3</span><span class="w"> </span>-v
+</span></pre></div>
+</div>
+<p><strong>Notes sur le mode Gradio :</strong></p>
+<ul class="simple">
+<li><p>Le mode Gradio utilise <code class="docutils literal notranslate"><span class="pre">gradio_client</span></code> pour communiquer avec l’API Gradio</p></li>
+<li><p>Compatible avec HuggingFace Spaces (public et privé avec token)</p></li>
+<li><p>Les endpoints sont mappés automatiquement : <code class="docutils literal notranslate"><span class="pre">/predict</span></code> → <code class="docutils literal notranslate"><span class="pre">/predict_api</span></code>, <code class="docutils literal notranslate"><span class="pre">/predict_proba</span></code> → <code class="docutils literal notranslate"><span class="pre">/predict_proba_api</span></code></p></li>
+<li><p>Les requêtes sont exécutées de manière concurrente via <code class="docutils literal notranslate"><span class="pre">ThreadPoolExecutor</span></code></p></li>
+</ul>
+</section>
+<section id="mode-gradio-avec-data-drift">
+<h5>🔌🔄 Mode Gradio avec Data Drift<a class="headerlink" href="#mode-gradio-avec-data-drift" title="Link to this heading">¶</a></h5>
+<p>Vous pouvez combiner le mode Gradio avec la simulation de data drift pour tester la robustesse du modèle déployé sur HuggingFace Spaces.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Drift via Gradio local (vers 75 ans)</span>
+</span><span data-line="2">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--use-gradio<span class="w"> </span>--gradio-url<span class="w"> </span>http://localhost:7860<span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">    </span>-r<span class="w"> </span><span class="m">200</span><span class="w"> </span>-u<span class="w"> </span><span class="m">10</span><span class="w"> </span>--enable-age-drift<span class="w"> </span>--age-drift-target<span class="w"> </span><span class="m">75</span><span class="w"> </span>-v
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Ou utiliser le Makefile</span>
+</span><span data-line="6">make<span class="w"> </span>simulate-gradio-drift-local
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># Drift via HuggingFace Spaces (vers 75 ans)</span>
+</span><span data-line="9">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--use-gradio<span class="w"> </span><span class="se">\</span>
+</span><span data-line="10"><span class="w">    </span>--gradio-url<span class="w"> </span>https://francoisformation-oc-project8.hf.space<span class="w"> </span><span class="se">\</span>
+</span><span data-line="11"><span class="w">    </span>--hf-token<span class="w"> </span>hf_xxxxxxxxxxxxxxxxxxxxx<span class="w"> </span><span class="se">\</span>
+</span><span data-line="12"><span class="w">    </span>-r<span class="w"> </span><span class="m">200</span><span class="w"> </span>-u<span class="w"> </span><span class="m">10</span><span class="w"> </span>--enable-age-drift<span class="w"> </span>--age-drift-target<span class="w"> </span><span class="m">75</span><span class="w"> </span>-v
+</span><span data-line="13">
+</span><span data-line="14"><span class="c1"># Ou utiliser le Makefile (charge HF_TOKEN depuis .env)</span>
+</span><span data-line="15">make<span class="w"> </span>simulate-gradio-drift-hf
+</span><span data-line="16">
+</span><span data-line="17"><span class="c1"># Drift progressif via HuggingFace Spaces (50% à 100%)</span>
+</span><span data-line="18">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--use-gradio<span class="w"> </span><span class="se">\</span>
+</span><span data-line="19"><span class="w">    </span>--gradio-url<span class="w"> </span>https://francoisformation-oc-project8.hf.space<span class="w"> </span><span class="se">\</span>
+</span><span data-line="20"><span class="w">    </span>--hf-token<span class="w"> </span>hf_xxxxxxxxxxxxxxxxxxxxx<span class="w"> </span><span class="se">\</span>
+</span><span data-line="21"><span class="w">    </span>-r<span class="w"> </span><span class="m">300</span><span class="w"> </span>-u<span class="w"> </span><span class="m">15</span><span class="w"> </span>--enable-age-drift<span class="w"> </span><span class="se">\</span>
+</span><span data-line="22"><span class="w">    </span>--age-drift-target<span class="w"> </span><span class="m">80</span><span class="w"> </span>--age-drift-start<span class="w"> </span><span class="m">50</span><span class="w"> </span>--age-drift-end<span class="w"> </span><span class="m">100</span><span class="w"> </span>-v
+</span><span data-line="23">
+</span><span data-line="24"><span class="c1"># Ou utiliser le Makefile</span>
+</span><span data-line="25">make<span class="w"> </span>simulate-gradio-drift-progressive-hf
+</span></pre></div>
+</div>
+<p><strong>Cas d’usage :</strong></p>
+<ul class="simple">
+<li><p>Tester la robustesse du modèle en production (HF Spaces) face au data drift</p></li>
+<li><p>Valider que le modèle déployé gère bien les changements de distribution</p></li>
+<li><p>Comparer les performances du modèle en local vs déployé avec drift</p></li>
+</ul>
+</section>
+<section id="simulation-de-data-drift">
+<h5>🔄 Simulation de Data Drift<a class="headerlink" href="#simulation-de-data-drift" title="Link to this heading">¶</a></h5>
+<p>Le simulateur peut générer un data drift progressif sur l’âge des patients pour tester la robustesse du modèle face aux changements de distribution des données.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Activer le drift sur l&#39;âge (vers 75 ans)</span>
+</span><span data-line="2">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">200</span><span class="w"> </span>-u<span class="w"> </span><span class="m">10</span><span class="w"> </span>--enable-age-drift<span class="w"> </span>--age-drift-target<span class="w"> </span><span class="m">75</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Drift progressif entre 50% et 100% de la simulation</span>
+</span><span data-line="5">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">500</span><span class="w"> </span>-u<span class="w"> </span><span class="m">20</span><span class="w"> </span>--enable-age-drift<span class="w"> </span><span class="se">\</span>
+</span><span data-line="6"><span class="w">    </span>--age-drift-target<span class="w"> </span><span class="m">80</span><span class="w"> </span>--age-drift-start<span class="w"> </span><span class="m">50</span><span class="w"> </span>--age-drift-end<span class="w"> </span><span class="m">100</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># Drift immédiat vers une population âgée (85 ans)</span>
+</span><span data-line="9">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">300</span><span class="w"> </span>-u<span class="w"> </span><span class="m">15</span><span class="w"> </span>--enable-age-drift<span class="w"> </span>--age-drift-target<span class="w"> </span><span class="m">85</span>
+</span></pre></div>
+</div>
+<p><strong>Comment fonctionne le drift ?</strong></p>
+<p>Le drift évolue <strong>linéairement</strong> entre <code class="docutils literal notranslate"><span class="pre">--age-drift-start</span></code> et <code class="docutils literal notranslate"><span class="pre">--age-drift-end</span></code> :</p>
+<ul class="simple">
+<li><p><strong>Avant le début</strong> : Distribution uniforme normale (20-90 ans)</p></li>
+<li><p><strong>Pendant le drift</strong> : Transition progressive vers une distribution gaussienne centrée sur <code class="docutils literal notranslate"><span class="pre">--age-drift-target</span></code></p></li>
+<li><p><strong>Après la fin</strong> : Distribution gaussienne complète (moyenne = target, écart-type = 10)</p></li>
+</ul>
+<p><strong>Analyser le drift :</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Lancer l&#39;analyseur de drift</span>
+</span><span data-line="2">python<span class="w"> </span>-m<span class="w"> </span>src.simulator.drift_analyzer
+</span></pre></div>
+</div>
+<p>Cet outil affiche des statistiques par fenêtre pour visualiser l’évolution de l’âge moyen au cours de la simulation.</p>
+</section>
+<section id="options-disponibles">
+<h5>Options disponibles<a class="headerlink" href="#options-disponibles" title="Link to this heading">¶</a></h5>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Court</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Défaut</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Mode de simulation</strong></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--use-gradio</span></code></p></td>
+<td><p>-</p></td>
+<td><p>Utilise l’API Gradio au lieu de FastAPI</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--gradio-url</span></code></p></td>
+<td><p>-</p></td>
+<td><p>URL Gradio (local ou HF Spaces)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">http://localhost:7860</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--hf-token</span></code></p></td>
+<td><p>-</p></td>
+<td><p>Token HuggingFace pour Spaces privés</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Configuration générale</strong></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--url</span></code></p></td>
+<td><p>-</p></td>
+<td><p>URL de base de l’API FastAPI</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--requests</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-r</span></code></p></td>
+<td><p>Nombre total de requêtes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--users</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-u</span></code></p></td>
+<td><p>Utilisateurs concurrents</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--delay</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-d</span></code></p></td>
+<td><p>Délai entre requêtes (s)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--timeout</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-t</span></code></p></td>
+<td><p>Timeout par requête (s)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">30.0</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--endpoint</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-e</span></code></p></td>
+<td><p>Endpoint à tester</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/predict</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-v</span></code></p></td>
+<td><p>Mode verbeux</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Data Drift</strong></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--enable-age-drift</span></code></p></td>
+<td><p>-</p></td>
+<td><p>Active le data drift sur l’âge</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--age-drift-target</span></code></p></td>
+<td><p>-</p></td>
+<td><p>Âge moyen cible du drift</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">70.0</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--age-drift-start</span></code></p></td>
+<td><p>-</p></td>
+<td><p>Début du drift (%)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--age-drift-end</span></code></p></td>
+<td><p>-</p></td>
+<td><p>Fin du drift (%)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100.0</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="exemple-de-sortie">
+<h4>📊 Exemple de sortie<a class="headerlink" href="#exemple-de-sortie" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">🚀 Démarrage de la simulation...
+</span><span data-line="2">   API: http://localhost:8000/predict
+</span><span data-line="3">   Requêtes: 100
+</span><span data-line="4">   Utilisateurs concurrents: 10
+</span><span data-line="5">
+</span><span data-line="6">   Progression: 100.0%
+</span><span data-line="7">
+</span><span data-line="8">╔══════════════════════════════════════════════════════════╗
+</span><span data-line="9">║           RÉSULTATS DE LA SIMULATION                     ║
+</span><span data-line="10">╠══════════════════════════════════════════════════════════╣
+</span><span data-line="11">║ Requêtes totales      :        100            ║
+</span><span data-line="12">║ Requêtes réussies     :        100            ║
+</span><span data-line="13">║ Requêtes échouées     :          0            ║
+</span><span data-line="14">║                                                          ║
+</span><span data-line="15">║ Durée totale          :       5.23 s         ║
+</span><span data-line="16">║ Temps de réponse moy. :      45.67 ms        ║
+</span><span data-line="17">║ Temps de réponse min  :      23.12 ms        ║
+</span><span data-line="18">║ Temps de réponse max  :      89.45 ms        ║
+</span><span data-line="19">║                                                          ║
+</span><span data-line="20">║ Requêtes par seconde  :      19.12 req/s     ║
+</span><span data-line="21">╚══════════════════════════════════════════════════════════╝
+</span><span data-line="22">
+</span><span data-line="23">Status codes:
+</span><span data-line="24">  200: 100
+</span><span data-line="25">
+</span><span data-line="26">Erreurs: 0
+</span><span data-line="27">
+</span><span data-line="28">✅ Simulation terminée avec succès!
+</span></pre></div>
+</div>
+</section>
+<section id="usage-programmatique">
+<h4>🔧 Usage programmatique<a class="headerlink" href="#usage-programmatique" title="Link to this heading">¶</a></h4>
+<section id="mode-fastapi">
+<h5>Mode FastAPI<a class="headerlink" href="#mode-fastapi" title="Link to this heading">¶</a></h5>
+<p>Vous pouvez utiliser le simulateur dans votre code Python :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">src.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserSimulator</span><span class="p">,</span> <span class="n">SimulationConfig</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Configuration personnalisée</span>
+</span><span data-line="4"><span class="n">config</span> <span class="o">=</span> <span class="n">SimulationConfig</span><span class="p">(</span>
+</span><span data-line="5">    <span class="n">api_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:8000&quot;</span><span class="p">,</span>
+</span><span data-line="6">    <span class="n">num_requests</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+</span><span data-line="7">    <span class="n">concurrent_users</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span data-line="8">    <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;/predict&quot;</span><span class="p">,</span>
+</span><span data-line="9">    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+</span><span data-line="10"><span class="p">)</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="c1"># Lancer la simulation</span>
+</span><span data-line="13"><span class="n">simulator</span> <span class="o">=</span> <span class="n">UserSimulator</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</span><span data-line="14"><span class="n">result</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span><span data-line="15">
+</span><span data-line="16"><span class="c1"># Accéder aux résultats</span>
+</span><span data-line="17"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Succès: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">successful_requests</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">total_requests</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="18"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Temps moyen: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">avg_response_time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">ms&quot;</span><span class="p">)</span>
+</span><span data-line="19"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RPS: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">requests_per_second</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id1">
+<h5>Mode Gradio<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">src.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserSimulator</span><span class="p">,</span> <span class="n">SimulationConfig</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Configuration pour Gradio local</span>
+</span><span data-line="4"><span class="n">config</span> <span class="o">=</span> <span class="n">SimulationConfig</span><span class="p">(</span>
+</span><span data-line="5">    <span class="n">use_gradio</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="6">    <span class="n">gradio_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:7860&quot;</span><span class="p">,</span>
+</span><span data-line="7">    <span class="n">num_requests</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+</span><span data-line="8">    <span class="n">concurrent_users</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span data-line="9">    <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;/predict&quot;</span><span class="p">,</span>
+</span><span data-line="10">    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+</span><span data-line="11"><span class="p">)</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1"># Configuration pour HuggingFace Spaces (privé)</span>
+</span><span data-line="14"><span class="n">config_hf</span> <span class="o">=</span> <span class="n">SimulationConfig</span><span class="p">(</span>
+</span><span data-line="15">    <span class="n">use_gradio</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="16">    <span class="n">gradio_url</span><span class="o">=</span><span class="s2">&quot;https://francoisformation-oc-project8.hf.space&quot;</span><span class="p">,</span>
+</span><span data-line="17">    <span class="n">hf_token</span><span class="o">=</span><span class="s2">&quot;hf_xxxxxxxxxxxxxxxxxxxxx&quot;</span><span class="p">,</span>
+</span><span data-line="18">    <span class="n">num_requests</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+</span><span data-line="19">    <span class="n">concurrent_users</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span data-line="20">    <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;/predict_proba&quot;</span>
+</span><span data-line="21"><span class="p">)</span>
+</span><span data-line="22">
+</span><span data-line="23"><span class="c1"># Lancer la simulation</span>
+</span><span data-line="24"><span class="n">simulator</span> <span class="o">=</span> <span class="n">UserSimulator</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</span><span data-line="25"><span class="n">result</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span><span data-line="26"><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="utilisation-asynchrone-fastapi-uniquement">
+<h5>Utilisation asynchrone (FastAPI uniquement)<a class="headerlink" href="#utilisation-asynchrone-fastapi-uniquement" title="Link to this heading">¶</a></h5>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">src.simulator</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserSimulator</span><span class="p">,</span> <span class="n">SimulationConfig</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+</span><span data-line="5">    <span class="n">config</span> <span class="o">=</span> <span class="n">SimulationConfig</span><span class="p">(</span><span class="n">num_requests</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">concurrent_users</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span data-line="6">    <span class="n">simulator</span> <span class="o">=</span> <span class="n">UserSimulator</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</span><span data-line="7">    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run_simulation</span><span class="p">()</span>
+</span><span data-line="8">    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</span></pre></div>
+</div>
+<p><strong>Note :</strong> Le mode Gradio utilise <code class="docutils literal notranslate"><span class="pre">run_simulation_gradio()</span></code> qui est synchrone. Pour le mode Gradio, utilisez directement <code class="docutils literal notranslate"><span class="pre">simulator.run()</span></code>.</p>
+</section>
+</section>
+<section id="cas-d-usage">
+<h4>📈 Cas d’usage<a class="headerlink" href="#cas-d-usage" title="Link to this heading">¶</a></h4>
+<section id="mode-fastapi-local">
+<h5>Mode FastAPI (local)<a class="headerlink" href="#mode-fastapi-local" title="Link to this heading">¶</a></h5>
+<section id="test-de-charge-basique">
+<h6>1. Test de charge basique<a class="headerlink" href="#test-de-charge-basique" title="Link to this heading">¶</a></h6>
+<p>Vérifier que l’API peut gérer un nombre modéré de requêtes :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">100</span><span class="w"> </span>-u<span class="w"> </span><span class="m">10</span>
+</span></pre></div>
+</div>
+</section>
+<section id="test-de-performance">
+<h6>2. Test de performance<a class="headerlink" href="#test-de-performance" title="Link to this heading">¶</a></h6>
+<p>Mesurer les temps de réponse sous charge :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">500</span><span class="w"> </span>-u<span class="w"> </span><span class="m">50</span><span class="w"> </span>-v
+</span></pre></div>
+</div>
+</section>
+<section id="test-de-stress">
+<h6>3. Test de stress<a class="headerlink" href="#test-de-stress" title="Link to this heading">¶</a></h6>
+<p>Tester les limites de l’API :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">2000</span><span class="w"> </span>-u<span class="w"> </span><span class="m">200</span><span class="w"> </span>--timeout<span class="w"> </span><span class="m">120</span>
+</span></pre></div>
+</div>
+</section>
+<section id="test-de-stabilite">
+<h6>4. Test de stabilité<a class="headerlink" href="#test-de-stabilite" title="Link to this heading">¶</a></h6>
+<p>Vérifier la stabilité sur une longue période avec délai :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">1000</span><span class="w"> </span>-u<span class="w"> </span><span class="m">5</span><span class="w"> </span>--delay<span class="w"> </span><span class="m">0</span>.5
+</span></pre></div>
+</div>
+</section>
+<section id="comparaison-des-endpoints">
+<h6>5. Comparaison des endpoints<a class="headerlink" href="#comparaison-des-endpoints" title="Link to this heading">¶</a></h6>
+<p>Comparer les performances de <code class="docutils literal notranslate"><span class="pre">/predict</span></code> et <code class="docutils literal notranslate"><span class="pre">/predict_proba</span></code> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">100</span><span class="w"> </span>-u<span class="w"> </span><span class="m">10</span><span class="w"> </span>-e<span class="w"> </span>/predict
+</span><span data-line="2">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">100</span><span class="w"> </span>-u<span class="w"> </span><span class="m">10</span><span class="w"> </span>-e<span class="w"> </span>/predict_proba
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="mode-gradio-production">
+<h5>Mode Gradio (production)<a class="headerlink" href="#mode-gradio-production" title="Link to this heading">¶</a></h5>
+<section id="test-de-production-huggingface-spaces">
+<h6>6. Test de production HuggingFace Spaces<a class="headerlink" href="#test-de-production-huggingface-spaces" title="Link to this heading">¶</a></h6>
+<p>Tester le modèle déployé en production :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>simulate-gradio-hf
+</span><span data-line="2"><span class="c1"># ou</span>
+</span><span data-line="3">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--use-gradio<span class="w"> </span><span class="se">\</span>
+</span><span data-line="4"><span class="w">    </span>--gradio-url<span class="w"> </span>https://francoisformation-oc-project8.hf.space<span class="w"> </span><span class="se">\</span>
+</span><span data-line="5"><span class="w">    </span>--hf-token<span class="w"> </span>hf_xxx<span class="w"> </span>-r<span class="w"> </span><span class="m">100</span><span class="w"> </span>-u<span class="w"> </span><span class="m">10</span><span class="w"> </span>-v
+</span></pre></div>
+</div>
+</section>
+<section id="test-de-robustesse-avec-drift">
+<h6>7. Test de robustesse avec drift<a class="headerlink" href="#test-de-robustesse-avec-drift" title="Link to this heading">¶</a></h6>
+<p>Tester la robustesse du modèle face au data drift en production :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>simulate-gradio-drift-hf
+</span><span data-line="2"><span class="c1"># ou</span>
+</span><span data-line="3">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--use-gradio<span class="w"> </span><span class="se">\</span>
+</span><span data-line="4"><span class="w">    </span>--gradio-url<span class="w"> </span>https://francoisformation-oc-project8.hf.space<span class="w"> </span><span class="se">\</span>
+</span><span data-line="5"><span class="w">    </span>--hf-token<span class="w"> </span>hf_xxx<span class="w"> </span>-r<span class="w"> </span><span class="m">200</span><span class="w"> </span>-u<span class="w"> </span><span class="m">10</span><span class="w"> </span>--enable-age-drift<span class="w"> </span>--age-drift-target<span class="w"> </span><span class="m">75</span><span class="w"> </span>-v
+</span></pre></div>
+</div>
+</section>
+<section id="validation-de-deploiement">
+<h6>8. Validation de déploiement<a class="headerlink" href="#validation-de-deploiement" title="Link to this heading">¶</a></h6>
+<p>Valider qu’un nouveau déploiement fonctionne correctement :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Test rapide (50 requêtes)</span>
+</span><span data-line="2">make<span class="w"> </span>simulate-gradio-hf
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Test approfondi avec drift progressif (300 requêtes)</span>
+</span><span data-line="5">make<span class="w"> </span>simulate-gradio-drift-progressive-hf
+</span></pre></div>
+</div>
+</section>
+<section id="comparaison-local-vs-production">
+<h6>9. Comparaison local vs production<a class="headerlink" href="#comparaison-local-vs-production" title="Link to this heading">¶</a></h6>
+<p>Comparer les performances entre local et production :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Local</span>
+</span><span data-line="2">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">100</span><span class="w"> </span>-u<span class="w"> </span><span class="m">10</span><span class="w"> </span>-e<span class="w"> </span>/predict_proba
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Production (HF Spaces)</span>
+</span><span data-line="5">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--use-gradio<span class="w"> </span><span class="se">\</span>
+</span><span data-line="6"><span class="w">    </span>--gradio-url<span class="w"> </span>https://francoisformation-oc-project8.hf.space<span class="w"> </span><span class="se">\</span>
+</span><span data-line="7"><span class="w">    </span>--hf-token<span class="w"> </span>hf_xxx<span class="w"> </span>-r<span class="w"> </span><span class="m">100</span><span class="w"> </span>-u<span class="w"> </span><span class="m">10</span><span class="w"> </span>-e<span class="w"> </span>/predict_proba
+</span></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="tests-avec-l-api-locale">
+<h4>🧪 Tests avec l’API locale<a class="headerlink" href="#tests-avec-l-api-locale" title="Link to this heading">¶</a></h4>
+<p>Assurez-vous que l’API est en cours d’exécution avant de lancer le simulateur :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Terminal 1 : Lancer l&#39;API</span>
+</span><span data-line="2">make<span class="w"> </span>run-api
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Terminal 2 : Lancer le simulateur</span>
+</span><span data-line="5">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">50</span><span class="w"> </span>-u<span class="w"> </span><span class="m">5</span>
+</span></pre></div>
+</div>
+</section>
+<section id="metriques-collectees">
+<h4>📊 Métriques collectées<a class="headerlink" href="#metriques-collectees" title="Link to this heading">¶</a></h4>
+<p>Le simulateur collecte et affiche les métriques suivantes :</p>
+<ul class="simple">
+<li><p><strong>Requêtes totales</strong> : Nombre total de requêtes envoyées</p></li>
+<li><p><strong>Requêtes réussies</strong> : Nombre de requêtes avec status 200</p></li>
+<li><p><strong>Requêtes échouées</strong> : Nombre de requêtes en erreur</p></li>
+<li><p><strong>Durée totale</strong> : Temps total de la simulation</p></li>
+<li><p><strong>Temps de réponse moyen</strong> : Moyenne des temps de réponse</p></li>
+<li><p><strong>Temps de réponse min/max</strong> : Plus rapide et plus lent</p></li>
+<li><p><strong>Requêtes par seconde</strong> : Throughput de l’API</p></li>
+<li><p><strong>Distribution des status codes</strong> : Répartition des codes HTTP</p></li>
+<li><p><strong>Liste des erreurs</strong> : Détail des erreurs rencontrées</p></li>
+</ul>
+</section>
+<section id="donnees-generees">
+<h4>🎨 Données générées<a class="headerlink" href="#donnees-generees" title="Link to this heading">¶</a></h4>
+<p>Le simulateur génère automatiquement des données de patients aléatoires avec :</p>
+<ul class="simple">
+<li><p><strong>AGE</strong> : Entre 20 et 90 ans</p></li>
+<li><p><strong>GENDER</strong> : 0 (femme) ou 1 (homme)</p></li>
+<li><p><strong>Symptômes binaires</strong> : 0 (non) ou 1 (oui) pour chaque symptôme</p>
+<ul>
+<li><p>SMOKING, ALCOHOL CONSUMING, PEER_PRESSURE</p></li>
+<li><p>YELLOW_FINGERS, ANXIETY, FATIGUE, ALLERGY</p></li>
+<li><p>WHEEZING, COUGHING, SHORTNESS OF BREATH</p></li>
+<li><p>SWALLOWING DIFFICULTY, CHEST PAIN, CHRONIC DISEASE</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="notes-importantes">
+<h4>⚠️ Notes importantes<a class="headerlink" href="#notes-importantes" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>API démarrée</strong> : L’API doit être en cours d’exécution avant de lancer le simulateur</p></li>
+<li><p><strong>Limites</strong> : Respectez les limites de votre infrastructure (CPU, RAM, connexions)</p></li>
+<li><p><strong>Timeout</strong> : Augmentez le timeout pour des charges très élevées</p></li>
+<li><p><strong>Production</strong> : N’utilisez pas ce simulateur sur une API de production sans autorisation</p></li>
+</ul>
+</section>
+<section id="depannage">
+<h4>🐛 Dépannage<a class="headerlink" href="#depannage" title="Link to this heading">¶</a></h4>
+<section id="l-api-ne-repond-pas">
+<h5>L’API ne répond pas<a class="headerlink" href="#l-api-ne-repond-pas" title="Link to this heading">¶</a></h5>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vérifier que l&#39;API est accessible</span>
+</span><span data-line="2">curl<span class="w"> </span>http://localhost:8000/health
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Vérifier les logs de l&#39;API</span>
+</span><span data-line="5">make<span class="w"> </span>docker-logs-api
+</span></pre></div>
+</div>
+</section>
+<section id="trop-d-erreurs-de-timeout">
+<h5>Trop d’erreurs de timeout<a class="headerlink" href="#trop-d-erreurs-de-timeout" title="Link to this heading">¶</a></h5>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Augmenter le timeout et réduire la charge</span>
+</span><span data-line="2">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>-r<span class="w"> </span><span class="m">100</span><span class="w"> </span>-u<span class="w"> </span><span class="m">5</span><span class="w"> </span>--timeout<span class="w"> </span><span class="m">60</span>
+</span></pre></div>
+</div>
+</section>
+<section id="erreurs-de-connexion">
+<h5>Erreurs de connexion<a class="headerlink" href="#erreurs-de-connexion" title="Link to this heading">¶</a></h5>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vérifier l&#39;URL de l&#39;API</span>
+</span><span data-line="2">python<span class="w"> </span>-m<span class="w"> </span>src.simulator<span class="w"> </span>--url<span class="w"> </span>http://localhost:8000<span class="w"> </span>-r<span class="w"> </span><span class="m">10</span><span class="w"> </span>-u<span class="w"> </span><span class="m">1</span><span class="w"> </span>-v
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="ressources">
+<h4>📚 Ressources<a class="headerlink" href="#ressources" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.python-httpx.org/">httpx Documentation</a></p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/asyncio.html">asyncio Documentation</a></p></li>
+<li><p><a class="reference external" href="https://fastapi.tiangolo.com/">FastAPI Documentation</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">¶</a></h2>
+<section id="module-src.simulator.simulator">
+<span id="simulator"></span><h3>Simulator<a class="headerlink" href="#module-src.simulator.simulator" title="Link to this heading">¶</a></h3>
+<p>Simulateur d’utilisateurs pour l’API de prédiction.</p>
+<p>Ce module permet de simuler des charges de travail sur l’API
+en envoyant des requêtes concurrentes avec des données aléatoires.</p>
+<p>Supporte deux modes:
+- HTTP: Requêtes directes via httpx (par défaut)
+- Gradio: Requêtes via l’API Gradio (compatible HF Spaces)</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.simulator.simulator.</span></span><span class="sig-name descname"><span class="pre">SimulationConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/simulator.html#SimulationConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.SimulationConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Configuration pour une simulation.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.api_url">
+<span class="sig-name descname"><span class="pre">api_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.api_url" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.num_requests">
+<span class="sig-name descname"><span class="pre">num_requests</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.num_requests" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.concurrent_users">
+<span class="sig-name descname"><span class="pre">concurrent_users</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.concurrent_users" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.delay_between_requests">
+<span class="sig-name descname"><span class="pre">delay_between_requests</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.delay_between_requests" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.timeout">
+<span class="sig-name descname"><span class="pre">timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.timeout" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.endpoint">
+<span class="sig-name descname"><span class="pre">endpoint</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.endpoint" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.verbose">
+<span class="sig-name descname"><span class="pre">verbose</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.verbose" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.use_gradio">
+<span class="sig-name descname"><span class="pre">use_gradio</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.use_gradio" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.gradio_url">
+<span class="sig-name descname"><span class="pre">gradio_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.gradio_url" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.hf_token">
+<span class="sig-name descname"><span class="pre">hf_token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.hf_token" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.enable_age_drift">
+<span class="sig-name descname"><span class="pre">enable_age_drift</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.enable_age_drift" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.age_drift_target_mean">
+<span class="sig-name descname"><span class="pre">age_drift_target_mean</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.age_drift_target_mean" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.age_drift_start_pct">
+<span class="sig-name descname"><span class="pre">age_drift_start_pct</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.age_drift_start_pct" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.age_drift_end_pct">
+<span class="sig-name descname"><span class="pre">age_drift_end_pct</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.age_drift_end_pct" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.Config">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../_modules/src/simulator/simulator.html#SimulationConfig.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.Config" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Configuration Pydantic.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.Config.arbitrary_types_allowed">
+<span class="sig-name descname"><span class="pre">arbitrary_types_allowed</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.Config.arbitrary_types_allowed" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationConfig.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'arbitrary_types_allowed':</span> <span class="pre">True}</span></em><a class="headerlink" href="#src.simulator.simulator.SimulationConfig.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.simulator.simulator.</span></span><span class="sig-name descname"><span class="pre">SimulationResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_requests</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">successful_requests</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">failed_requests</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_response_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_response_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_response_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requests_per_second</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_times=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status_codes=&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/simulator.html#SimulationResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.SimulationResult" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Résultats d’une simulation.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult.total_requests">
+<span class="sig-name descname"><span class="pre">total_requests</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationResult.total_requests" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult.successful_requests">
+<span class="sig-name descname"><span class="pre">successful_requests</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationResult.successful_requests" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult.failed_requests">
+<span class="sig-name descname"><span class="pre">failed_requests</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationResult.failed_requests" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult.total_duration">
+<span class="sig-name descname"><span class="pre">total_duration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationResult.total_duration" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult.avg_response_time">
+<span class="sig-name descname"><span class="pre">avg_response_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationResult.avg_response_time" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult.min_response_time">
+<span class="sig-name descname"><span class="pre">min_response_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationResult.min_response_time" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult.max_response_time">
+<span class="sig-name descname"><span class="pre">max_response_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationResult.max_response_time" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult.requests_per_second">
+<span class="sig-name descname"><span class="pre">requests_per_second</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#src.simulator.simulator.SimulationResult.requests_per_second" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult.response_times">
+<span class="sig-name descname"><span class="pre">response_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#src.simulator.simulator.SimulationResult.response_times" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult.errors">
+<span class="sig-name descname"><span class="pre">errors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#src.simulator.simulator.SimulationResult.errors" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult.status_codes">
+<span class="sig-name descname"><span class="pre">status_codes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a><span class="pre">,</span> <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#src.simulator.simulator.SimulationResult.status_codes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/simulator.html#SimulationResult.__str__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.SimulationResult.__str__" title="Link to this definition">¶</a></dt>
+<dd><p>Format les résultats pour affichage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.simulator.simulator.SimulationResult.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_requests</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">successful_requests</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">failed_requests</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_response_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_response_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_response_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requests_per_second</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response_times=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status_codes=&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.simulator.simulator.SimulationResult.__init__" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.simulator.simulator.UserSimulator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.simulator.simulator.</span></span><span class="sig-name descname"><span class="pre">UserSimulator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/simulator.html#UserSimulator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.UserSimulator" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Simulateur d’utilisateurs pour l’API.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.simulator.simulator.UserSimulator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/simulator.html#UserSimulator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.UserSimulator.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialise le simulateur.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="#src.simulator.simulator.SimulationConfig" title="src.simulator.simulator.SimulationConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimulationConfig</span></code></a>]</span>) – Configuration de la simulation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.simulator.simulator.UserSimulator.generate_patient_data">
+<span class="sig-name descname"><span class="pre">generate_patient_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/simulator.html#UserSimulator.generate_patient_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.UserSimulator.generate_patient_data" title="Link to this definition">¶</a></dt>
+<dd><p>Génère des données de patient aléatoires.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionnaire avec les données du patient.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.simulator.simulator.UserSimulator.send_request_gradio">
+<span class="sig-name descname"><span class="pre">send_request_gradio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/simulator.html#UserSimulator.send_request_gradio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.UserSimulator.send_request_gradio" title="Link to this definition">¶</a></dt>
+<dd><p>Envoie une requête via l’API Gradio (mode synchrone).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request_id</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Identifiant de la requête.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionnaire avec les résultats de la requête.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.simulator.simulator.UserSimulator.send_request">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">send_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/simulator.html#UserSimulator.send_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.UserSimulator.send_request" title="Link to this definition">¶</a></dt>
+<dd><p>Envoie une requête à l’API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsyncClient</span></code></span>) – Client HTTP asynchrone.</p></li>
+<li><p><strong>request_id</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Identifiant de la requête.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionnaire avec les résultats de la requête.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.simulator.simulator.UserSimulator.run_batch">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/simulator.html#UserSimulator.run_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.UserSimulator.run_batch" title="Link to this definition">¶</a></dt>
+<dd><p>Execute un lot de requêtes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsyncClient</span></code></span>) – Client HTTP asynchrone.</p></li>
+<li><p><strong>start_id</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – ID de départ pour les requêtes.</p></li>
+<li><p><strong>batch_size</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Nombre de requêtes dans le lot.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Liste des résultats.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.simulator.simulator.UserSimulator.run_batch_gradio">
+<span class="sig-name descname"><span class="pre">run_batch_gradio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/simulator.html#UserSimulator.run_batch_gradio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.UserSimulator.run_batch_gradio" title="Link to this definition">¶</a></dt>
+<dd><p>Execute un lot de requêtes via Gradio (synchrone).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_id</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – ID de départ pour les requêtes.</p></li>
+<li><p><strong>batch_size</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Nombre de requêtes dans le lot.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Liste des résultats.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.simulator.simulator.UserSimulator.run_simulation_gradio">
+<span class="sig-name descname"><span class="pre">run_simulation_gradio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/simulator.html#UserSimulator.run_simulation_gradio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.UserSimulator.run_simulation_gradio" title="Link to this definition">¶</a></dt>
+<dd><p>Execute la simulation complète en mode Gradio (synchrone).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#src.simulator.simulator.SimulationResult" title="src.simulator.simulator.SimulationResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimulationResult</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>SimulationResult avec les résultats de la simulation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.simulator.simulator.UserSimulator.run_simulation">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_simulation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/simulator.html#UserSimulator.run_simulation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.UserSimulator.run_simulation" title="Link to this definition">¶</a></dt>
+<dd><p>Execute la simulation complète.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#src.simulator.simulator.SimulationResult" title="src.simulator.simulator.SimulationResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimulationResult</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>SimulationResult avec les résultats de la simulation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.simulator.simulator.UserSimulator.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/simulator.html#UserSimulator.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.simulator.UserSimulator.run" title="Link to this definition">¶</a></dt>
+<dd><p>Lance la simulation (version synchrone).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#src.simulator.simulator.SimulationResult" title="src.simulator.simulator.SimulationResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimulationResult</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>SimulationResult avec les résultats.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.simulator.drift_analyzer">
+<span id="drift-analyzer"></span><h3>Drift Analyzer<a class="headerlink" href="#module-src.simulator.drift_analyzer" title="Link to this heading">¶</a></h3>
+<p>Script pour analyser le data drift généré par le simulateur.</p>
+<p>Ce script permet de visualiser comment l’âge des patients évolue
+au cours d’une simulation avec data drift activé.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.simulator.drift_analyzer.analyze_age_drift">
+<span class="sig-prename descclassname"><span class="pre">src.simulator.drift_analyzer.</span></span><span class="sig-name descname"><span class="pre">analyze_age_drift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_requests</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_drift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">75.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drift_start_pct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drift_end_pct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/drift_analyzer.html#analyze_age_drift"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.drift_analyzer.analyze_age_drift" title="Link to this definition">¶</a></dt>
+<dd><p>Génère une série d’âges simulant le drift.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_requests</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Nombre de requêtes à simuler.</p></li>
+<li><p><strong>enable_drift</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Si True, active le drift.</p></li>
+<li><p><strong>target_mean</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Âge moyen cible du drift.</p></li>
+<li><p><strong>drift_start_pct</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Début du drift en %.</p></li>
+<li><p><strong>drift_end_pct</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Fin du drift en %.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Liste des âges générés.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.simulator.drift_analyzer.print_age_statistics">
+<span class="sig-prename descclassname"><span class="pre">src.simulator.drift_analyzer.</span></span><span class="sig-name descname"><span class="pre">print_age_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ages</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/drift_analyzer.html#print_age_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.drift_analyzer.print_age_statistics" title="Link to this definition">¶</a></dt>
+<dd><p>Affiche les statistiques d’âge par fenêtre.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ages</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Liste des âges.</p></li>
+<li><p><strong>window_size</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Taille de la fenêtre glissante.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.simulator.drift_analyzer.main">
+<span class="sig-prename descclassname"><span class="pre">src.simulator.drift_analyzer.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/simulator/drift_analyzer.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.simulator.drift_analyzer.main" title="Link to this definition">¶</a></dt>
+<dd><p>Point d’entrée principal.</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="ui.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">UI Module</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="logs_pipeline.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Logs Pipeline Module</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Endpoint DELETE /logs - Vider le cache Redis - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Endpoint DELETE /logs - Vider le cache Redis"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#details-de-l-endpoint">D&#233;tails de l&#8217;endpoint</a></li>
+<li><a class="reference internal" href="#comportement">Comportement</a><ul>
+<li><a class="reference internal" href="#reponse-en-cas-de-succes">R&#233;ponse en cas de succ&#232;s</a></li>
+<li><a class="reference internal" href="#reponse-en-cas-d-erreur">R&#233;ponse en cas d&#8217;erreur</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exemples-d-utilisation">Exemples d&#8217;utilisation</a><ul>
+<li><a class="reference internal" href="#avec-curl-api-directe">Avec cURL (API directe)</a></li>
+<li><a class="reference internal" href="#avec-makefile-recommande">Avec Makefile (recommand&#233;)</a><ul>
+<li><a class="reference internal" href="#api-locale">API locale</a></li>
+<li><a class="reference internal" href="#via-gradio-local">Via Gradio local</a></li>
+<li><a class="reference internal" href="#via-gradio-huggingface-spaces">Via Gradio HuggingFace Spaces</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#avec-httpie">Avec HTTPie</a></li>
+<li><a class="reference internal" href="#avec-python-requests">Avec Python (requests)</a></li>
+<li><a class="reference internal" href="#avec-python-httpx">Avec Python (httpx)</a></li>
+<li><a class="reference internal" href="#avec-javascript-fetch">Avec JavaScript (fetch)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cas-d-usage">Cas d&#8217;usage</a><ul>
+<li><a class="reference internal" href="#nettoyage-apres-tests">1. Nettoyage apr&#232;s tests</a></li>
+<li><a class="reference internal" href="#maintenance-periodique">2. Maintenance p&#233;riodique</a></li>
+<li><a class="reference internal" href="#reset-avant-un-nouveau-test-de-charge">3. Reset avant un nouveau test de charge</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#integration-avec-le-pipeline-elasticsearch">Int&#233;gration avec le pipeline Elasticsearch</a><ul>
+<li><a class="reference internal" href="#workflow-complet">Workflow complet</a></li>
+<li><a class="reference internal" href="#pour-vider-completement-les-logs">Pour vider compl&#232;tement les logs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#implementation-technique">Impl&#233;mentation technique</a><ul>
+<li><a class="reference internal" href="#code-source">Code source</a></li>
+<li><a class="reference internal" href="#fonction-backend">Fonction backend</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tests">Tests</a></li>
+<li><a class="reference internal" href="#documentation-openapi">Documentation OpenAPI</a></li>
+<li><a class="reference internal" href="#bonnes-pratiques">Bonnes pratiques</a><ul>
+<li><a class="reference internal" href="#a-faire">&#9989; &#192; faire</a></li>
+<li><a class="reference internal" href="#a-eviter">&#10060; &#192; &#233;viter</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#securite">S&#233;curit&#233;</a></li>
+<li><a class="reference internal" href="#monitoring">Monitoring</a></li>
+<li><a class="reference internal" href="#faq">FAQ</a><ul>
+<li><a class="reference internal" href="#q-que-se-passe-t-il-si-redis-n-est-pas-disponible">Q: Que se passe-t-il si Redis n&#8217;est pas disponible ?</a></li>
+<li><a class="reference internal" href="#q-les-logs-en-cours-de-collecte-par-le-pipeline-sont-ils-perdus">Q: Les logs en cours de collecte par le pipeline sont-ils perdus ?</a></li>
+<li><a class="reference internal" href="#q-peut-on-recuperer-les-logs-apres-suppression">Q: Peut-on r&#233;cup&#233;rer les logs apr&#232;s suppression ?</a></li>
+<li><a class="reference internal" href="#q-combien-de-temps-prend-la-suppression">Q: Combien de temps prend la suppression ?</a></li>
+<li><a class="reference internal" href="#q-faut-il-redemarrer-l-api-apres-avoir-vide-les-logs">Q: Faut-il red&#233;marrer l&#8217;API apr&#232;s avoir vid&#233; les logs ?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#voir-aussi">Voir aussi</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Endpoint DELETE /logs - Vider le cache Redis</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="endpoint-delete-logs-vider-le-cache-redis">
+<h1>Endpoint DELETE /logs - Vider le cache Redis<a class="headerlink" href="#endpoint-delete-logs-vider-le-cache-redis" title="Link to this heading">¶</a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>L’endpoint <code class="docutils literal notranslate"><span class="pre">DELETE</span> <span class="pre">/logs</span></code> permet de vider complètement le cache des logs stockés dans Redis.</p>
+</section>
+<section id="details-de-l-endpoint">
+<h2>Détails de l’endpoint<a class="headerlink" href="#details-de-l-endpoint" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>URL</strong>: <code class="docutils literal notranslate"><span class="pre">/logs</span></code></p></li>
+<li><p><strong>Méthode</strong>: <code class="docutils literal notranslate"><span class="pre">DELETE</span></code></p></li>
+<li><p><strong>Tag OpenAPI</strong>: <code class="docutils literal notranslate"><span class="pre">Logs</span></code></p></li>
+<li><p><strong>Authentification</strong>: Aucune</p></li>
+</ul>
+</section>
+<section id="comportement">
+<h2>Comportement<a class="headerlink" href="#comportement" title="Link to this heading">¶</a></h2>
+<p>Cet endpoint supprime <strong>tous les logs</strong> stockés dans le cache Redis en appelant la fonction <code class="docutils literal notranslate"><span class="pre">clear_redis_logs()</span></code> du module <code class="docutils literal notranslate"><span class="pre">logging_config</span></code>.</p>
+<section id="reponse-en-cas-de-succes">
+<h3>Réponse en cas de succès<a class="headerlink" href="#reponse-en-cas-de-succes" title="Link to this heading">¶</a></h3>
+<p><strong>Code HTTP</strong>: <code class="docutils literal notranslate"><span class="pre">200</span> <span class="pre">OK</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Logs supprimés avec succès&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="reponse-en-cas-d-erreur">
+<h3>Réponse en cas d’erreur<a class="headerlink" href="#reponse-en-cas-d-erreur" title="Link to this heading">¶</a></h3>
+<p><strong>Code HTTP</strong>: <code class="docutils literal notranslate"><span class="pre">500</span> <span class="pre">Internal</span> <span class="pre">Server</span> <span class="pre">Error</span></code></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Échec de la suppression des logs&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p>Ou si une exception est levée:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Erreur lors de la suppression des logs : &lt;message d&#39;erreur&gt;&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="exemples-d-utilisation">
+<h2>Exemples d’utilisation<a class="headerlink" href="#exemples-d-utilisation" title="Link to this heading">¶</a></h2>
+<section id="avec-curl-api-directe">
+<h3>Avec cURL (API directe)<a class="headerlink" href="#avec-curl-api-directe" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span><span class="s2">&quot;http://localhost:8000/logs&quot;</span>
+</span></pre></div>
+</div>
+<p><strong>Réponse</strong>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Logs supprimés avec succès&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="avec-makefile-recommande">
+<h3>Avec Makefile (recommandé)<a class="headerlink" href="#avec-makefile-recommande" title="Link to this heading">¶</a></h3>
+<section id="api-locale">
+<h4>API locale<a class="headerlink" href="#api-locale" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>clear-logs
+</span></pre></div>
+</div>
+</section>
+<section id="via-gradio-local">
+<h4>Via Gradio local<a class="headerlink" href="#via-gradio-local" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>clear-logs-gradio-local
+</span></pre></div>
+</div>
+</section>
+<section id="via-gradio-huggingface-spaces">
+<h4>Via Gradio HuggingFace Spaces<a class="headerlink" href="#via-gradio-huggingface-spaces" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>clear-logs-gradio-hf
+</span></pre></div>
+</div>
+<p><strong>Note</strong> : Les commandes Gradio utilisent le client Gradio pour appeler l’endpoint <code class="docutils literal notranslate"><span class="pre">/api_clear_logs_proxy</span></code> qui fait un proxy vers <code class="docutils literal notranslate"><span class="pre">DELETE</span> <span class="pre">/logs</span></code> de l’API.</p>
+</section>
+</section>
+<section id="avec-httpie">
+<h3>Avec HTTPie<a class="headerlink" href="#avec-httpie" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">http<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8000/logs
+</span></pre></div>
+</div>
+</section>
+<section id="avec-python-requests">
+<h3>Avec Python (requests)<a class="headerlink" href="#avec-python-requests" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;http://localhost:8000/logs&quot;</span><span class="p">)</span>
+</span><span data-line="4"><span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>  <span class="c1"># 200</span>
+</span><span data-line="5"><span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>       <span class="c1"># {&quot;message&quot;: &quot;Logs supprimés avec succès&quot;}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="avec-python-httpx">
+<h3>Avec Python (httpx)<a class="headerlink" href="#avec-python-httpx" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">response</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;http://localhost:8000/logs&quot;</span><span class="p">)</span>
+</span><span data-line="4"><span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>  <span class="c1"># 200</span>
+</span><span data-line="5"><span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>       <span class="c1"># {&quot;message&quot;: &quot;Logs supprimés avec succès&quot;}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="avec-javascript-fetch">
+<h3>Avec JavaScript (fetch)<a class="headerlink" href="#avec-javascript-fetch" title="Link to this heading">¶</a></h3>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;http://localhost:8000/logs&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;DELETE&#39;</span>
+</span><span data-line="3"><span class="p">})</span>
+</span><span data-line="4"><span class="w">  </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
+</span><span data-line="5"><span class="w">  </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+</span><span data-line="6"><span class="w">  </span><span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Error:&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">error</span><span class="p">));</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="cas-d-usage">
+<h2>Cas d’usage<a class="headerlink" href="#cas-d-usage" title="Link to this heading">¶</a></h2>
+<section id="nettoyage-apres-tests">
+<h3>1. Nettoyage après tests<a class="headerlink" href="#nettoyage-apres-tests" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Exécuter des tests qui génèrent beaucoup de logs</span>
+</span><span data-line="2">make<span class="w"> </span><span class="nb">test</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Vider les logs après les tests</span>
+</span><span data-line="5">curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span><span class="s2">&quot;http://localhost:8000/logs&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="maintenance-periodique">
+<h3>2. Maintenance périodique<a class="headerlink" href="#maintenance-periodique" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Script de maintenance quotidien</span>
+</span><span data-line="2"><span class="c1">#!/bin/bash</span>
+</span><span data-line="3"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Nettoyage des logs...&quot;</span>
+</span><span data-line="4">curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span><span class="s2">&quot;http://localhost:8000/logs&quot;</span>
+</span><span data-line="5"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Logs supprimés&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="reset-avant-un-nouveau-test-de-charge">
+<h3>3. Reset avant un nouveau test de charge<a class="headerlink" href="#reset-avant-un-nouveau-test-de-charge" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vider les logs avant un test de performance</span>
+</span><span data-line="2">curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span><span class="s2">&quot;http://localhost:8000/logs&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Lancer le test de charge</span>
+</span><span data-line="5">make<span class="w"> </span>simulate-load
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Consulter les nouveaux logs</span>
+</span><span data-line="8">curl<span class="w"> </span><span class="s2">&quot;http://localhost:8000/logs?limit=100&quot;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="integration-avec-le-pipeline-elasticsearch">
+<h2>Intégration avec le pipeline Elasticsearch<a class="headerlink" href="#integration-avec-le-pipeline-elasticsearch" title="Link to this heading">¶</a></h2>
+<p>⚠️ <strong>Important</strong>: Cet endpoint vide <strong>uniquement</strong> le cache Redis local. Les logs déjà indexés dans Elasticsearch ne sont <strong>pas affectés</strong>.</p>
+<section id="workflow-complet">
+<h3>Workflow complet<a class="headerlink" href="#workflow-complet" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">1. Logs générés par l&#39;API → Redis (cache temporaire)
+</span><span data-line="2">                          ↓
+</span><span data-line="3">2. Pipeline collecte les logs depuis Redis
+</span><span data-line="4">                          ↓
+</span><span data-line="5">3. Pipeline filtre et indexe dans Elasticsearch
+</span><span data-line="6">                          ↓
+</span><span data-line="7">4. Logs persistés dans ES (ml-api-logs, ml-api-message, ml-api-perfs)
+</span></pre></div>
+</div>
+<p><strong>Après <code class="docutils literal notranslate"><span class="pre">DELETE</span> <span class="pre">/logs</span></code></strong>:</p>
+<ul class="simple">
+<li><p>✅ Cache Redis vidé</p></li>
+<li><p>✅ Logs dans Elasticsearch conservés</p></li>
+<li><p>✅ Nouveaux logs continuent d’être collectés</p></li>
+</ul>
+</section>
+<section id="pour-vider-completement-les-logs">
+<h3>Pour vider complètement les logs<a class="headerlink" href="#pour-vider-completement-les-logs" title="Link to this heading">¶</a></h3>
+<p>Si vous voulez supprimer à la fois le cache Redis ET les index Elasticsearch:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># 1. Vider le cache Redis</span>
+</span><span data-line="2">curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span><span class="s2">&quot;http://localhost:8000/logs&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># 2. Vider les index Elasticsearch</span>
+</span><span data-line="5">make<span class="w"> </span>pipeline-clear-indexes
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="implementation-technique">
+<h2>Implémentation technique<a class="headerlink" href="#implementation-technique" title="Link to this heading">¶</a></h2>
+<section id="code-source">
+<h3>Code source<a class="headerlink" href="#code-source" title="Link to this heading">¶</a></h3>
+<p><a class="reference download internal" download="" href="_downloads/a8def2520637eb3780ccf7be42b6fc79/main.py"><span class="xref download myst">src/api/main.py:416-439</span></a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/logs&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Logs&quot;</span><span class="p">])</span>
+</span><span data-line="2"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">clear_logs</span><span class="p">():</span>
+</span><span data-line="3"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="4"><span class="sd">    Supprime tous les logs.</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="sd">    Returns:</span>
+</span><span data-line="7"><span class="sd">        dict: Message de confirmation.</span>
+</span><span data-line="8"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="9">    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="10">        <span class="n">success</span> <span class="o">=</span> <span class="n">clear_redis_logs</span><span class="p">()</span>
+</span><span data-line="11">
+</span><span data-line="12">        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+</span><span data-line="13">            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Logs supprimés&quot;</span><span class="p">)</span>
+</span><span data-line="14">            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Logs supprimés avec succès&quot;</span><span class="p">}</span>
+</span><span data-line="15">        <span class="k">else</span><span class="p">:</span>
+</span><span data-line="16">            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+</span><span data-line="17">                <span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+</span><span data-line="18">                <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Échec de la suppression des logs&quot;</span>
+</span><span data-line="19">            <span class="p">)</span>
+</span><span data-line="20">
+</span><span data-line="21">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="22">        <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Erreur lors de la suppression des logs : </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="23">        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+</span><span data-line="24">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">error_msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+</span></pre></div>
+</div>
+</section>
+<section id="fonction-backend">
+<h3>Fonction backend<a class="headerlink" href="#fonction-backend" title="Link to this heading">¶</a></h3>
+<p>La fonction <code class="docutils literal notranslate"><span class="pre">clear_redis_logs()</span></code> est implémentée dans <a class="reference download internal" download="" href="_downloads/7b179a1c8c1110dc60f40d7361023530/logging_config.py"><span class="xref download myst">src/api/logging_config.py</span></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">def</span><span class="w"> </span><span class="nf">clear_redis_logs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span data-line="2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="3"><span class="sd">    Supprime tous les logs de Redis.</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="sd">    Returns:</span>
+</span><span data-line="6"><span class="sd">        bool: True si succès, False sinon</span>
+</span><span data-line="7"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="8">    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="9">        <span class="n">redis_client</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span>
+</span><span data-line="10">            <span class="n">host</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">REDIS_HOST</span><span class="p">,</span>
+</span><span data-line="11">            <span class="n">port</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">REDIS_PORT</span><span class="p">,</span>
+</span><span data-line="12">            <span class="n">db</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">REDIS_DB</span><span class="p">,</span>
+</span><span data-line="13">            <span class="n">decode_responses</span><span class="o">=</span><span class="kc">True</span>
+</span><span data-line="14">        <span class="p">)</span>
+</span><span data-line="15">        <span class="n">redis_client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;api_logs&quot;</span><span class="p">)</span>
+</span><span data-line="16">        <span class="k">return</span> <span class="kc">True</span>
+</span><span data-line="17">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="18">        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Erreur lors de la suppression des logs Redis: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="19">        <span class="k">return</span> <span class="kc">False</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="tests">
+<h2>Tests<a class="headerlink" href="#tests" title="Link to this heading">¶</a></h2>
+<p>L’endpoint est testé dans <a class="reference download internal" download="" href="_downloads/c82fc74bf9d0461793d7f1c402cd720f/test_main.py"><span class="xref download myst">tests/api/test_main.py</span></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">def</span><span class="w"> </span><span class="nf">test_clear_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_client</span><span class="p">):</span>
+</span><span data-line="2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Test DELETE /logs pour supprimer les logs.&quot;&quot;&quot;</span>
+</span><span data-line="3">    <span class="n">response</span> <span class="o">=</span> <span class="n">api_client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/logs&quot;</span><span class="p">)</span>
+</span><span data-line="4">
+</span><span data-line="5">    <span class="c1"># Peut retourner 200 ou 500 selon Redis disponible</span>
+</span><span data-line="6">    <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="ow">in</span> <span class="p">[</span>
+</span><span data-line="7">        <span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span>
+</span><span data-line="8">        <span class="n">status</span><span class="o">.</span><span class="n">HTTP_500_INTERNAL_SERVER_ERROR</span>
+</span><span data-line="9">    <span class="p">]</span>
+</span></pre></div>
+</div>
+</section>
+<section id="documentation-openapi">
+<h2>Documentation OpenAPI<a class="headerlink" href="#documentation-openapi" title="Link to this heading">¶</a></h2>
+<p>L’endpoint est automatiquement documenté dans Swagger UI:</p>
+<p><strong>URL</strong>: http://localhost:8000/docs#/Logs/clear_logs_logs_delete</p>
+<p><img alt="Swagger UI" src="https://via.placeholder.com/800x400?text=DELETE+/logs+in+Swagger+UI" /></p>
+</section>
+<section id="bonnes-pratiques">
+<h2>Bonnes pratiques<a class="headerlink" href="#bonnes-pratiques" title="Link to this heading">¶</a></h2>
+<section id="a-faire">
+<h3>✅ À faire<a class="headerlink" href="#a-faire" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Utiliser cet endpoint pour nettoyer les logs de développement</p></li>
+<li><p>L’intégrer dans des scripts de maintenance</p></li>
+<li><p>Le combiner avec des vérifications de capacité Redis</p></li>
+</ul>
+</section>
+<section id="a-eviter">
+<h3>❌ À éviter<a class="headerlink" href="#a-eviter" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Ne pas l’utiliser en production sans précaution (perte de logs non indexés)</p></li>
+<li><p>Ne pas l’appeler trop fréquemment (laissez le pipeline collecter les logs d’abord)</p></li>
+<li><p>Ne pas le confondre avec le nettoyage des index Elasticsearch</p></li>
+</ul>
+</section>
+</section>
+<section id="securite">
+<h2>Sécurité<a class="headerlink" href="#securite" title="Link to this heading">¶</a></h2>
+<p>⚠️ <strong>Important</strong>: Cet endpoint n’a <strong>aucune authentification</strong>. En production:</p>
+<ol class="arabic simple">
+<li><p>Ajoutez une authentification (API key, OAuth, etc.)</p></li>
+<li><p>Limitez l’accès par IP</p></li>
+<li><p>Loggez tous les appels à cet endpoint pour l’audit</p></li>
+</ol>
+<p>Exemple de protection par API key:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">Header</span><span class="p">,</span> <span class="n">HTTPException</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">verify_api_key</span><span class="p">(</span><span class="n">x_api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Header</span><span class="p">(</span><span class="o">...</span><span class="p">)):</span>
+</span><span data-line="4">    <span class="k">if</span> <span class="n">x_api_key</span> <span class="o">!=</span> <span class="n">settings</span><span class="o">.</span><span class="n">API_KEY</span><span class="p">:</span>
+</span><span data-line="5">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid API key&quot;</span><span class="p">)</span>
+</span><span data-line="6">    <span class="k">return</span> <span class="n">x_api_key</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/logs&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Logs&quot;</span><span class="p">],</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">verify_api_key</span><span class="p">)])</span>
+</span><span data-line="9"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">clear_logs</span><span class="p">():</span>
+</span><span data-line="10">    <span class="c1"># ... rest of the code</span>
+</span></pre></div>
+</div>
+</section>
+<section id="monitoring">
+<h2>Monitoring<a class="headerlink" href="#monitoring" title="Link to this heading">¶</a></h2>
+<p>Pour monitorer l’utilisation de cet endpoint:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Dans le middleware de logging</span>
+</span><span data-line="2"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+</span><span data-line="3">    <span class="sa">f</span><span class="s2">&quot;CLEAR_LOGS called from IP: </span><span class="si">{</span><span class="n">request</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="4"><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="faq">
+<h2>FAQ<a class="headerlink" href="#faq" title="Link to this heading">¶</a></h2>
+<section id="q-que-se-passe-t-il-si-redis-n-est-pas-disponible">
+<h3>Q: Que se passe-t-il si Redis n’est pas disponible ?<a class="headerlink" href="#q-que-se-passe-t-il-si-redis-n-est-pas-disponible" title="Link to this heading">¶</a></h3>
+<p><strong>R</strong>: L’endpoint retournera une erreur 500 avec le message “Échec de la suppression des logs”.</p>
+</section>
+<section id="q-les-logs-en-cours-de-collecte-par-le-pipeline-sont-ils-perdus">
+<h3>Q: Les logs en cours de collecte par le pipeline sont-ils perdus ?<a class="headerlink" href="#q-les-logs-en-cours-de-collecte-par-le-pipeline-sont-ils-perdus" title="Link to this heading">¶</a></h3>
+<p><strong>R</strong>: Oui, si vous videz Redis pendant que le pipeline collecte les logs, les logs non encore indexés dans Elasticsearch seront perdus.</p>
+</section>
+<section id="q-peut-on-recuperer-les-logs-apres-suppression">
+<h3>Q: Peut-on récupérer les logs après suppression ?<a class="headerlink" href="#q-peut-on-recuperer-les-logs-apres-suppression" title="Link to this heading">¶</a></h3>
+<p><strong>R</strong>: Non, les logs supprimés du cache Redis ne peuvent pas être récupérés. Seuls les logs déjà indexés dans Elasticsearch restent disponibles.</p>
+</section>
+<section id="q-combien-de-temps-prend-la-suppression">
+<h3>Q: Combien de temps prend la suppression ?<a class="headerlink" href="#q-combien-de-temps-prend-la-suppression" title="Link to this heading">¶</a></h3>
+<p><strong>R</strong>: Instantané (&lt; 10ms), car Redis exécute la commande DELETE de manière atomique.</p>
+</section>
+<section id="q-faut-il-redemarrer-l-api-apres-avoir-vide-les-logs">
+<h3>Q: Faut-il redémarrer l’API après avoir vidé les logs ?<a class="headerlink" href="#q-faut-il-redemarrer-l-api-apres-avoir-vide-les-logs" title="Link to this heading">¶</a></h3>
+<p><strong>R</strong>: Non, l’API continue de fonctionner normalement et recommence immédiatement à logger.</p>
+</section>
+</section>
+<section id="voir-aussi">
+<h2>Voir aussi<a class="headerlink" href="#voir-aussi" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#../API_DOCUMENTATION.md"><span class="xref myst">API_DOCUMENTATION.md</span></a> - Documentation complète de l’API</p></li>
+<li><p><span class="xref myst">src/api/PERFORMANCE_MONITORING.md</span> - Monitoring des performances</p></li>
+<li><p><span class="xref myst">src/logs_pipeline/README.md</span> - Pipeline Elasticsearch</p></li>
+</ul>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

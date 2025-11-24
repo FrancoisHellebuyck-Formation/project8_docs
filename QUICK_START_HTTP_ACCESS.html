@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Quick Start - Accès HTTP Direct - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Quick Start - Accès HTTP Direct"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#url-du-space">&#128640; URL du Space</a></li>
+<li><a class="reference internal" href="#exemples-rapides">&#9889; Exemples Rapides</a><ul>
+<li><a class="reference internal" href="#health-check-5-secondes">1. Health Check (5 secondes)</a></li>
+<li><a class="reference internal" href="#prediction-rapide-10-secondes">2. Pr&#233;diction Rapide (10 secondes)</a></li>
+<li><a class="reference internal" href="#probabilites-detaillees">3. Probabilit&#233;s D&#233;taill&#233;es</a></li>
+<li><a class="reference internal" href="#logs-derniers-10">4. Logs (Derniers 10)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#format-des-donnees">&#128203; Format des Donn&#233;es</a><ul>
+<li><a class="reference internal" href="#features-obligatoires-14">Features Obligatoires (14)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#integration-dans-votre-code">&#128187; Int&#233;gration dans Votre Code</a><ul>
+<li><a class="reference internal" href="#python">Python</a></li>
+<li><a class="reference internal" href="#javascript">JavaScript</a></li>
+<li><a class="reference internal" href="#curl-avec-fichier">cURL avec fichier</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#endpoints-disponibles">&#128269; Endpoints Disponibles</a></li>
+<li><a class="reference internal" href="#gestion-des-erreurs">&#10060; Gestion des Erreurs</a><ul>
+<li><a class="reference internal" href="#erreur-400-bad-request">Erreur 400 - Bad Request</a></li>
+<li><a class="reference internal" href="#erreur-500-internal-server-error">Erreur 500 - Internal Server Error</a></li>
+<li><a class="reference internal" href="#erreur-503-service-unavailable">Erreur 503 - Service Unavailable</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#codes-de-statut">&#128202; Codes de Statut</a></li>
+<li><a class="reference internal" href="#depannage">&#128027; D&#233;pannage</a><ul>
+<li><a class="reference internal" href="#le-space-retourne-404">Le Space retourne 404</a></li>
+<li><a class="reference internal" href="#timeout-apres-30s">Timeout apr&#232;s 30s</a></li>
+<li><a class="reference internal" href="#feature-manquante">Feature manquante</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#documentation-complete">&#128218; Documentation Compl&#232;te</a></li>
+<li><a class="reference internal" href="#prochaines-etapes">&#127919; Prochaines &#201;tapes</a></li>
+<li><a class="reference internal" href="#conseils">&#128161; Conseils</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Quick Start - Accès HTTP Direct</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="quick-start-acces-http-direct">
+<h1>Quick Start - Accès HTTP Direct<a class="headerlink" href="#quick-start-acces-http-direct" title="Link to this heading">¶</a></h1>
+<p>Guide rapide pour utiliser l’API ML via HTTP/curl sur HuggingFace Spaces.</p>
+<section id="url-du-space">
+<h2>🚀 URL du Space<a class="headerlink" href="#url-du-space" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">francoisformation</span><span class="o">-</span><span class="n">oc</span><span class="o">-</span><span class="n">project8</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">space</span>
+</span></pre></div>
+</div>
+</section>
+<section id="exemples-rapides">
+<h2>⚡ Exemples Rapides<a class="headerlink" href="#exemples-rapides" title="Link to this heading">¶</a></h2>
+<section id="health-check-5-secondes">
+<h3>1. Health Check (5 secondes)<a class="headerlink" href="#health-check-5-secondes" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>https://francoisformation-oc-project8.hf.space/api/health
+</span></pre></div>
+</div>
+<p><strong>Réponse attendue</strong>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;healthy&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;model_loaded&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;redis_connected&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span>
+</span><span data-line="6"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="prediction-rapide-10-secondes">
+<h3>2. Prédiction Rapide (10 secondes)<a class="headerlink" href="#prediction-rapide-10-secondes" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://francoisformation-oc-project8.hf.space/api/predict<span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span data-line="4"><span class="s1">    &quot;AGE&quot;: 65,</span>
+</span><span data-line="5"><span class="s1">    &quot;GENDER&quot;: 1,</span>
+</span><span data-line="6"><span class="s1">    &quot;SMOKING&quot;: 1,</span>
+</span><span data-line="7"><span class="s1">    &quot;ALCOHOL CONSUMING&quot;: 1,</span>
+</span><span data-line="8"><span class="s1">    &quot;PEER_PRESSURE&quot;: 0,</span>
+</span><span data-line="9"><span class="s1">    &quot;YELLOW_FINGERS&quot;: 1,</span>
+</span><span data-line="10"><span class="s1">    &quot;ANXIETY&quot;: 0,</span>
+</span><span data-line="11"><span class="s1">    &quot;FATIGUE&quot;: 1,</span>
+</span><span data-line="12"><span class="s1">    &quot;ALLERGY&quot;: 0,</span>
+</span><span data-line="13"><span class="s1">    &quot;WHEEZING&quot;: 1,</span>
+</span><span data-line="14"><span class="s1">    &quot;COUGHING&quot;: 1,</span>
+</span><span data-line="15"><span class="s1">    &quot;SHORTNESS OF BREATH&quot;: 1,</span>
+</span><span data-line="16"><span class="s1">    &quot;SWALLOWING DIFFICULTY&quot;: 0,</span>
+</span><span data-line="17"><span class="s1">    &quot;CHEST PAIN&quot;: 1,</span>
+</span><span data-line="18"><span class="s1">    &quot;CHRONIC DISEASE&quot;: 0</span>
+</span><span data-line="19"><span class="s1">  }&#39;</span>
+</span></pre></div>
+</div>
+<p><strong>Réponse attendue</strong>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;prediction&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;probability&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.92</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prédiction positive&quot;</span>
+</span><span data-line="5"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="probabilites-detaillees">
+<h3>3. Probabilités Détaillées<a class="headerlink" href="#probabilites-detaillees" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://francoisformation-oc-project8.hf.space/api/predict_proba<span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;AGE&quot;: 50, &quot;GENDER&quot;: 2, &quot;SMOKING&quot;: 0, ...}&#39;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="logs-derniers-10">
+<h3>4. Logs (Derniers 10)<a class="headerlink" href="#logs-derniers-10" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span><span class="s2">&quot;https://francoisformation-oc-project8.hf.space/api/logs?limit=10&quot;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="format-des-donnees">
+<h2>📋 Format des Données<a class="headerlink" href="#format-des-donnees" title="Link to this heading">¶</a></h2>
+<section id="features-obligatoires-14">
+<h3>Features Obligatoires (14)<a class="headerlink" href="#features-obligatoires-14" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Valeurs</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AGE</p></td>
+<td><p>int</p></td>
+<td><p>20-80</p></td>
+<td><p>Âge du patient</p></td>
+</tr>
+<tr class="row-odd"><td><p>GENDER</p></td>
+<td><p>int</p></td>
+<td><p>1=M, 2=F</p></td>
+<td><p>Genre</p></td>
+</tr>
+<tr class="row-even"><td><p>SMOKING</p></td>
+<td><p>int</p></td>
+<td><p>0/1</p></td>
+<td><p>Fumeur</p></td>
+</tr>
+<tr class="row-odd"><td><p>ALCOHOL CONSUMING</p></td>
+<td><p>int</p></td>
+<td><p>0/1</p></td>
+<td><p>Consommation d’alcool</p></td>
+</tr>
+<tr class="row-even"><td><p>PEER_PRESSURE</p></td>
+<td><p>int</p></td>
+<td><p>0/1</p></td>
+<td><p>Pression des pairs</p></td>
+</tr>
+<tr class="row-odd"><td><p>YELLOW_FINGERS</p></td>
+<td><p>int</p></td>
+<td><p>0/1</p></td>
+<td><p>Doigts jaunes</p></td>
+</tr>
+<tr class="row-even"><td><p>ANXIETY</p></td>
+<td><p>int</p></td>
+<td><p>0/1</p></td>
+<td><p>Anxiété</p></td>
+</tr>
+<tr class="row-odd"><td><p>FATIGUE</p></td>
+<td><p>int</p></td>
+<td><p>0/1</p></td>
+<td><p>Fatigue</p></td>
+</tr>
+<tr class="row-even"><td><p>ALLERGY</p></td>
+<td><p>int</p></td>
+<td><p>0/1</p></td>
+<td><p>Allergies</p></td>
+</tr>
+<tr class="row-odd"><td><p>WHEEZING</p></td>
+<td><p>int</p></td>
+<td><p>0/1</p></td>
+<td><p>Respiration sifflante</p></td>
+</tr>
+<tr class="row-even"><td><p>COUGHING</p></td>
+<td><p>int</p></td>
+<td><p>0/1</p></td>
+<td><p>Toux</p></td>
+</tr>
+<tr class="row-odd"><td><p>SHORTNESS OF BREATH</p></td>
+<td><p>int</p></td>
+<td><p>0/1</p></td>
+<td><p>Essoufflement</p></td>
+</tr>
+<tr class="row-even"><td><p>SWALLOWING DIFFICULTY</p></td>
+<td><p>int</p></td>
+<td><p>0/1</p></td>
+<td><p>Difficulté à avaler</p></td>
+</tr>
+<tr class="row-odd"><td><p>CHEST PAIN</p></td>
+<td><p>int</p></td>
+<td><p>0/1</p></td>
+<td><p>Douleur thoracique</p></td>
+</tr>
+<tr class="row-even"><td><p>CHRONIC DISEASE</p></td>
+<td><p>int</p></td>
+<td><p>0/1</p></td>
+<td><p>Maladie chronique</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="integration-dans-votre-code">
+<h2>💻 Intégration dans Votre Code<a class="headerlink" href="#integration-dans-votre-code" title="Link to this heading">¶</a></h2>
+<section id="python">
+<h3>Python<a class="headerlink" href="#python" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://francoisformation-oc-project8.hf.space/api/predict&quot;</span>
+</span><span data-line="4"><span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="5">    <span class="s2">&quot;AGE&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+</span><span data-line="6">    <span class="s2">&quot;GENDER&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="7">    <span class="s2">&quot;SMOKING&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="8">    <span class="s2">&quot;ALCOHOL CONSUMING&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="9">    <span class="s2">&quot;PEER_PRESSURE&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="10">    <span class="s2">&quot;YELLOW_FINGERS&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="11">    <span class="s2">&quot;ANXIETY&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="12">    <span class="s2">&quot;FATIGUE&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="13">    <span class="s2">&quot;ALLERGY&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="14">    <span class="s2">&quot;WHEEZING&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="15">    <span class="s2">&quot;COUGHING&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="16">    <span class="s2">&quot;SHORTNESS OF BREATH&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="17">    <span class="s2">&quot;SWALLOWING DIFFICULTY&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="18">    <span class="s2">&quot;CHEST PAIN&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="19">    <span class="s2">&quot;CHRONIC DISEASE&quot;</span><span class="p">:</span> <span class="mi">0</span>
+</span><span data-line="20"><span class="p">}</span>
+</span><span data-line="21">
+</span><span data-line="22"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</span><span data-line="23"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prédiction: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="24"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Probabilité: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;probability&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="javascript">
+<h3>JavaScript<a class="headerlink" href="#javascript" title="Link to this heading">¶</a></h3>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kd">const</span><span class="w"> </span><span class="nx">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://francoisformation-oc-project8.hf.space/api/predict&quot;</span><span class="p">;</span>
+</span><span data-line="2"><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="3"><span class="w">  </span><span class="nx">AGE</span><span class="o">:</span><span class="w"> </span><span class="mf">50</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nx">GENDER</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nx">SMOKING</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span>
+</span><span data-line="6"><span class="w">  </span><span class="s2">&quot;ALCOHOL CONSUMING&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span><span class="p">,</span>
+</span><span data-line="7"><span class="w">  </span><span class="c1">// ... autres features</span>
+</span><span data-line="8"><span class="p">};</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="11"><span class="w">  </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+</span><span data-line="12"><span class="w">  </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">&quot;Content-Type&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;application/json&quot;</span><span class="w"> </span><span class="p">},</span>
+</span><span data-line="13"><span class="w">  </span><span class="nx">body</span><span class="o">:</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+</span><span data-line="14"><span class="p">})</span>
+</span><span data-line="15"><span class="w">  </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
+</span><span data-line="16"><span class="w">  </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">));</span>
+</span></pre></div>
+</div>
+</section>
+<section id="curl-avec-fichier">
+<h3>cURL avec fichier<a class="headerlink" href="#curl-avec-fichier" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Créer un fichier patient.json</span>
+</span><span data-line="2">cat<span class="w"> </span>&gt;<span class="w"> </span>patient.json<span class="w"> </span><span class="s">&lt;&lt; EOF</span>
+</span><span data-line="3"><span class="s">{</span>
+</span><span data-line="4"><span class="s">  &quot;AGE&quot;: 65,</span>
+</span><span data-line="5"><span class="s">  &quot;GENDER&quot;: 1,</span>
+</span><span data-line="6"><span class="s">  &quot;SMOKING&quot;: 1,</span>
+</span><span data-line="7"><span class="s">  &quot;ALCOHOL CONSUMING&quot;: 1,</span>
+</span><span data-line="8"><span class="s">  &quot;PEER_PRESSURE&quot;: 0,</span>
+</span><span data-line="9"><span class="s">  &quot;YELLOW_FINGERS&quot;: 1,</span>
+</span><span data-line="10"><span class="s">  &quot;ANXIETY&quot;: 0,</span>
+</span><span data-line="11"><span class="s">  &quot;FATIGUE&quot;: 1,</span>
+</span><span data-line="12"><span class="s">  &quot;ALLERGY&quot;: 0,</span>
+</span><span data-line="13"><span class="s">  &quot;WHEEZING&quot;: 1,</span>
+</span><span data-line="14"><span class="s">  &quot;COUGHING&quot;: 1,</span>
+</span><span data-line="15"><span class="s">  &quot;SHORTNESS OF BREATH&quot;: 1,</span>
+</span><span data-line="16"><span class="s">  &quot;SWALLOWING DIFFICULTY&quot;: 0,</span>
+</span><span data-line="17"><span class="s">  &quot;CHEST PAIN&quot;: 1,</span>
+</span><span data-line="18"><span class="s">  &quot;CHRONIC DISEASE&quot;: 0</span>
+</span><span data-line="19"><span class="s">}</span>
+</span><span data-line="20"><span class="s">EOF</span>
+</span><span data-line="21">
+</span><span data-line="22"><span class="c1"># Utiliser le fichier</span>
+</span><span data-line="23">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://francoisformation-oc-project8.hf.space/api/predict<span class="w"> </span><span class="se">\</span>
+</span><span data-line="24"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="25"><span class="w">  </span>-d<span class="w"> </span>@patient.json
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="endpoints-disponibles">
+<h2>🔍 Endpoints Disponibles<a class="headerlink" href="#endpoints-disponibles" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Endpoint</p></th>
+<th class="head"><p>Méthode</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/api/health</span></code></p></td>
+<td><p>GET</p></td>
+<td><p>État de santé de l’API</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/api/info</span></code></p></td>
+<td><p>GET</p></td>
+<td><p>Informations API</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/api/predict</span></code></p></td>
+<td><p>POST</p></td>
+<td><p>Prédiction binaire</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/api/predict_proba</span></code></p></td>
+<td><p>POST</p></td>
+<td><p>Probabilités détaillées</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/api/logs</span></code></p></td>
+<td><p>GET</p></td>
+<td><p>Récupérer les logs</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/api/logs</span></code></p></td>
+<td><p>DELETE</p></td>
+<td><p>Vider les logs Redis</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/</span></code></p></td>
+<td><p>GET</p></td>
+<td><p>Interface Gradio UI</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="gestion-des-erreurs">
+<h2>❌ Gestion des Erreurs<a class="headerlink" href="#gestion-des-erreurs" title="Link to this heading">¶</a></h2>
+<section id="erreur-400-bad-request">
+<h3>Erreur 400 - Bad Request<a class="headerlink" href="#erreur-400-bad-request" title="Link to this heading">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Missing required fields: AGE, GENDER&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Solution</strong>: Vérifier que toutes les 14 features sont présentes.</p>
+</section>
+<section id="erreur-500-internal-server-error">
+<h3>Erreur 500 - Internal Server Error<a class="headerlink" href="#erreur-500-internal-server-error" title="Link to this heading">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Model not loaded&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Solution</strong>: Attendre que le Space soit complètement démarré (30s).</p>
+</section>
+<section id="erreur-503-service-unavailable">
+<h3>Erreur 503 - Service Unavailable<a class="headerlink" href="#erreur-503-service-unavailable" title="Link to this heading">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;API backend not accessible&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Solution</strong>: L’API backend (port 8000) n’est pas accessible. Vérifier les logs HF.</p>
+</section>
+</section>
+<section id="codes-de-statut">
+<h2>📊 Codes de Statut<a class="headerlink" href="#codes-de-statut" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>Signification</p></th>
+<th class="head"><p>Action</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>200</p></td>
+<td><p>OK</p></td>
+<td><p>Requête réussie</p></td>
+</tr>
+<tr class="row-odd"><td><p>400</p></td>
+<td><p>Bad Request</p></td>
+<td><p>Vérifier les données</p></td>
+</tr>
+<tr class="row-even"><td><p>500</p></td>
+<td><p>Internal Error</p></td>
+<td><p>Contacter le support</p></td>
+</tr>
+<tr class="row-odd"><td><p>503</p></td>
+<td><p>Service Unavailable</p></td>
+<td><p>Réessayer plus tard</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="depannage">
+<h2>🐛 Dépannage<a class="headerlink" href="#depannage" title="Link to this heading">¶</a></h2>
+<section id="le-space-retourne-404">
+<h3>Le Space retourne 404<a class="headerlink" href="#le-space-retourne-404" title="Link to this heading">¶</a></h3>
+<p>❌ <strong>Problème</strong>: <code class="docutils literal notranslate"><span class="pre">/api/health</span></code> retourne 404</p>
+<p>✅ <strong>Solution</strong>:</p>
+<ol class="arabic simple">
+<li><p>Vérifier l’URL (avec <code class="docutils literal notranslate"><span class="pre">/api/</span></code> au début)</p></li>
+<li><p>Attendre 1-2 minutes après le déploiement</p></li>
+<li><p>Tester d’abord la racine: <code class="docutils literal notranslate"><span class="pre">curl</span> <span class="pre">https://francoisformation-oc-project8.hf.space/</span></code></p></li>
+</ol>
+</section>
+<section id="timeout-apres-30s">
+<h3>Timeout après 30s<a class="headerlink" href="#timeout-apres-30s" title="Link to this heading">¶</a></h3>
+<p>❌ <strong>Problème</strong>: La requête timeout</p>
+<p>✅ <strong>Solution</strong>:</p>
+<ol class="arabic simple">
+<li><p>Le Space est peut-être en sommeil (HF arrête les Spaces inactifs)</p></li>
+<li><p>Première requête prend 30-60s pour réveiller le Space</p></li>
+<li><p>Réessayer immédiatement après</p></li>
+</ol>
+</section>
+<section id="feature-manquante">
+<h3>Feature manquante<a class="headerlink" href="#feature-manquante" title="Link to this heading">¶</a></h3>
+<p>❌ <strong>Problème</strong>: <code class="docutils literal notranslate"><span class="pre">{&quot;detail&quot;:</span> <span class="pre">&quot;Missing</span> <span class="pre">required</span> <span class="pre">field:</span> <span class="pre">AGE&quot;}</span></code></p>
+<p>✅ <strong>Solution</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vérifier le JSON avec jq</span>
+</span><span data-line="2"><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;{&quot;AGE&quot;: 50, ...}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Compter les features (devrait être 14)</span>
+</span><span data-line="5"><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;{&quot;AGE&quot;: 50, ...}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;keys | length&#39;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="documentation-complete">
+<h2>📚 Documentation Complète<a class="headerlink" href="#documentation-complete" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong><a class="reference internal" href="DIRECT_HTTP_ACCESS.html"><span class="std std-doc">DIRECT_HTTP_ACCESS.md</span></a></strong> - Guide complet (550 lignes)</p>
+<ul>
+<li><p>Tous les endpoints</p></li>
+<li><p>Intégrations (Python, JS, R)</p></li>
+<li><p>Architecture</p></li>
+<li><p>Exemples avancés</p></li>
+</ul>
+</li>
+<li><p><strong><a class="reference internal" href="PROXY_REFACTOR_SUMMARY.html"><span class="std std-doc">PROXY_REFACTOR_SUMMARY.md</span></a></strong> - Résumé technique</p>
+<ul>
+<li><p>Changements effectués</p></li>
+<li><p>Architecture avant/après</p></li>
+<li><p>Tests réalisés</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="prochaines-etapes">
+<h2>🎯 Prochaines Étapes<a class="headerlink" href="#prochaines-etapes" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>✅ Tester le health check</p></li>
+<li><p>✅ Tester une prédiction simple</p></li>
+<li><p>✅ Intégrer dans votre application</p></li>
+<li><p>📖 Lire la documentation complète</p></li>
+<li><p>🚀 Déployer en production</p></li>
+</ol>
+</section>
+<section id="conseils">
+<h2>💡 Conseils<a class="headerlink" href="#conseils" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Cache les résultats</strong>: Le modèle ne change pas, cacher les prédictions identiques</p></li>
+<li><p><strong>Batch les requêtes</strong>: Grouper plusieurs prédictions si possible</p></li>
+<li><p><strong>Gérer les timeouts</strong>: Première requête peut prendre 30-60s</p></li>
+<li><p><strong>Valider les données</strong>: Vérifier les 14 features avant l’envoi</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Besoin d’aide?</strong> Consultez la <a class="reference internal" href="DIRECT_HTTP_ACCESS.html"><span class="std std-doc">documentation complète</span></a> ou ouvrez une issue sur GitHub.</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

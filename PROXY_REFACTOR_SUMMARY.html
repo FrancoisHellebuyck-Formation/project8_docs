@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Refactorisation du Proxy pour Accès HTTP Direct - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Refactorisation du Proxy pour Accès HTTP Direct"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#resume">&#128221; R&#233;sum&#233;</a></li>
+<li><a class="reference internal" href="#changements-effectues">&#9989; Changements Effectu&#233;s</a><ul>
+<li><a class="reference internal" href="#nouveau-module-src-ui-fastapi-app-py">1. Nouveau Module: <code class="docutils literal notranslate"><span class="pre">src/ui/fastapi_app.py</span></code></a></li>
+<li><a class="reference internal" href="#routes-api-src-ui-api-routes-py">2. Routes API: <code class="docutils literal notranslate"><span class="pre">src/ui/api_routes.py</span></code></a></li>
+<li><a class="reference internal" href="#dockerfile-mis-a-jour">3. Dockerfile Mis &#224; Jour</a></li>
+<li><a class="reference internal" href="#documentation-complete">4. Documentation Compl&#232;te</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tests-realises">&#129514; Tests R&#233;alis&#233;s</a><ul>
+<li><a class="reference internal" href="#test-local-reussi">Test Local R&#233;ussi</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilisation">&#128640; Utilisation</a><ul>
+<li><a class="reference internal" href="#local">Local</a></li>
+<li><a class="reference internal" href="#huggingface-spaces-apres-deploiement">HuggingFace Spaces (apr&#232;s d&#233;ploiement)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#architecture">&#128202; Architecture</a><ul>
+<li><a class="reference internal" href="#avant-gradio-uniquement">Avant (Gradio uniquement)</a></li>
+<li><a class="reference internal" href="#apres-fastapi-gradio">Apr&#232;s (FastAPI + Gradio)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#avantages">&#128279; Avantages</a></li>
+<li><a class="reference internal" href="#fichiers-crees-modifies">&#128230; Fichiers Cr&#233;&#233;s/Modifi&#233;s</a><ul>
+<li><a class="reference internal" href="#crees-4-fichiers">Cr&#233;&#233;s (4 fichiers)</a></li>
+<li><a class="reference internal" href="#modifies-1-fichier">Modifi&#233;s (1 fichier)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#deploiement">&#9881;&#65039; D&#233;ploiement</a><ul>
+<li><a class="reference internal" href="#etapes-pour-deployer-sur-huggingface">&#201;tapes pour d&#233;ployer sur HuggingFace</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#prochaines-etapes-optionnel">&#127919; Prochaines &#201;tapes (Optionnel)</a></li>
+<li><a class="reference internal" href="#resolution-de-problemes">&#128027; R&#233;solution de Probl&#232;mes</a><ul>
+<li><a class="reference internal" href="#probleme-404-not-found-sur-api-health">Probl&#232;me: &#8220;404 Not Found&#8221; sur /api/health</a></li>
+<li><a class="reference internal" href="#probleme-connection-refused">Probl&#232;me: &#8220;Connection refused&#8221;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id1">&#128218; Documentation Compl&#232;te</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Refactorisation du Proxy pour Accès HTTP Direct</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="refactorisation-du-proxy-pour-acces-http-direct">
+<h1>Refactorisation du Proxy pour Accès HTTP Direct<a class="headerlink" href="#refactorisation-du-proxy-pour-acces-http-direct" title="Link to this heading">¶</a></h1>
+<section id="resume">
+<h2>📝 Résumé<a class="headerlink" href="#resume" title="Link to this heading">¶</a></h2>
+<p>Cette refactorisation permet l’accès <strong>HTTP/REST direct</strong> aux endpoints de l’API ML déployée sur HuggingFace Spaces, <strong>sans nécessiter le client Gradio</strong>.</p>
+</section>
+<section id="changements-effectues">
+<h2>✅ Changements Effectués<a class="headerlink" href="#changements-effectues" title="Link to this heading">¶</a></h2>
+<section id="nouveau-module-src-ui-fastapi-app-py">
+<h3>1. Nouveau Module: <code class="docutils literal notranslate"><span class="pre">src/ui/fastapi_app.py</span></code><a class="headerlink" href="#nouveau-module-src-ui-fastapi-app-py" title="Link to this heading">¶</a></h3>
+<p><strong>Fichier créé</strong>: <a class="reference download internal" download="" href="_downloads/ff782ae4be60cf4535030159f1a276d1/fastapi_app.py"><span class="xref download myst">src/ui/fastapi_app.py</span></a></p>
+<ul class="simple">
+<li><p><strong>Architecture</strong>: FastAPI principale avec Gradio monté dessus (via <code class="docutils literal notranslate"><span class="pre">gr.mount_gradio_app()</span></code>)</p></li>
+<li><p><strong>Endpoints REST disponibles</strong>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/health</span></code> - Health check</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/info</span></code> - Informations API</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/predict</span></code> - Prédiction ML</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/api/predict_proba</span></code> - Probabilités détaillées</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/logs</span></code> - Récupérer les logs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DELETE</span> <span class="pre">/api/logs</span></code> - Vider les logs</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="routes-api-src-ui-api-routes-py">
+<h3>2. Routes API: <code class="docutils literal notranslate"><span class="pre">src/ui/api_routes.py</span></code><a class="headerlink" href="#routes-api-src-ui-api-routes-py" title="Link to this heading">¶</a></h3>
+<p><strong>Fichier créé</strong>: <a class="reference download internal" download="" href="_downloads/225783954c5895b656f6469ddbd620ce/api_routes.py"><span class="xref download myst">src/ui/api_routes.py</span></a></p>
+<ul class="simple">
+<li><p>Router FastAPI avec tous les endpoints REST</p></li>
+<li><p>Utilise <code class="docutils literal notranslate"><span class="pre">APIProxyClient</span></code> pour communiquer avec l’API backend (port 8000)</p></li>
+<li><p>Documentation intégrée avec exemples curl</p></li>
+</ul>
+</section>
+<section id="dockerfile-mis-a-jour">
+<h3>3. Dockerfile Mis à Jour<a class="headerlink" href="#dockerfile-mis-a-jour" title="Link to this heading">¶</a></h3>
+<p><strong>Fichier modifié</strong>: <a class="reference download internal" download="" href="_downloads/14a485b64748f2bc0dbbbf790f80349d/Dockerfile.hf"><span class="xref download myst">docker/Dockerfile.hf</span></a></p>
+<p><strong>Avant</strong>:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span data-line="1">python<span class="w"> </span>-m<span class="w"> </span>src.ui
+</span></pre></div>
+</div>
+<p><strong>Après</strong>:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span data-line="1">python<span class="w"> </span>-m<span class="w"> </span>src.ui.fastapi_app
+</span></pre></div>
+</div>
+</section>
+<section id="documentation-complete">
+<h3>4. Documentation Complète<a class="headerlink" href="#documentation-complete" title="Link to this heading">¶</a></h3>
+<p><strong>Fichier créé</strong>: <a class="reference internal" href="DIRECT_HTTP_ACCESS.html"><span class="std std-doc">docs/DIRECT_HTTP_ACCESS.md</span></a></p>
+<ul class="simple">
+<li><p>Guide complet d’utilisation avec exemples curl</p></li>
+<li><p>Intégrations Python, JavaScript, R</p></li>
+<li><p>Codes de statut HTTP</p></li>
+<li><p>Dépannage</p></li>
+</ul>
+</section>
+</section>
+<section id="tests-realises">
+<h2>🧪 Tests Réalisés<a class="headerlink" href="#tests-realises" title="Link to this heading">¶</a></h2>
+<section id="test-local-reussi">
+<h3>Test Local Réussi<a class="headerlink" href="#test-local-reussi" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Démarrage du backend API</span>
+</span><span data-line="2">uv<span class="w"> </span>run<span class="w"> </span>uvicorn<span class="w"> </span>src.api.main:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="p">&amp;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Démarrage FastAPI+Gradio</span>
+</span><span data-line="5">uv<span class="w"> </span>run<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>src.ui.fastapi_app<span class="w"> </span><span class="p">&amp;</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Test health check</span>
+</span><span data-line="8">curl<span class="w"> </span>http://localhost:7860/api/health
+</span><span data-line="9"><span class="c1"># ✅ {&quot;status&quot;:&quot;healthy&quot;,&quot;model_loaded&quot;:true,&quot;redis_connected&quot;:false,&quot;version&quot;:&quot;1.0.0&quot;}</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="c1"># Test prédiction</span>
+</span><span data-line="12">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7860/api/predict<span class="w"> </span><span class="se">\</span>
+</span><span data-line="13"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="14"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;AGE&quot;: 50, &quot;GENDER&quot;: 1, &quot;SMOKING&quot;: 1, ...}&#39;</span>
+</span><span data-line="15"><span class="c1"># ✅ {&quot;prediction&quot;:1,&quot;probability&quot;:0.8659778675097131,&quot;message&quot;:&quot;Prédiction positive&quot;}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="utilisation">
+<h2>🚀 Utilisation<a class="headerlink" href="#utilisation" title="Link to this heading">¶</a></h2>
+<section id="local">
+<h3>Local<a class="headerlink" href="#local" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Terminal 1: Démarrer l&#39;API backend</span>
+</span><span data-line="2">make<span class="w"> </span>run-api
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Terminal 2: Démarrer FastAPI+Gradio</span>
+</span><span data-line="5">python<span class="w"> </span>-m<span class="w"> </span>src.ui.fastapi_app
+</span></pre></div>
+</div>
+</section>
+<section id="huggingface-spaces-apres-deploiement">
+<h3>HuggingFace Spaces (après déploiement)<a class="headerlink" href="#huggingface-spaces-apres-deploiement" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Health check</span>
+</span><span data-line="2">curl<span class="w"> </span>https://francoisformation-oc-project8.hf.space/api/health
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Prédiction</span>
+</span><span data-line="5">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://francoisformation-oc-project8.hf.space/api/predict<span class="w"> </span><span class="se">\</span>
+</span><span data-line="6"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="7"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span data-line="8"><span class="s1">    &quot;AGE&quot;: 65,</span>
+</span><span data-line="9"><span class="s1">    &quot;GENDER&quot;: 1,</span>
+</span><span data-line="10"><span class="s1">    &quot;SMOKING&quot;: 1,</span>
+</span><span data-line="11"><span class="s1">    &quot;ALCOHOL CONSUMING&quot;: 1,</span>
+</span><span data-line="12"><span class="s1">    &quot;PEER_PRESSURE&quot;: 0,</span>
+</span><span data-line="13"><span class="s1">    &quot;YELLOW_FINGERS&quot;: 1,</span>
+</span><span data-line="14"><span class="s1">    &quot;ANXIETY&quot;: 0,</span>
+</span><span data-line="15"><span class="s1">    &quot;FATIGUE&quot;: 1,</span>
+</span><span data-line="16"><span class="s1">    &quot;ALLERGY&quot;: 0,</span>
+</span><span data-line="17"><span class="s1">    &quot;WHEEZING&quot;: 1,</span>
+</span><span data-line="18"><span class="s1">    &quot;COUGHING&quot;: 1,</span>
+</span><span data-line="19"><span class="s1">    &quot;SHORTNESS OF BREATH&quot;: 1,</span>
+</span><span data-line="20"><span class="s1">    &quot;SWALLOWING DIFFICULTY&quot;: 0,</span>
+</span><span data-line="21"><span class="s1">    &quot;CHEST PAIN&quot;: 1,</span>
+</span><span data-line="22"><span class="s1">    &quot;CHRONIC DISEASE&quot;: 0</span>
+</span><span data-line="23"><span class="s1">  }&#39;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="architecture">
+<h2>📊 Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h2>
+<section id="avant-gradio-uniquement">
+<h3>Avant (Gradio uniquement)<a class="headerlink" href="#avant-gradio-uniquement" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">HuggingFace Space (Port 7860)
+</span><span data-line="2">└── Gradio UI
+</span><span data-line="3">    └── API via client Gradio uniquement
+</span></pre></div>
+</div>
+</section>
+<section id="apres-fastapi-gradio">
+<h3>Après (FastAPI + Gradio)<a class="headerlink" href="#apres-fastapi-gradio" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">HuggingFace Space (Port 7860)
+</span><span data-line="2">├── FastAPI (routes /api/*)
+</span><span data-line="3">│   ├── GET /api/health
+</span><span data-line="4">│   ├── POST /api/predict
+</span><span data-line="5">│   ├── POST /api/predict_proba
+</span><span data-line="6">│   ├── GET /api/logs
+</span><span data-line="7">│   └── DELETE /api/logs
+</span><span data-line="8">└── Gradio UI (monté sur /)
+</span><span data-line="9">    └── Interface utilisateur interactive
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="avantages">
+<h2>🔗 Avantages<a class="headerlink" href="#avantages" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Avant</p></th>
+<th class="head"><p>Après</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>❌ Nécessite le client Gradio Python</p></td>
+<td><p>✅ Accès via HTTP standard (curl, requests, fetch)</p></td>
+</tr>
+<tr class="row-odd"><td><p>❌ Format de requête propriétaire Gradio</p></td>
+<td><p>✅ Format JSON standard REST API</p></td>
+</tr>
+<tr class="row-even"><td><p>❌ Difficile à intégrer dans d’autres langages</p></td>
+<td><p>✅ Compatible avec n’importe quel langage (Python, JS, R, etc.)</p></td>
+</tr>
+<tr class="row-odd"><td><p>❌ Pas de documentation OpenAPI automatique</p></td>
+<td><p>✅ Documentation FastAPI intégrée</p></td>
+</tr>
+<tr class="row-even"><td><p>⚠️ Interface UI seulement</p></td>
+<td><p>✅ Interface UI <strong>ET</strong> API REST</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="fichiers-crees-modifies">
+<h2>📦 Fichiers Créés/Modifiés<a class="headerlink" href="#fichiers-crees-modifies" title="Link to this heading">¶</a></h2>
+<section id="crees-4-fichiers">
+<h3>Créés (4 fichiers)<a class="headerlink" href="#crees-4-fichiers" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>src/ui/fastapi_app.py</strong> (225 lignes) - App FastAPI principale</p></li>
+<li><p><strong>src/ui/api_routes.py</strong> (195 lignes) - Router FastAPI (remplacé par fastapi_app.py)</p></li>
+<li><p><strong>docs/DIRECT_HTTP_ACCESS.md</strong> (550 lignes) - Documentation complète</p></li>
+<li><p><strong>docs/PROXY_REFACTOR_SUMMARY.md</strong> (ce fichier)</p></li>
+</ol>
+</section>
+<section id="modifies-1-fichier">
+<h3>Modifiés (1 fichier)<a class="headerlink" href="#modifies-1-fichier" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>docker/Dockerfile.hf</strong> (ligne 84-87) - Changement du point d’entrée</p></li>
+</ol>
+</section>
+</section>
+<section id="deploiement">
+<h2>⚙️ Déploiement<a class="headerlink" href="#deploiement" title="Link to this heading">¶</a></h2>
+<section id="etapes-pour-deployer-sur-huggingface">
+<h3>Étapes pour déployer sur HuggingFace<a class="headerlink" href="#etapes-pour-deployer-sur-huggingface" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Commit les changements</strong>:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">git<span class="w"> </span>add<span class="w"> </span>src/ui/fastapi_app.py<span class="w"> </span>src/ui/api_routes.py<span class="w"> </span>docker/Dockerfile.hf<span class="w"> </span>docs/
+</span><span data-line="2">git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat: Add direct HTTP/REST access to API on HF Spaces&quot;</span>
+</span><span data-line="3">git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>develop
+</span></pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Merge vers main</strong> (déclenche le déploiement automatique via GitHub Actions):</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">git<span class="w"> </span>checkout<span class="w"> </span>main
+</span><span data-line="2">git<span class="w"> </span>merge<span class="w"> </span>develop
+</span><span data-line="3">git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main
+</span></pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>Vérifier le déploiement</strong>:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Attendre 2-3 minutes que le Space se redémarre</span>
+</span><span data-line="2">curl<span class="w"> </span>https://francoisformation-oc-project8.hf.space/api/health
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="prochaines-etapes-optionnel">
+<h2>🎯 Prochaines Étapes (Optionnel)<a class="headerlink" href="#prochaines-etapes-optionnel" title="Link to this heading">¶</a></h2>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Ajouter authentification API (API keys)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Implémenter rate limiting</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Ajouter CORS personnalisé</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Créer un client Python SDK simplifié</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Ajouter métriques Prometheus sur <code class="docutils literal notranslate"><span class="pre">/metrics</span></code></p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Documentation OpenAPI interactive sur <code class="docutils literal notranslate"><span class="pre">/docs</span></code></p></li>
+</ul>
+</section>
+<section id="resolution-de-problemes">
+<h2>🐛 Résolution de Problèmes<a class="headerlink" href="#resolution-de-problemes" title="Link to this heading">¶</a></h2>
+<section id="probleme-404-not-found-sur-api-health">
+<h3>Problème: “404 Not Found” sur /api/health<a class="headerlink" href="#probleme-404-not-found-sur-api-health" title="Link to this heading">¶</a></h3>
+<p><strong>Cause</strong>: Le Space utilise encore l’ancien <code class="docutils literal notranslate"><span class="pre">src.ui</span></code> au lieu de <code class="docutils literal notranslate"><span class="pre">src.ui.fastapi_app</span></code></p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic simple">
+<li><p>Vérifier que <code class="docutils literal notranslate"><span class="pre">Dockerfile.hf</span></code> contient <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">src.ui.fastapi_app</span></code></p></li>
+<li><p>Redéployer le Space</p></li>
+<li><p>Attendre le redémarrage complet (2-3 min)</p></li>
+</ol>
+</section>
+<section id="probleme-connection-refused">
+<h3>Problème: “Connection refused”<a class="headerlink" href="#probleme-connection-refused" title="Link to this heading">¶</a></h3>
+<p><strong>Cause</strong>: Le Space n’est pas encore démarré</p>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic simple">
+<li><p>Vérifier le status du Space sur HuggingFace</p></li>
+<li><p>Consulter les logs du Space</p></li>
+<li><p>Attendre que le healthcheck passe (environ 30s après démarrage)</p></li>
+</ol>
+</section>
+</section>
+<section id="id1">
+<h2>📚 Documentation Complète<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>Pour plus de détails, consultez:</p>
+<ul class="simple">
+<li><p><strong><a class="reference internal" href="DIRECT_HTTP_ACCESS.html"><span class="std std-doc">docs/DIRECT_HTTP_ACCESS.md</span></a></strong> - Guide complet avec exemples</p></li>
+<li><p><strong><a class="reference download internal" download="" href="_downloads/ff782ae4be60cf4535030159f1a276d1/fastapi_app.py"><span class="xref download myst">src/ui/fastapi_app.py</span></a></strong> - Code source commenté</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Date</strong>: 2025-11-21
+<strong>Auteur</strong>: Project8 Team
+<strong>Version</strong>: 1.0.0</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

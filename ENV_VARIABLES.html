@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Variables d’environnement - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Variables d’environnement"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#variables-disponibles">Variables disponibles</a><ul>
+<li><a class="reference internal" href="#configuration-du-modele-ml">Configuration du mod&#232;le ML</a></li>
+<li><a class="reference internal" href="#configuration-de-l-api-fastapi">Configuration de l&#8217;API FastAPI</a></li>
+<li><a class="reference internal" href="#configuration-redis">Configuration Redis</a></li>
+<li><a class="reference internal" href="#configuration-gradio">Configuration Gradio</a></li>
+<li><a class="reference internal" href="#performance-monitoring">Performance Monitoring</a></li>
+<li><a class="reference internal" href="#elasticsearch">Elasticsearch</a></li>
+<li><a class="reference internal" href="#pipeline-de-logs">Pipeline de logs</a></li>
+<li><a class="reference internal" href="#simulateur-de-charge">Simulateur de charge</a></li>
+<li><a class="reference internal" href="#data-drift">Data Drift</a></li>
+<li><a class="reference internal" href="#huggingface">HuggingFace</a></li>
+<li><a class="reference internal" href="#environnement">Environnement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilisation-dans-le-code">Utilisation dans le code</a></li>
+<li><a class="reference internal" href="#configuration-docker">Configuration Docker</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Variables d’environnement</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="variables-d-environnement">
+<h1>Variables d’environnement<a class="headerlink" href="#variables-d-environnement" title="Link to this heading">¶</a></h1>
+<p>Ce fichier documente les variables d’environnement utilisées dans le projet.</p>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
+<p>Pour configurer le projet, copiez le fichier <code class="docutils literal notranslate"><span class="pre">.env.example</span></code> vers <code class="docutils literal notranslate"><span class="pre">.env</span></code> et ajustez les valeurs selon vos besoins :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+</span></pre></div>
+</div>
+<p><strong>Important</strong> : Le fichier <code class="docutils literal notranslate"><span class="pre">.env</span></code> contient des informations sensibles et ne doit jamais être commité dans git (il est déjà dans <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code>).</p>
+</section>
+<section id="variables-disponibles">
+<h2>Variables disponibles<a class="headerlink" href="#variables-disponibles" title="Link to this heading">¶</a></h2>
+<section id="configuration-du-modele-ml">
+<h3>Configuration du modèle ML<a class="headerlink" href="#configuration-du-modele-ml" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MODEL_PATH</span></code> : Chemin vers le fichier du modèle ML (.pkl)</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">./model/model.pkl</span></code></p></li>
+<li><p><strong>Type</strong> : string (chemin relatif ou absolu)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="configuration-de-l-api-fastapi">
+<h3>Configuration de l’API FastAPI<a class="headerlink" href="#configuration-de-l-api-fastapi" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">API_HOST</span></code> : Adresse IP sur laquelle l’API écoute</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code></p></li>
+<li><p><strong>Type</strong> : string</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">API_PORT</span></code> : Port sur lequel l’API écoute</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">8000</span></code></p></li>
+<li><p><strong>Type</strong> : integer</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="configuration-redis">
+<h3>Configuration Redis<a class="headerlink" href="#configuration-redis" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">REDIS_HOST</span></code> : Hôte du serveur Redis</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">localhost</span></code></p></li>
+<li><p><strong>Type</strong> : string</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REDIS_PORT</span></code> : Port du serveur Redis</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">6379</span></code></p></li>
+<li><p><strong>Type</strong> : integer</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REDIS_DB</span></code> : Numéro de la base de données Redis</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">0</span></code></p></li>
+<li><p><strong>Type</strong> : integer</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REDIS_LOGS_KEY</span></code> : Clé Redis pour stocker les logs</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">api_logs</span></code></p></li>
+<li><p><strong>Type</strong> : string</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REDIS_LOGS_MAX_SIZE</span></code> : Nombre maximum de logs à conserver</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">1000</span></code></p></li>
+<li><p><strong>Type</strong> : integer</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="configuration-gradio">
+<h3>Configuration Gradio<a class="headerlink" href="#configuration-gradio" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">GRADIO_HOST</span></code> : Adresse IP sur laquelle Gradio écoute</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code></p></li>
+<li><p><strong>Type</strong> : string</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GRADIO_PORT</span></code> : Port sur lequel Gradio écoute</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">7860</span></code></p></li>
+<li><p><strong>Type</strong> : integer</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">API_URL</span></code> : URL de l’API FastAPI</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code></p></li>
+<li><p><strong>Type</strong> : string (URL complète)</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GRADIO_URL</span></code> : URL du serveur Gradio (pour le pipeline de logs)</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">https://francoisformation-oc-project8.hf.space</span></code></p></li>
+<li><p><strong>Type</strong> : string (URL complète)</p></li>
+<li><p><strong>Note</strong> : Utilisé par le pipeline de logs pour collecter les logs depuis Gradio</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="performance-monitoring">
+<h3>Performance Monitoring<a class="headerlink" href="#performance-monitoring" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ENABLE_PERFORMANCE_MONITORING</span></code> : Active/désactive le monitoring des performances</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><strong>Type</strong> : boolean</p></li>
+<li><p><strong>Note</strong> : Utilise cProfile pour collecter des métriques détaillées (CPU, RAM, temps d’inférence, latence, etc.)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="elasticsearch">
+<h3>Elasticsearch<a class="headerlink" href="#elasticsearch" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ELASTICSEARCH_HOST</span></code> : Hôte du serveur Elasticsearch</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">localhost</span></code></p></li>
+<li><p><strong>Type</strong> : string</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ELASTICSEARCH_PORT</span></code> : Port du serveur Elasticsearch</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">9200</span></code></p></li>
+<li><p><strong>Type</strong> : integer</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ELASTICSEARCH_INDEX</span></code> : Nom de l’index principal Elasticsearch</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">ml-api-logs</span></code></p></li>
+<li><p><strong>Type</strong> : string</p></li>
+<li><p><strong>Note</strong> : Le pipeline crée 3 index : <code class="docutils literal notranslate"><span class="pre">ml-api-logs</span></code>, <code class="docutils literal notranslate"><span class="pre">ml-api-message</span></code>, <code class="docutils literal notranslate"><span class="pre">ml-api-perfs</span></code></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="pipeline-de-logs">
+<h3>Pipeline de logs<a class="headerlink" href="#pipeline-de-logs" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PIPELINE_BATCH_SIZE</span></code> : Nombre de logs à collecter par batch</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">100</span></code></p></li>
+<li><p><strong>Type</strong> : integer</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PIPELINE_POLL_INTERVAL</span></code> : Intervalle de collecte en secondes</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">10</span></code></p></li>
+<li><p><strong>Type</strong> : integer</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PIPELINE_FILTER_PATTERN</span></code> : Pattern pour filtrer les logs</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">API</span> <span class="pre">Call</span> <span class="pre">-</span> <span class="pre">POST</span> <span class="pre">/predict</span></code></p></li>
+<li><p><strong>Type</strong> : string</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="simulateur-de-charge">
+<h3>Simulateur de charge<a class="headerlink" href="#simulateur-de-charge" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SIMULATOR_API_URL</span></code> : URL de l’API à tester</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code></p></li>
+<li><p><strong>Type</strong> : string</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SIMULATOR_NUM_REQUESTS</span></code> : Nombre total de requêtes à envoyer</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">100</span></code></p></li>
+<li><p><strong>Type</strong> : integer</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SIMULATOR_CONCURRENT_USERS</span></code> : Nombre d’utilisateurs concurrents</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">10</span></code></p></li>
+<li><p><strong>Type</strong> : integer</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SIMULATOR_DELAY</span></code> : Délai entre les requêtes (secondes)</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></li>
+<li><p><strong>Type</strong> : float</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SIMULATOR_TIMEOUT</span></code> : Timeout des requêtes (secondes)</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">30.0</span></code></p></li>
+<li><p><strong>Type</strong> : float</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SIMULATOR_ENDPOINT</span></code> : Endpoint à tester</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">/predict</span></code></p></li>
+<li><p><strong>Type</strong> : string</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SIMULATOR_VERBOSE</span></code> : Mode verbeux pour le simulateur</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><strong>Type</strong> : boolean</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="data-drift">
+<h3>Data Drift<a class="headerlink" href="#data-drift" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SIMULATOR_ENABLE_AGE_DRIFT</span></code> : Active/désactive la simulation de drift</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><strong>Type</strong> : boolean</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SIMULATOR_AGE_DRIFT_TARGET</span></code> : Âge cible pour le drift</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">70.0</span></code></p></li>
+<li><p><strong>Type</strong> : float</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SIMULATOR_AGE_DRIFT_START</span></code> : Pourcentage de drift au début</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">0.0</span></code></p></li>
+<li><p><strong>Type</strong> : float</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SIMULATOR_AGE_DRIFT_END</span></code> : Pourcentage de drift à la fin</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">100.0</span></code></p></li>
+<li><p><strong>Type</strong> : float</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="huggingface">
+<h3>HuggingFace<a class="headerlink" href="#huggingface" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">HF_TOKEN</span></code> : Token d’authentification HuggingFace</p>
+<ul>
+<li><p><strong>Par défaut</strong> : vide</p></li>
+<li><p><strong>Type</strong> : string</p></li>
+<li><p><strong>Note</strong> : Nécessaire pour accéder aux Spaces privés. Créer un token sur https://huggingface.co/settings/tokens</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="environnement">
+<h3>Environnement<a class="headerlink" href="#environnement" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ENV</span></code> : Environnement d’exécution</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">development</span></code></p></li>
+<li><p><strong>Valeurs possibles</strong> : <code class="docutils literal notranslate"><span class="pre">development</span></code>, <code class="docutils literal notranslate"><span class="pre">staging</span></code>, <code class="docutils literal notranslate"><span class="pre">production</span></code></p></li>
+<li><p><strong>Type</strong> : string</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LOG_LEVEL</span></code> : Niveau de log</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">INFO</span></code></p></li>
+<li><p><strong>Valeurs possibles</strong> : <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>, <code class="docutils literal notranslate"><span class="pre">INFO</span></code>, <code class="docutils literal notranslate"><span class="pre">WARNING</span></code>, <code class="docutils literal notranslate"><span class="pre">ERROR</span></code>, <code class="docutils literal notranslate"><span class="pre">CRITICAL</span></code></p></li>
+<li><p><strong>Type</strong> : string</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LOGGING_HANDLER</span></code> : Type de handler pour les logs de l’API</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">stdout</span></code></p></li>
+<li><p><strong>Valeurs possibles</strong> :</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">stdout</span></code> : Logs uniquement vers la console (standard output)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">redis</span></code> : Logs vers la console ET stockage dans Redis</p></li>
+</ul>
+</li>
+<li><p><strong>Type</strong> : string</p></li>
+<li><p><strong>Note</strong> : En mode <code class="docutils literal notranslate"><span class="pre">redis</span></code>, les logs sont à la fois affichés dans la console et stockés dans Redis pour consultation via l’endpoint <code class="docutils literal notranslate"><span class="pre">/logs</span></code>. En mode <code class="docutils literal notranslate"><span class="pre">stdout</span></code>, les logs sont uniquement affichés dans la console.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UI_LOG_LEVEL</span></code> : Niveau de log pour l’interface Gradio</p>
+<ul>
+<li><p><strong>Par défaut</strong> : <code class="docutils literal notranslate"><span class="pre">INFO</span></code></p></li>
+<li><p><strong>Valeurs possibles</strong> : <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>, <code class="docutils literal notranslate"><span class="pre">INFO</span></code>, <code class="docutils literal notranslate"><span class="pre">WARNING</span></code>, <code class="docutils literal notranslate"><span class="pre">ERROR</span></code>, <code class="docutils literal notranslate"><span class="pre">CRITICAL</span></code></p></li>
+<li><p><strong>Type</strong> : string</p></li>
+<li><p><strong>Note</strong> : Configure le niveau de log spécifique pour l’interface utilisateur Gradio. Les logs UI sont toujours affichés sur stdout.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="utilisation-dans-le-code">
+<h2>Utilisation dans le code<a class="headerlink" href="#utilisation-dans-le-code" title="Link to this heading">¶</a></h2>
+<p>Les variables d’environnement sont chargées via le module <code class="docutils literal notranslate"><span class="pre">src/config.py</span></code> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">src.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">settings</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Accéder aux variables</span>
+</span><span data-line="4"><span class="n">model_path</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">MODEL_PATH</span>
+</span><span data-line="5"><span class="n">api_host</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">API_HOST</span>
+</span></pre></div>
+</div>
+</section>
+<section id="configuration-docker">
+<h2>Configuration Docker<a class="headerlink" href="#configuration-docker" title="Link to this heading">¶</a></h2>
+<p>Pour Docker, vous pouvez :</p>
+<ol class="arabic simple">
+<li><p>Utiliser un fichier <code class="docutils literal notranslate"><span class="pre">.env</span></code> à la racine du projet</p></li>
+<li><p>Passer les variables via <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code></p></li>
+<li><p>Utiliser l’option <code class="docutils literal notranslate"><span class="pre">-e</span></code> avec <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code></p></li>
+</ol>
+<p>Exemple avec docker-compose :</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nt">services</span><span class="p">:</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">api</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="4"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MODEL_PATH=/app/model/model.pkl</span>
+</span><span data-line="5"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REDIS_HOST=redis</span>
+</span><span data-line="6"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REDIS_PORT=6379</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

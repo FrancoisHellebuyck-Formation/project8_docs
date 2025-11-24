@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Métriques de Performance de l’API ML - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Métriques de Performance de l’API ML"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#vue-d-ensemble">Vue d&#8217;ensemble</a></li>
+<li><a class="reference internal" href="#activation-desactivation">Activation/D&#233;sactivation</a><ul>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#impact-sur-les-performances">Impact sur les performances</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#structure-des-metriques">Structure des m&#233;triques</a><ul>
+<li><a class="reference internal" href="#format-json">Format JSON</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#metriques-collectees">M&#233;triques collect&#233;es</a><ul>
+<li><a class="reference internal" href="#transaction-id-string">1. <code class="docutils literal notranslate"><span class="pre">transaction_id</span></code> (string)</a></li>
+<li><a class="reference internal" href="#inference-time-ms-float">2. <code class="docutils literal notranslate"><span class="pre">inference_time_ms</span></code> (float)</a></li>
+<li><a class="reference internal" href="#cpu-time-ms-float">3. <code class="docutils literal notranslate"><span class="pre">cpu_time_ms</span></code> (float)</a></li>
+<li><a class="reference internal" href="#memory-mb-float">4. <code class="docutils literal notranslate"><span class="pre">memory_mb</span></code> (float)</a></li>
+<li><a class="reference internal" href="#memory-delta-mb-float">5. <code class="docutils literal notranslate"><span class="pre">memory_delta_mb</span></code> (float)</a></li>
+<li><a class="reference internal" href="#function-calls-integer">6. <code class="docutils literal notranslate"><span class="pre">function_calls</span></code> (integer)</a></li>
+<li><a class="reference internal" href="#latency-ms-float">7. <code class="docutils literal notranslate"><span class="pre">latency_ms</span></code> (float)</a></li>
+<li><a class="reference internal" href="#top-functions-array">8. <code class="docutils literal notranslate"><span class="pre">top_functions</span></code> (array)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#flux-de-collecte">Flux de collecte</a></li>
+<li><a class="reference internal" href="#acces-aux-metriques">Acc&#232;s aux m&#233;triques</a><ul>
+<li><a class="reference internal" href="#via-les-logs-redis-temps-reel">1. Via les logs Redis (temps r&#233;el)</a></li>
+<li><a class="reference internal" href="#via-elasticsearch-historique">2. Via Elasticsearch (historique)</a></li>
+<li><a class="reference internal" href="#via-kibana-visualisation">3. Via Kibana (visualisation)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dashboards-kibana-recommandes">Dashboards Kibana recommand&#233;s</a><ul>
+<li><a class="reference internal" href="#dashboard-1-vue-d-ensemble-des-performances">Dashboard 1 : Vue d&#8217;ensemble des performances</a></li>
+<li><a class="reference internal" href="#dashboard-2-analyse-detaillee">Dashboard 2 : Analyse d&#233;taill&#233;e</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#analyse-et-optimisation">Analyse et optimisation</a><ul>
+<li><a class="reference internal" href="#identifier-les-requetes-lentes">1. Identifier les requ&#234;tes lentes</a></li>
+<li><a class="reference internal" href="#detecter-les-fuites-memoire">2. D&#233;tecter les fuites m&#233;moire</a></li>
+<li><a class="reference internal" href="#optimiser-le-feature-engineering">3. Optimiser le feature engineering</a></li>
+<li><a class="reference internal" href="#optimiser-la-prediction">4. Optimiser la pr&#233;diction</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#alertes-recommandees">Alertes recommand&#233;es</a><ul>
+<li><a class="reference internal" href="#alertes-critiques">Alertes critiques</a></li>
+<li><a class="reference internal" href="#alertes-warning">Alertes warning</a></li>
+<li><a class="reference internal" href="#configuration-prometheus-exemple">Configuration Prometheus (exemple)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exemples-d-analyse">Exemples d&#8217;analyse</a><ul>
+<li><a class="reference internal" href="#exemple-1-requete-lente-identifiee">Exemple 1 : Requ&#234;te lente identifi&#233;e</a></li>
+<li><a class="reference internal" href="#exemple-2-fuite-memoire-detectee">Exemple 2 : Fuite m&#233;moire d&#233;tect&#233;e</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#export-des-metriques">Export des m&#233;triques</a><ul>
+<li><a class="reference internal" href="#export-vers-parquet">Export vers Parquet</a></li>
+<li><a class="reference internal" href="#analyse-avec-pandas">Analyse avec Pandas</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#desactivation-en-production">D&#233;sactivation en production</a></li>
+<li><a class="reference internal" href="#references">R&#233;f&#233;rences</a></li>
+<li><a class="reference internal" href="#faq">FAQ</a><ul>
+<li><a class="reference internal" href="#q-les-metriques-ralentissent-elles-l-api">Q: Les m&#233;triques ralentissent-elles l&#8217;API ?</a></li>
+<li><a class="reference internal" href="#q-puis-je-collecter-des-metriques-custom">Q: Puis-je collecter des m&#233;triques custom ?</a></li>
+<li><a class="reference internal" href="#q-les-metriques-sont-elles-disponibles-en-temps-reel">Q: Les m&#233;triques sont-elles disponibles en temps r&#233;el ?</a></li>
+<li><a class="reference internal" href="#q-comment-comparer-les-performances-entre-versions">Q: Comment comparer les performances entre versions ?</a></li>
+<li><a class="reference internal" href="#q-que-faire-si-memory-delta-mb-est-toujours-negatif">Q: Que faire si memory_delta_mb est toujours n&#233;gatif ?</a></li>
+<li><a class="reference internal" href="#q-comment-simuler-une-charge-pour-tester-les-metriques">Q: Comment simuler une charge pour tester les m&#233;triques ?</a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Métriques de Performance de l’API ML</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="metriques-de-performance-de-l-api-ml">
+<h1>Métriques de Performance de l’API ML<a class="headerlink" href="#metriques-de-performance-de-l-api-ml" title="Link to this heading">¶</a></h1>
+<p>Ce document détaille les métriques de performance collectées et loggées par l’API lors de chaque prédiction.</p>
+<section id="vue-d-ensemble">
+<h2>Vue d’ensemble<a class="headerlink" href="#vue-d-ensemble" title="Link to this heading">¶</a></h2>
+<p>L’API collecte automatiquement des métriques de performance détaillées pour chaque appel aux endpoints <code class="docutils literal notranslate"><span class="pre">/predict</span></code> et <code class="docutils literal notranslate"><span class="pre">/predict_proba</span></code>. Ces métriques permettent de :</p>
+<ul class="simple">
+<li><p><strong>Optimiser les performances</strong> du modèle ML</p></li>
+<li><p><strong>Identifier les goulots d’étranglement</strong> dans le code</p></li>
+<li><p><strong>Monitorer la latence</strong> de l’API en production</p></li>
+<li><p><strong>Analyser l’utilisation des ressources</strong> (CPU, mémoire)</p></li>
+</ul>
+</section>
+<section id="activation-desactivation">
+<h2>Activation/Désactivation<a class="headerlink" href="#activation-desactivation" title="Link to this heading">¶</a></h2>
+<p>Les métriques de performance sont contrôlées par la variable d’environnement <code class="docutils literal notranslate"><span class="pre">ENABLE_PERFORMANCE_MONITORING</span></code>.</p>
+<section id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Dans .env</span>
+</span><span data-line="2"><span class="nv">ENABLE_PERFORMANCE_MONITORING</span><span class="o">=</span><span class="nb">true</span><span class="w">   </span><span class="c1"># Activer (par défaut)</span>
+</span><span data-line="3"><span class="nv">ENABLE_PERFORMANCE_MONITORING</span><span class="o">=</span><span class="nb">false</span><span class="w">  </span><span class="c1"># Désactiver</span>
+</span></pre></div>
+</div>
+</section>
+<section id="impact-sur-les-performances">
+<h3>Impact sur les performances<a class="headerlink" href="#impact-sur-les-performances" title="Link to this heading">¶</a></h3>
+<p>⚠️ <strong>Important</strong> : Le monitoring de performance utilise <code class="docutils literal notranslate"><span class="pre">cProfile</span></code> qui ajoute un léger overhead (~5-10ms par requête). En production, évaluez si cet overhead est acceptable pour votre cas d’usage.</p>
+</section>
+</section>
+<section id="structure-des-metriques">
+<h2>Structure des métriques<a class="headerlink" href="#structure-des-metriques" title="Link to this heading">¶</a></h2>
+<section id="format-json">
+<h3>Format JSON<a class="headerlink" href="#format-json" title="Link to this heading">¶</a></h3>
+<p>Les métriques sont loggées au format JSON structuré :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;performance_metrics&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="3"><span class="w">    </span><span class="nt">&quot;transaction_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;a1b2c3d4-e5f6-7890-abcd-ef1234567890&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">    </span><span class="nt">&quot;inference_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">25.34</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">    </span><span class="nt">&quot;cpu_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">18.12</span><span class="p">,</span>
+</span><span data-line="6"><span class="w">    </span><span class="nt">&quot;memory_mb&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">245.6</span><span class="p">,</span>
+</span><span data-line="7"><span class="w">    </span><span class="nt">&quot;memory_delta_mb&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">2.3</span><span class="p">,</span>
+</span><span data-line="8"><span class="w">    </span><span class="nt">&quot;function_calls&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1523</span><span class="p">,</span>
+</span><span data-line="9"><span class="w">    </span><span class="nt">&quot;latency_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">28.45</span><span class="p">,</span>
+</span><span data-line="10"><span class="w">    </span><span class="nt">&quot;top_functions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span data-line="11"><span class="w">      </span><span class="p">{</span>
+</span><span data-line="12"><span class="w">        </span><span class="nt">&quot;function&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;predict&quot;</span><span class="p">,</span>
+</span><span data-line="13"><span class="w">        </span><span class="nt">&quot;file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;src/model/predictor.py&quot;</span><span class="p">,</span>
+</span><span data-line="14"><span class="w">        </span><span class="nt">&quot;line&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span>
+</span><span data-line="15"><span class="w">        </span><span class="nt">&quot;cumulative_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">15.23</span><span class="p">,</span>
+</span><span data-line="16"><span class="w">        </span><span class="nt">&quot;total_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">12.45</span><span class="p">,</span>
+</span><span data-line="17"><span class="w">        </span><span class="nt">&quot;calls&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+</span><span data-line="18"><span class="w">      </span><span class="p">},</span>
+</span><span data-line="19"><span class="w">      </span><span class="p">{</span>
+</span><span data-line="20"><span class="w">        </span><span class="nt">&quot;function&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;engineer_features&quot;</span><span class="p">,</span>
+</span><span data-line="21"><span class="w">        </span><span class="nt">&quot;file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;src/model/feature_engineering.py&quot;</span><span class="p">,</span>
+</span><span data-line="22"><span class="w">        </span><span class="nt">&quot;line&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">78</span><span class="p">,</span>
+</span><span data-line="23"><span class="w">        </span><span class="nt">&quot;cumulative_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">8.12</span><span class="p">,</span>
+</span><span data-line="24"><span class="w">        </span><span class="nt">&quot;total_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">7.89</span><span class="p">,</span>
+</span><span data-line="25"><span class="w">        </span><span class="nt">&quot;calls&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+</span><span data-line="26"><span class="w">      </span><span class="p">}</span>
+</span><span data-line="27"><span class="w">    </span><span class="p">]</span>
+</span><span data-line="28"><span class="w">  </span><span class="p">}</span>
+</span><span data-line="29"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="metriques-collectees">
+<h2>Métriques collectées<a class="headerlink" href="#metriques-collectees" title="Link to this heading">¶</a></h2>
+<section id="transaction-id-string">
+<h3>1. <code class="docutils literal notranslate"><span class="pre">transaction_id</span></code> (string)<a class="headerlink" href="#transaction-id-string" title="Link to this heading">¶</a></h3>
+<p><strong>Description</strong> : Identifiant unique (UUID) de la transaction.</p>
+<p><strong>Utilité</strong> : Permet de corréler les métriques de performance avec les logs de prédiction dans Elasticsearch.</p>
+<p><strong>Exemple</strong> : <code class="docutils literal notranslate"><span class="pre">&quot;a1b2c3d4-e5f6-7890-abcd-ef1234567890&quot;</span></code></p>
+<p><strong>Disponibilité</strong> : ✅ Toujours présent</p>
+</section>
+<hr class="docutils" />
+<section id="inference-time-ms-float">
+<h3>2. <code class="docutils literal notranslate"><span class="pre">inference_time_ms</span></code> (float)<a class="headerlink" href="#inference-time-ms-float" title="Link to this heading">¶</a></h3>
+<p><strong>Description</strong> : Temps total d’inférence du modèle ML en millisecondes.</p>
+<p><strong>Mesure</strong> : Temps écoulé depuis le début du profiling jusqu’à la fin, incluant :</p>
+<ul class="simple">
+<li><p>Feature engineering</p></li>
+<li><p>Prédiction du modèle</p></li>
+<li><p>Post-traitement</p></li>
+</ul>
+<p><strong>Plage typique</strong> : 10-50 ms (dépend de la complexité du modèle)</p>
+<p><strong>Utilité</strong> :</p>
+<ul class="simple">
+<li><p>Indicateur principal de performance du modèle</p></li>
+<li><p>Permet de détecter les dégradations de performance</p></li>
+<li><p>Utile pour définir des SLA (Service Level Agreement)</p></li>
+</ul>
+<p><strong>Exemple</strong> : <code class="docutils literal notranslate"><span class="pre">25.34</span></code> (ms)</p>
+<p><strong>Alerte recommandée</strong> : &gt; 100 ms</p>
+</section>
+<hr class="docutils" />
+<section id="cpu-time-ms-float">
+<h3>3. <code class="docutils literal notranslate"><span class="pre">cpu_time_ms</span></code> (float)<a class="headerlink" href="#cpu-time-ms-float" title="Link to this heading">¶</a></h3>
+<p><strong>Description</strong> : Temps CPU utilisé par le processus en millisecondes.</p>
+<p><strong>Mesure</strong> : Temps réel passé sur le CPU (peut être inférieur à <code class="docutils literal notranslate"><span class="pre">inference_time_ms</span></code> si le processus attend des I/O).</p>
+<p><strong>Plage typique</strong> : 15-40 ms</p>
+<p><strong>Utilité</strong> :</p>
+<ul class="simple">
+<li><p>Identifier les opérations CPU-intensives</p></li>
+<li><p>Optimiser l’utilisation des ressources</p></li>
+<li><p>Dimensionner les instances en production</p></li>
+</ul>
+<p><strong>Exemple</strong> : <code class="docutils literal notranslate"><span class="pre">18.12</span></code> (ms)</p>
+<p><strong>Formule</strong> : <code class="docutils literal notranslate"><span class="pre">cpu_time_ms</span> <span class="pre">≤</span> <span class="pre">inference_time_ms</span></code></p>
+</section>
+<hr class="docutils" />
+<section id="memory-mb-float">
+<h3>4. <code class="docutils literal notranslate"><span class="pre">memory_mb</span></code> (float)<a class="headerlink" href="#memory-mb-float" title="Link to this heading">¶</a></h3>
+<p><strong>Description</strong> : Mémoire totale utilisée par le processus en mégaoctets.</p>
+<p><strong>Mesure</strong> : RSS (Resident Set Size) du processus au moment de la mesure.</p>
+<p><strong>Plage typique</strong> : 200-500 MB (dépend de la taille du modèle)</p>
+<p><strong>Utilité</strong> :</p>
+<ul class="simple">
+<li><p>Surveiller les fuites mémoire</p></li>
+<li><p>Dimensionner les conteneurs Docker</p></li>
+<li><p>Optimiser le chargement du modèle</p></li>
+</ul>
+<p><strong>Exemple</strong> : <code class="docutils literal notranslate"><span class="pre">245.6</span></code> (MB)</p>
+<p><strong>Alerte recommandée</strong> : Augmentation constante sur plusieurs requêtes</p>
+</section>
+<hr class="docutils" />
+<section id="memory-delta-mb-float">
+<h3>5. <code class="docutils literal notranslate"><span class="pre">memory_delta_mb</span></code> (float)<a class="headerlink" href="#memory-delta-mb-float" title="Link to this heading">¶</a></h3>
+<p><strong>Description</strong> : Variation de mémoire entre le début et la fin de la requête en mégaoctets.</p>
+<p><strong>Mesure</strong> : <code class="docutils literal notranslate"><span class="pre">memory_after</span> <span class="pre">-</span> <span class="pre">memory_before</span></code></p>
+<p><strong>Plage typique</strong> : -5 à +10 MB</p>
+<p><strong>Valeur positive</strong> : Allocation mémoire (normale)
+<strong>Valeur négative</strong> : Libération mémoire par le garbage collector</p>
+<p><strong>Utilité</strong> :</p>
+<ul class="simple">
+<li><p>Détecter les allocations mémoire importantes</p></li>
+<li><p>Identifier les fuites mémoire potentielles</p></li>
+<li><p>Optimiser les structures de données</p></li>
+</ul>
+<p><strong>Exemple</strong> : <code class="docutils literal notranslate"><span class="pre">2.3</span></code> (MB)</p>
+<p><strong>Alerte recommandée</strong> : &gt; 50 MB (allocation excessive)</p>
+</section>
+<hr class="docutils" />
+<section id="function-calls-integer">
+<h3>6. <code class="docutils literal notranslate"><span class="pre">function_calls</span></code> (integer)<a class="headerlink" href="#function-calls-integer" title="Link to this heading">¶</a></h3>
+<p><strong>Description</strong> : Nombre total d’appels de fonctions durant l’exécution.</p>
+<p><strong>Mesure</strong> : Compteur de tous les appels de fonctions interceptés par cProfile.</p>
+<p><strong>Plage typique</strong> : 1000-5000 appels</p>
+<p><strong>Utilité</strong> :</p>
+<ul class="simple">
+<li><p>Identifier les chemins d’exécution complexes</p></li>
+<li><p>Détecter les boucles récursives excessives</p></li>
+<li><p>Comparer la complexité entre différentes versions</p></li>
+</ul>
+<p><strong>Exemple</strong> : <code class="docutils literal notranslate"><span class="pre">1523</span></code></p>
+<p><strong>Alerte recommandée</strong> : &gt; 10,000 (code potentiellement inefficace)</p>
+</section>
+<hr class="docutils" />
+<section id="latency-ms-float">
+<h3>7. <code class="docutils literal notranslate"><span class="pre">latency_ms</span></code> (float)<a class="headerlink" href="#latency-ms-float" title="Link to this heading">¶</a></h3>
+<p><strong>Description</strong> : Latence totale de la requête HTTP en millisecondes (temps wall-clock).</p>
+<p><strong>Mesure</strong> : Temps écoulé du début à la fin de la requête HTTP, incluant :</p>
+<ul class="simple">
+<li><p>Parsing de la requête</p></li>
+<li><p>Validation Pydantic</p></li>
+<li><p>Inférence du modèle</p></li>
+<li><p>Sérialisation de la réponse</p></li>
+</ul>
+<p><strong>Plage typique</strong> : 20-60 ms</p>
+<p><strong>Utilité</strong> :</p>
+<ul class="simple">
+<li><p>Mesure de l’expérience utilisateur réelle</p></li>
+<li><p>Inclut tous les overheads (réseau, middleware, etc.)</p></li>
+<li><p>Métrique principale pour les SLA</p></li>
+</ul>
+<p><strong>Exemple</strong> : <code class="docutils literal notranslate"><span class="pre">28.45</span></code> (ms)</p>
+<p><strong>Formule</strong> : <code class="docutils literal notranslate"><span class="pre">latency_ms</span> <span class="pre">≥</span> <span class="pre">inference_time_ms</span></code></p>
+<p><strong>Alerte recommandée</strong> : &gt; 200 ms (mauvaise expérience utilisateur)</p>
+</section>
+<hr class="docutils" />
+<section id="top-functions-array">
+<h3>8. <code class="docutils literal notranslate"><span class="pre">top_functions</span></code> (array)<a class="headerlink" href="#top-functions-array" title="Link to this heading">¶</a></h3>
+<p><strong>Description</strong> : Liste des 5 fonctions les plus coûteuses en temps d’exécution.</p>
+<p><strong>Structure</strong> : Tableau d’objets contenant :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">function</span></code> : Nom de la fonction</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">file</span></code> : Chemin du fichier source</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">line</span></code> : Numéro de ligne dans le fichier</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cumulative_time_ms</span></code> : Temps cumulatif (incluant les sous-appels)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">total_time_ms</span></code> : Temps passé dans la fonction elle-même</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">calls</span></code> : Nombre d’appels à cette fonction</p></li>
+</ul>
+<p><strong>Utilité</strong> :</p>
+<ul class="simple">
+<li><p>Identifier précisément les goulots d’étranglement</p></li>
+<li><p>Prioriser les optimisations</p></li>
+<li><p>Comprendre le comportement du code en production</p></li>
+</ul>
+<p><strong>Exemple</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;function&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;predict&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;src/model/predictor.py&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;line&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;cumulative_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">15.23</span><span class="p">,</span>
+</span><span data-line="6"><span class="w">  </span><span class="nt">&quot;total_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">12.45</span><span class="p">,</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">&quot;calls&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+</span><span data-line="8"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Interprétation</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cumulative_time_ms</span></code> élevé : La fonction et ses sous-fonctions sont coûteuses</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">total_time_ms</span></code> élevé : La fonction elle-même est coûteuse</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">calls</span></code> élevé : La fonction est appelée fréquemment</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="flux-de-collecte">
+<h2>Flux de collecte<a class="headerlink" href="#flux-de-collecte" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">1. Requête HTTP POST /predict
+</span><span data-line="2">        ↓
+</span><span data-line="3">2. Middleware ajoute transaction_id
+</span><span data-line="4">        ↓
+</span><span data-line="5">3. PerformanceMonitor.start()
+</span><span data-line="6">   - Capture memory_before
+</span><span data-line="7">   - Démarre cProfile
+</span><span data-line="8">        ↓
+</span><span data-line="9">4. Exécution de la prédiction
+</span><span data-line="10">   - Feature engineering
+</span><span data-line="11">   - Inférence du modèle
+</span><span data-line="12">        ↓
+</span><span data-line="13">5. PerformanceMonitor.stop()
+</span><span data-line="14">   - Capture memory_after
+</span><span data-line="15">   - Arrête cProfile
+</span><span data-line="16">   - Calcule les métriques
+</span><span data-line="17">        ↓
+</span><span data-line="18">6. PerformanceMonitor.log_metrics()
+</span><span data-line="19">   - Formate en JSON
+</span><span data-line="20">   - Logge avec transaction_id
+</span><span data-line="21">        ↓
+</span><span data-line="22">7. Logs envoyés à Redis
+</span><span data-line="23">        ↓
+</span><span data-line="24">8. Pipeline Elasticsearch collecte
+</span><span data-line="25">        ↓
+</span><span data-line="26">9. Indexation dans ml-api-perfs
+</span></pre></div>
+</div>
+</section>
+<section id="acces-aux-metriques">
+<h2>Accès aux métriques<a class="headerlink" href="#acces-aux-metriques" title="Link to this heading">¶</a></h2>
+<section id="via-les-logs-redis-temps-reel">
+<h3>1. Via les logs Redis (temps réel)<a class="headerlink" href="#via-les-logs-redis-temps-reel" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Récupérer les derniers logs incluant les métriques</span>
+</span><span data-line="2">curl<span class="w"> </span><span class="s2">&quot;http://localhost:8000/logs?limit=50&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.logs[] | select(.message | contains(&quot;performance_metrics&quot;))&#39;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="via-elasticsearch-historique">
+<h3>2. Via Elasticsearch (historique)<a class="headerlink" href="#via-elasticsearch-historique" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Requête Elasticsearch pour les métriques</span>
+</span><span data-line="2">curl<span class="w"> </span>-X<span class="w"> </span>GET<span class="w"> </span><span class="s2">&quot;http://localhost:9200/ml-api-perfs/_search?pretty&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="4"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span data-line="5"><span class="s1">    &quot;size&quot;: 10,</span>
+</span><span data-line="6"><span class="s1">    &quot;sort&quot;: [{&quot;@timestamp&quot;: &quot;desc&quot;}],</span>
+</span><span data-line="7"><span class="s1">    &quot;query&quot;: {</span>
+</span><span data-line="8"><span class="s1">      &quot;range&quot;: {</span>
+</span><span data-line="9"><span class="s1">        &quot;inference_time_ms&quot;: {</span>
+</span><span data-line="10"><span class="s1">          &quot;gte&quot;: 50</span>
+</span><span data-line="11"><span class="s1">        }</span>
+</span><span data-line="12"><span class="s1">      }</span>
+</span><span data-line="13"><span class="s1">    }</span>
+</span><span data-line="14"><span class="s1">  }&#39;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="via-kibana-visualisation">
+<h3>3. Via Kibana (visualisation)<a class="headerlink" href="#via-kibana-visualisation" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Ouvrir Kibana : http://localhost:5601</p></li>
+<li><p>Créer un index pattern : <code class="docutils literal notranslate"><span class="pre">ml-api-perfs*</span></code></p></li>
+<li><p>Créer des visualisations :</p>
+<ul class="simple">
+<li><p>Graphique de latence moyenne au fil du temps</p></li>
+<li><p>Distribution des temps d’inférence</p></li>
+<li><p>Top fonctions par temps cumulatif</p></li>
+<li><p>Utilisation mémoire par requête</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="dashboards-kibana-recommandes">
+<h2>Dashboards Kibana recommandés<a class="headerlink" href="#dashboards-kibana-recommandes" title="Link to this heading">¶</a></h2>
+<section id="dashboard-1-vue-d-ensemble-des-performances">
+<h3>Dashboard 1 : Vue d’ensemble des performances<a class="headerlink" href="#dashboard-1-vue-d-ensemble-des-performances" title="Link to this heading">¶</a></h3>
+<p><strong>Visualisations</strong> :</p>
+<ol class="arabic simple">
+<li><p><strong>Latence moyenne</strong> (Line chart)</p>
+<ul class="simple">
+<li><p>Axe X : &#64;timestamp</p></li>
+<li><p>Axe Y : Moyenne de latency_ms</p></li>
+</ul>
+</li>
+<li><p><strong>Distribution des temps d’inférence</strong> (Histogram)</p>
+<ul class="simple">
+<li><p>Buckets : inference_time_ms (0-20ms, 20-50ms, 50-100ms, &gt;100ms)</p></li>
+</ul>
+</li>
+<li><p><strong>Utilisation mémoire</strong> (Area chart)</p>
+<ul class="simple">
+<li><p>Axe X : &#64;timestamp</p></li>
+<li><p>Axe Y : memory_mb</p></li>
+</ul>
+</li>
+<li><p><strong>Top 10 fonctions coûteuses</strong> (Data table)</p>
+<ul class="simple">
+<li><p>Colonnes : function, file, avg(cumulative_time_ms)</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="dashboard-2-analyse-detaillee">
+<h3>Dashboard 2 : Analyse détaillée<a class="headerlink" href="#dashboard-2-analyse-detaillee" title="Link to this heading">¶</a></h3>
+<p><strong>Visualisations</strong> :</p>
+<ol class="arabic simple">
+<li><p><strong>Corrélation CPU vs Latence</strong> (Scatter plot)</p>
+<ul class="simple">
+<li><p>Axe X : cpu_time_ms</p></li>
+<li><p>Axe Y : latency_ms</p></li>
+</ul>
+</li>
+<li><p><strong>Évolution de la mémoire</strong> (Line chart)</p>
+<ul class="simple">
+<li><p>memory_delta_mb par requête</p></li>
+</ul>
+</li>
+<li><p><strong>Nombre d’appels de fonctions</strong> (Metric)</p>
+<ul class="simple">
+<li><p>Moyenne de function_calls</p></li>
+</ul>
+</li>
+<li><p><strong>Percentiles de latence</strong> (Line chart)</p>
+<ul class="simple">
+<li><p>P50, P95, P99 de latency_ms</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="analyse-et-optimisation">
+<h2>Analyse et optimisation<a class="headerlink" href="#analyse-et-optimisation" title="Link to this heading">¶</a></h2>
+<section id="identifier-les-requetes-lentes">
+<h3>1. Identifier les requêtes lentes<a class="headerlink" href="#identifier-les-requetes-lentes" title="Link to this heading">¶</a></h3>
+<p><strong>Requête Elasticsearch</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;query&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="3"><span class="w">    </span><span class="nt">&quot;range&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="4"><span class="w">      </span><span class="nt">&quot;latency_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;gte&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">}</span>
+</span><span data-line="5"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="6"><span class="w">  </span><span class="p">},</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">&quot;sort&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">&quot;latency_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;desc&quot;</span><span class="p">}],</span>
+</span><span data-line="8"><span class="w">  </span><span class="nt">&quot;size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span>
+</span><span data-line="9"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Actions</strong> :</p>
+<ul class="simple">
+<li><p>Analyser les <code class="docutils literal notranslate"><span class="pre">top_functions</span></code> des requêtes lentes</p></li>
+<li><p>Vérifier si memory_delta_mb est anormalement élevé</p></li>
+<li><p>Comparer avec des requêtes rapides du même endpoint</p></li>
+</ul>
+</section>
+<section id="detecter-les-fuites-memoire">
+<h3>2. Détecter les fuites mémoire<a class="headerlink" href="#detecter-les-fuites-memoire" title="Link to this heading">¶</a></h3>
+<p><strong>Critères</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">memory_delta_mb</span></code> positif constant sur plusieurs requêtes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">memory_mb</span></code> augmente linéairement dans le temps</p></li>
+</ul>
+<p><strong>Requête Elasticsearch</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;aggs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="3"><span class="w">    </span><span class="nt">&quot;memory_trend&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="4"><span class="w">      </span><span class="nt">&quot;date_histogram&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="5"><span class="w">        </span><span class="nt">&quot;field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;@timestamp&quot;</span><span class="p">,</span>
+</span><span data-line="6"><span class="w">        </span><span class="nt">&quot;interval&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1h&quot;</span>
+</span><span data-line="7"><span class="w">      </span><span class="p">},</span>
+</span><span data-line="8"><span class="w">      </span><span class="nt">&quot;aggs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="9"><span class="w">        </span><span class="nt">&quot;avg_memory&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;avg&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;memory_mb&quot;</span><span class="p">}},</span>
+</span><span data-line="10"><span class="w">        </span><span class="nt">&quot;avg_delta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;avg&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;memory_delta_mb&quot;</span><span class="p">}}</span>
+</span><span data-line="11"><span class="w">      </span><span class="p">}</span>
+</span><span data-line="12"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="13"><span class="w">  </span><span class="p">}</span>
+</span><span data-line="14"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="optimiser-le-feature-engineering">
+<h3>3. Optimiser le feature engineering<a class="headerlink" href="#optimiser-le-feature-engineering" title="Link to this heading">¶</a></h3>
+<p>Si <code class="docutils literal notranslate"><span class="pre">engineer_features</span></code> apparaît souvent dans <code class="docutils literal notranslate"><span class="pre">top_functions</span></code> :</p>
+<p><strong>Optimisations possibles</strong> :</p>
+<ul class="simple">
+<li><p>Vectoriser les opérations avec NumPy</p></li>
+<li><p>Éviter les boucles Python</p></li>
+<li><p>Utiliser des opérations Pandas optimisées</p></li>
+<li><p>Cacher les résultats si les features sont identiques</p></li>
+</ul>
+</section>
+<section id="optimiser-la-prediction">
+<h3>4. Optimiser la prédiction<a class="headerlink" href="#optimiser-la-prediction" title="Link to this heading">¶</a></h3>
+<p>Si <code class="docutils literal notranslate"><span class="pre">predict</span></code> ou <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code> est lent :</p>
+<p><strong>Vérifications</strong> :</p>
+<ul class="simple">
+<li><p>Utiliser un modèle plus léger (pruning, quantization)</p></li>
+<li><p>Vérifier la taille des features (28 features actuellement)</p></li>
+<li><p>Considérer ONNX Runtime pour l’inférence</p></li>
+<li><p>Évaluer l’utilisation de batch predictions</p></li>
+</ul>
+</section>
+</section>
+<section id="alertes-recommandees">
+<h2>Alertes recommandées<a class="headerlink" href="#alertes-recommandees" title="Link to this heading">¶</a></h2>
+<section id="alertes-critiques">
+<h3>Alertes critiques<a class="headerlink" href="#alertes-critiques" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Métrique</p></th>
+<th class="head"><p>Seuil</p></th>
+<th class="head"><p>Action</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">latency_ms</span></code></p></td>
+<td><p>&gt; 500 ms</p></td>
+<td><p>Investigation immédiate</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">memory_mb</span></code></p></td>
+<td><p>&gt; 1000 MB</p></td>
+<td><p>Risque de OOM</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">memory_delta_mb</span></code></p></td>
+<td><p>&gt; 100 MB</p></td>
+<td><p>Fuite mémoire probable</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="alertes-warning">
+<h3>Alertes warning<a class="headerlink" href="#alertes-warning" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Métrique</p></th>
+<th class="head"><p>Seuil</p></th>
+<th class="head"><p>Action</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">latency_ms</span></code></p></td>
+<td><p>&gt; 200 ms</p></td>
+<td><p>Analyse de performance</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">inference_time_ms</span></code></p></td>
+<td><p>&gt; 100 ms</p></td>
+<td><p>Optimisation du modèle</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cpu_time_ms</span></code></p></td>
+<td><p>&gt; 50 ms</p></td>
+<td><p>Optimisation du code</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">function_calls</span></code></p></td>
+<td><p>&gt; 10,000</p></td>
+<td><p>Refactoring recommandé</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="configuration-prometheus-exemple">
+<h3>Configuration Prometheus (exemple)<a class="headerlink" href="#configuration-prometheus-exemple" title="Link to this heading">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nt">groups</span><span class="p">:</span>
+</span><span data-line="2"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ml-api-performance</span>
+</span><span data-line="3"><span class="w">    </span><span class="nt">rules</span><span class="p">:</span>
+</span><span data-line="4"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HighLatency</span>
+</span><span data-line="5"><span class="w">        </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">avg(ml_api_latency_ms) &gt; 200</span>
+</span><span data-line="6"><span class="w">        </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+</span><span data-line="7"><span class="w">        </span><span class="nt">annotations</span><span class="p">:</span>
+</span><span data-line="8"><span class="w">          </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Latence</span><span class="nv"> </span><span class="s">API</span><span class="nv"> </span><span class="s">élevée&quot;</span>
+</span><span data-line="9"><span class="w">          </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Latence</span><span class="nv"> </span><span class="s">moyenne</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">200ms</span><span class="nv"> </span><span class="s">sur</span><span class="nv"> </span><span class="s">5</span><span class="nv"> </span><span class="s">minutes&quot;</span>
+</span><span data-line="10">
+</span><span data-line="11"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MemoryLeak</span>
+</span><span data-line="12"><span class="w">        </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">increase(ml_api_memory_mb[1h]) &gt; 100</span>
+</span><span data-line="13"><span class="w">        </span><span class="nt">annotations</span><span class="p">:</span>
+</span><span data-line="14"><span class="w">          </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Fuite</span><span class="nv"> </span><span class="s">mémoire</span><span class="nv"> </span><span class="s">détectée&quot;</span>
+</span><span data-line="15"><span class="w">          </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Augmentation</span><span class="nv"> </span><span class="s">de</span><span class="nv"> </span><span class="s">+100MB</span><span class="nv"> </span><span class="s">en</span><span class="nv"> </span><span class="s">1</span><span class="nv"> </span><span class="s">heure&quot;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="exemples-d-analyse">
+<h2>Exemples d’analyse<a class="headerlink" href="#exemples-d-analyse" title="Link to this heading">¶</a></h2>
+<section id="exemple-1-requete-lente-identifiee">
+<h3>Exemple 1 : Requête lente identifiée<a class="headerlink" href="#exemple-1-requete-lente-identifiee" title="Link to this heading">¶</a></h3>
+<p><strong>Métriques observées</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;inference_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">125.45</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;cpu_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">98.32</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;latency_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">132.67</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;top_functions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span data-line="6"><span class="w">    </span><span class="p">{</span>
+</span><span data-line="7"><span class="w">      </span><span class="nt">&quot;function&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;engineer_features&quot;</span><span class="p">,</span>
+</span><span data-line="8"><span class="w">      </span><span class="nt">&quot;cumulative_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">85.12</span><span class="p">,</span>
+</span><span data-line="9"><span class="w">      </span><span class="nt">&quot;total_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">78.45</span><span class="p">,</span>
+</span><span data-line="10"><span class="w">      </span><span class="nt">&quot;calls&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+</span><span data-line="11"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="12"><span class="w">  </span><span class="p">]</span>
+</span><span data-line="13"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Diagnostic</strong> :</p>
+<ul class="simple">
+<li><p>Feature engineering consomme 85% du temps total</p></li>
+<li><p>La fonction elle-même (vs ses sous-fonctions) prend 78ms</p></li>
+<li><p>Optimisation prioritaire : <code class="docutils literal notranslate"><span class="pre">engineer_features</span></code></p></li>
+</ul>
+<p><strong>Actions prises</strong> :</p>
+<ol class="arabic simple">
+<li><p>Profilé le code de <code class="docutils literal notranslate"><span class="pre">engineer_features</span></code></p></li>
+<li><p>Remplacé les boucles Python par NumPy vectorization</p></li>
+<li><p>Résultat : inference_time_ms réduit à 35ms (-72%)</p></li>
+</ol>
+</section>
+<section id="exemple-2-fuite-memoire-detectee">
+<h3>Exemple 2 : Fuite mémoire détectée<a class="headerlink" href="#exemple-2-fuite-memoire-detectee" title="Link to this heading">¶</a></h3>
+<p><strong>Observation sur 100 requêtes</strong> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Requête</span> <span class="mi">1</span><span class="p">:</span>  <span class="n">memory_mb</span><span class="o">=</span><span class="mf">245.3</span><span class="p">,</span> <span class="n">memory_delta_mb</span><span class="o">=</span><span class="mf">2.1</span>
+</span><span data-line="2"><span class="n">Requête</span> <span class="mi">50</span><span class="p">:</span> <span class="n">memory_mb</span><span class="o">=</span><span class="mf">312.7</span><span class="p">,</span> <span class="n">memory_delta_mb</span><span class="o">=</span><span class="mf">1.8</span>
+</span><span data-line="3"><span class="n">Requête</span> <span class="mi">100</span><span class="p">:</span> <span class="n">memory_mb</span><span class="o">=</span><span class="mf">385.2</span><span class="p">,</span> <span class="n">memory_delta_mb</span><span class="o">=</span><span class="mf">2.3</span>
+</span></pre></div>
+</div>
+<p><strong>Diagnostic</strong> :</p>
+<ul class="simple">
+<li><p>Augmentation de 140 MB sur 100 requêtes</p></li>
+<li><p>~1.4 MB par requête non libéré</p></li>
+</ul>
+<p><strong>Cause trouvée</strong> :</p>
+<ul class="simple">
+<li><p>Accumulation de logs en mémoire dans une liste globale</p></li>
+<li><p>Pas de rotation automatique</p></li>
+</ul>
+<p><strong>Solution</strong> :</p>
+<ul class="simple">
+<li><p>Implémentation d’un buffer rotatif limité à 1000 entrées</p></li>
+<li><p>Résultat : memory_mb stable autour de 250 MB</p></li>
+</ul>
+</section>
+</section>
+<section id="export-des-metriques">
+<h2>Export des métriques<a class="headerlink" href="#export-des-metriques" title="Link to this heading">¶</a></h2>
+<section id="export-vers-parquet">
+<h3>Export vers Parquet<a class="headerlink" href="#export-vers-parquet" title="Link to this heading">¶</a></h3>
+<p>Le pipeline Elasticsearch peut exporter les métriques vers Parquet :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Export des métriques de performance</span>
+</span><span data-line="2">python<span class="w"> </span>scripts/export_perfs_to_parquet.py<span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>--output<span class="w"> </span>reports/performance_metrics.parquet
+</span></pre></div>
+</div>
+</section>
+<section id="analyse-avec-pandas">
+<h3>Analyse avec Pandas<a class="headerlink" href="#analyse-avec-pandas" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Charger les métriques</span>
+</span><span data-line="4"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;reports/performance_metrics.parquet&#39;</span><span class="p">)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Statistiques descriptives</span>
+</span><span data-line="7"><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;inference_time_ms&#39;</span><span class="p">,</span> <span class="s1">&#39;latency_ms&#39;</span><span class="p">,</span> <span class="s1">&#39;memory_delta_mb&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="c1"># Identifier les outliers</span>
+</span><span data-line="10"><span class="n">slow_requests</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;latency_ms&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;latency_ms&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.95</span><span class="p">)]</span>
+</span><span data-line="11"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Top 5% requêtes lentes:</span><span class="se">\n</span><span class="si">{</span><span class="n">slow_requests</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1"># Corrélation entre métriques</span>
+</span><span data-line="14"><span class="n">corr</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;inference_time_ms&#39;</span><span class="p">,</span> <span class="s1">&#39;cpu_time_ms&#39;</span><span class="p">,</span> <span class="s1">&#39;memory_mb&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+</span><span data-line="15"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Corrélations:</span><span class="se">\n</span><span class="si">{</span><span class="n">corr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="desactivation-en-production">
+<h2>Désactivation en production<a class="headerlink" href="#desactivation-en-production" title="Link to this heading">¶</a></h2>
+<p>Si le monitoring de performance n’est pas nécessaire en production :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Dans .env</span>
+</span><span data-line="2"><span class="nv">ENABLE_PERFORMANCE_MONITORING</span><span class="o">=</span><span class="nb">false</span>
+</span></pre></div>
+</div>
+<p><strong>Impact</strong> :</p>
+<ul class="simple">
+<li><p>✅ Réduction de la latence (~5-10 ms)</p></li>
+<li><p>✅ Réduction de l’overhead CPU</p></li>
+<li><p>❌ Perte de visibilité sur les performances</p></li>
+</ul>
+<p><strong>Recommandation</strong> : Garder activé en production avec un sampling (ex: 10% des requêtes) pour maintenir la visibilité sans impacter significativement les performances.</p>
+</section>
+<section id="references">
+<h2>Références<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/004d87b68d5cf33c4e993ee04e290eeb/performance_monitor.py"><span class="xref download myst">src/api/performance_monitor.py</span></a> - Implémentation du monitoring</p></li>
+<li><p><span class="xref myst">src/api/PERFORMANCE_MONITORING.md</span> - Guide d’utilisation</p></li>
+<li><p><span class="xref myst">src/logs_pipeline/README.md</span> - Pipeline Elasticsearch</p></li>
+<li><p><a class="reference internal" href="#../API_DOCUMENTATION.md"><span class="xref myst">API_DOCUMENTATION.md</span></a> - Documentation de l’API</p></li>
+</ul>
+</section>
+<section id="faq">
+<h2>FAQ<a class="headerlink" href="#faq" title="Link to this heading">¶</a></h2>
+<section id="q-les-metriques-ralentissent-elles-l-api">
+<h3>Q: Les métriques ralentissent-elles l’API ?<a class="headerlink" href="#q-les-metriques-ralentissent-elles-l-api" title="Link to this heading">¶</a></h3>
+<p><strong>R</strong>: Oui, légèrement (~5-10 ms par requête). Cependant, cet overhead est généralement acceptable par rapport à la valeur des métriques collectées. En production à haute charge, considérez un sampling.</p>
+</section>
+<section id="q-puis-je-collecter-des-metriques-custom">
+<h3>Q: Puis-je collecter des métriques custom ?<a class="headerlink" href="#q-puis-je-collecter-des-metriques-custom" title="Link to this heading">¶</a></h3>
+<p><strong>R</strong>: Oui, modifiez <code class="docutils literal notranslate"><span class="pre">PerformanceMonitor</span></code> dans <a class="reference download internal" download="" href="_downloads/004d87b68d5cf33c4e993ee04e290eeb/performance_monitor.py"><span class="xref download myst">src/api/performance_monitor.py</span></a> pour ajouter vos propres métriques.</p>
+</section>
+<section id="q-les-metriques-sont-elles-disponibles-en-temps-reel">
+<h3>Q: Les métriques sont-elles disponibles en temps réel ?<a class="headerlink" href="#q-les-metriques-sont-elles-disponibles-en-temps-reel" title="Link to this heading">¶</a></h3>
+<p><strong>R</strong>: Oui, via l’endpoint <code class="docutils literal notranslate"><span class="pre">/logs</span></code>. Pour une analyse historique, utilisez Elasticsearch.</p>
+</section>
+<section id="q-comment-comparer-les-performances-entre-versions">
+<h3>Q: Comment comparer les performances entre versions ?<a class="headerlink" href="#q-comment-comparer-les-performances-entre-versions" title="Link to this heading">¶</a></h3>
+<p><strong>R</strong>: Utilisez le <code class="docutils literal notranslate"><span class="pre">&#64;timestamp</span></code> dans Elasticsearch pour filtrer par période et comparez les moyennes de <code class="docutils literal notranslate"><span class="pre">inference_time_ms</span></code>.</p>
+</section>
+<section id="q-que-faire-si-memory-delta-mb-est-toujours-negatif">
+<h3>Q: Que faire si memory_delta_mb est toujours négatif ?<a class="headerlink" href="#q-que-faire-si-memory-delta-mb-est-toujours-negatif" title="Link to this heading">¶</a></h3>
+<p><strong>R</strong>: C’est normal ! Le garbage collector Python libère de la mémoire. Une valeur négative constante indique une bonne gestion mémoire.</p>
+</section>
+<section id="q-comment-simuler-une-charge-pour-tester-les-metriques">
+<h3>Q: Comment simuler une charge pour tester les métriques ?<a class="headerlink" href="#q-comment-simuler-une-charge-pour-tester-les-metriques" title="Link to this heading">¶</a></h3>
+<p><strong>R</strong>: Utilisez le simulateur intégré :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>simulate-load
+</span><span data-line="2"><span class="c1"># ou</span>
+</span><span data-line="3">make<span class="w"> </span>simulate-quick
+</span></pre></div>
+</div>
+</section>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

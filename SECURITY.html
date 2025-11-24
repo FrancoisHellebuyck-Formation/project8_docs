@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Sécurité du Projet - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Sécurité du Projet"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#analyse-de-securite">Analyse de S&#233;curit&#233;</a><ul>
+<li><a class="reference internal" href="#bandit-analyse-statique-du-code">Bandit - Analyse statique du code</a></li>
+<li><a class="reference internal" href="#safety-analyse-des-vulnerabilites-des-dependances">Safety - Analyse des vuln&#233;rabilit&#233;s des d&#233;pendances</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilisation-de-pickle-pour-les-modeles-ml">Utilisation de Pickle pour les Mod&#232;les ML</a><ul>
+<li><a class="reference internal" href="#contexte">Contexte</a></li>
+<li><a class="reference internal" href="#risques-identifies-par-bandit">Risques identifi&#233;s par Bandit</a></li>
+<li><a class="reference internal" href="#pourquoi-c-est-acceptable-dans-notre-cas">Pourquoi c&#8217;est acceptable dans notre cas</a><ul>
+<li><a class="reference internal" href="#source-de-confiance">1. Source de confiance</a></li>
+<li><a class="reference internal" href="#standard-de-l-industrie-ml">2. Standard de l&#8217;industrie ML</a></li>
+<li><a class="reference internal" href="#isolation-au-niveau-infrastructure">3. Isolation au niveau infrastructure</a></li>
+<li><a class="reference internal" href="#validation-au-chargement">4. Validation au chargement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#alternatives-considerees">Alternatives consid&#233;r&#233;es</a></li>
+<li><a class="reference internal" href="#recommandations-pour-la-production">Recommandations pour la production</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bind-a-toutes-les-interfaces-0-0-0-0">Bind &#224; toutes les interfaces (0.0.0.0)</a><ul>
+<li><a class="reference internal" href="#id1">Risques identifi&#233;s par Bandit</a></li>
+<li><a class="reference internal" href="#justification">Justification</a><ul>
+<li><a class="reference internal" href="#requis-pour-docker">1. Requis pour Docker</a></li>
+<li><a class="reference internal" href="#securite-reseau-assuree-par-l-infrastructure">2. S&#233;curit&#233; r&#233;seau assur&#233;e par l&#8217;infrastructure</a></li>
+<li><a class="reference internal" href="#configuration-par-environnement">3. Configuration par environnement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mesures-de-securite-complementaires">Mesures de s&#233;curit&#233; compl&#233;mentaires</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#generateurs-pseudo-aleatoires-random">G&#233;n&#233;rateurs pseudo-al&#233;atoires (random)</a><ul>
+<li><a class="reference internal" href="#id2">Risques identifi&#233;s par Bandit</a></li>
+<li><a class="reference internal" href="#contexte-d-utilisation">Contexte d&#8217;utilisation</a></li>
+<li><a class="reference internal" href="#pourquoi-c-est-acceptable">Pourquoi c&#8217;est acceptable</a></li>
+<li><a class="reference internal" href="#si-un-usage-cryptographique-etait-necessaire">Si un usage cryptographique &#233;tait n&#233;cessaire</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#vulnerabilite-gradio-cve-2024-39236">Vuln&#233;rabilit&#233; Gradio (CVE-2024-39236)</a><ul>
+<li><a class="reference internal" href="#statut-actuel">Statut actuel</a></li>
+<li><a class="reference internal" href="#details-de-la-vulnerabilite">D&#233;tails de la vuln&#233;rabilit&#233;</a></li>
+<li><a class="reference internal" href="#mesures-d-attenuation-actuelles">Mesures d&#8217;att&#233;nuation actuelles</a></li>
+<li><a class="reference internal" href="#plan-de-mise-a-jour">Plan de mise &#224; jour</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#surveillance-et-monitoring">Surveillance et Monitoring</a><ul>
+<li><a class="reference internal" href="#logs-de-securite">Logs de s&#233;curit&#233;</a></li>
+<li><a class="reference internal" href="#metriques-de-securite">M&#233;triques de s&#233;curit&#233;</a></li>
+<li><a class="reference internal" href="#alertes">Alertes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#checklist-de-securite-pour-la-production">Checklist de s&#233;curit&#233; pour la production</a></li>
+<li><a class="reference internal" href="#references">R&#233;f&#233;rences</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Sécurité du Projet</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="securite-du-projet">
+<h1>Sécurité du Projet<a class="headerlink" href="#securite-du-projet" title="Link to this heading">¶</a></h1>
+<p>Ce document décrit les mesures de sécurité et les justifications des choix techniques pour le projet MLOps.</p>
+<section id="analyse-de-securite">
+<h2>Analyse de Sécurité<a class="headerlink" href="#analyse-de-securite" title="Link to this heading">¶</a></h2>
+<p>Le projet utilise <strong>Bandit</strong> et <strong>Safety</strong> pour l’analyse de sécurité automatique lors du CI/CD.</p>
+<section id="bandit-analyse-statique-du-code">
+<h3>Bandit - Analyse statique du code<a class="headerlink" href="#bandit-analyse-statique-du-code" title="Link to this heading">¶</a></h3>
+<p>Bandit est un outil d’analyse statique qui détecte les problèmes de sécurité courants dans le code Python.</p>
+</section>
+<section id="safety-analyse-des-vulnerabilites-des-dependances">
+<h3>Safety - Analyse des vulnérabilités des dépendances<a class="headerlink" href="#safety-analyse-des-vulnerabilites-des-dependances" title="Link to this heading">¶</a></h3>
+<p>Safety vérifie les dépendances installées contre une base de données de vulnérabilités connues (CVE).</p>
+</section>
+</section>
+<section id="utilisation-de-pickle-pour-les-modeles-ml">
+<h2>Utilisation de Pickle pour les Modèles ML<a class="headerlink" href="#utilisation-de-pickle-pour-les-modeles-ml" title="Link to this heading">¶</a></h2>
+<section id="contexte">
+<h3>Contexte<a class="headerlink" href="#contexte" title="Link to this heading">¶</a></h3>
+<p>Le projet utilise <code class="docutils literal notranslate"><span class="pre">pickle</span></code> pour charger les modèles de machine learning dans les fichiers suivants:</p>
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/d20e7b5a051b2683713e72bb34c9113c/model_loader.py"><span class="xref download myst">src/model/model_loader.py</span></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/ae0b749546c6b006183dac29c42d0e17/model_pool.py"><span class="xref download myst">src/model/model_pool.py</span></a></p></li>
+</ul>
+</section>
+<section id="risques-identifies-par-bandit">
+<h3>Risques identifiés par Bandit<a class="headerlink" href="#risques-identifies-par-bandit" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">B403</span><span class="o">/</span><span class="n">B301</span><span class="p">:</span> <span class="n">Pickle</span> <span class="ow">and</span> <span class="n">modules</span> <span class="n">that</span> <span class="n">wrap</span> <span class="n">it</span> <span class="n">can</span> <span class="n">be</span> <span class="n">unsafe</span> <span class="n">when</span> <span class="n">used</span> <span class="n">to</span>
+</span><span data-line="2"><span class="n">deserialize</span> <span class="n">untrusted</span> <span class="n">data</span><span class="p">,</span> <span class="n">possible</span> <span class="n">security</span> <span class="n">issue</span><span class="o">.</span>
+</span></pre></div>
+</div>
+</section>
+<section id="pourquoi-c-est-acceptable-dans-notre-cas">
+<h3>Pourquoi c’est acceptable dans notre cas<a class="headerlink" href="#pourquoi-c-est-acceptable-dans-notre-cas" title="Link to this heading">¶</a></h3>
+<section id="source-de-confiance">
+<h4>1. Source de confiance<a class="headerlink" href="#source-de-confiance" title="Link to this heading">¶</a></h4>
+<p>Les fichiers <code class="docutils literal notranslate"><span class="pre">.pkl</span></code> proviennent <strong>exclusivement</strong> de notre pipeline d’entraînement interne:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Le modèle est créé par notre propre code d&#39;entraînement</span>
+</span><span data-line="2"><span class="c1"># et stocké dans ./model/model.pkl</span>
+</span><span data-line="3"><span class="n">MODEL_PATH</span> <span class="o">=</span> <span class="s2">&quot;./model/model.pkl&quot;</span>
+</span></pre></div>
+</div>
+<p><strong>Mesures de sécurité:</strong></p>
+<ul class="simple">
+<li><p>Le fichier <code class="docutils literal notranslate"><span class="pre">model.pkl</span></code> est versionné dans Git LFS</p></li>
+<li><p>Aucun téléchargement de modèles depuis des sources externes</p></li>
+<li><p>Le modèle n’est chargé qu’au démarrage de l’API (pas d’upload dynamique)</p></li>
+<li><p>Pas d’endpoint permettant de charger un modèle arbitraire</p></li>
+</ul>
+</section>
+<section id="standard-de-l-industrie-ml">
+<h4>2. Standard de l’industrie ML<a class="headerlink" href="#standard-de-l-industrie-ml" title="Link to this heading">¶</a></h4>
+<p>Pickle est le format standard pour la sérialisation de modèles scikit-learn:</p>
+<ul class="simple">
+<li><p><strong>scikit-learn</strong> recommande pickle/joblib pour la persistance</p></li>
+<li><p><strong>MLflow</strong> utilise pickle en interne pour le tracking des modèles</p></li>
+<li><p>Alternatives (ONNX, PMML) nécessitent une conversion et perdent certaines fonctionnalités</p></li>
+</ul>
+</section>
+<section id="isolation-au-niveau-infrastructure">
+<h4>3. Isolation au niveau infrastructure<a class="headerlink" href="#isolation-au-niveau-infrastructure" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌─────────────────────────────────────────┐
+</span><span data-line="2">│  Container Docker (API)                 │
+</span><span data-line="3">│  ┌───────────────────────────────────┐  │
+</span><span data-line="4">│  │  ./model/model.pkl (Read-only)    │  │
+</span><span data-line="5">│  │  Bind mount depuis l&#39;hôte         │  │
+</span><span data-line="6">│  └───────────────────────────────────┘  │
+</span><span data-line="7">│                                         │
+</span><span data-line="8">│  Pas d&#39;accès réseau au système de      │
+</span><span data-line="9">│  fichiers hôte                          │
+</span><span data-line="10">└─────────────────────────────────────────┘
+</span></pre></div>
+</div>
+<p><strong>Mesures d’isolation:</strong></p>
+<ul class="simple">
+<li><p>Le conteneur Docker n’a pas de privilèges élevés</p></li>
+<li><p>Utilisateur non-root dans le conteneur</p></li>
+<li><p>Le modèle est en lecture seule (bind mount)</p></li>
+<li><p>Pas d’accès SSH ou shell dans le conteneur en production</p></li>
+</ul>
+</section>
+<section id="validation-au-chargement">
+<h4>4. Validation au chargement<a class="headerlink" href="#validation-au-chargement" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/model/model_pool.py</span>
+</span><span data-line="2"><span class="k">try</span><span class="p">:</span>
+</span><span data-line="3">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span data-line="4">        <span class="n">base_model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</span><span data-line="5">
+</span><span data-line="6">    <span class="c1"># Vérification que c&#39;est bien un modèle scikit-learn</span>
+</span><span data-line="7">    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">base_model</span><span class="p">,</span> <span class="s1">&#39;predict&#39;</span><span class="p">):</span>
+</span><span data-line="8">        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid model: missing predict method&quot;</span><span class="p">)</span>
+</span><span data-line="9">
+</span><span data-line="10"><span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="11">    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load model: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="12">    <span class="k">raise</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="alternatives-considerees">
+<h3>Alternatives considérées<a class="headerlink" href="#alternatives-considerees" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Format</p></th>
+<th class="head"><p>Avantages</p></th>
+<th class="head"><p>Inconvénients</p></th>
+<th class="head"><p>Décision</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Pickle</strong></p></td>
+<td><p>✅ Standard scikit-learn<br>✅ Préserve tous les attributs<br>✅ Compatible MLflow</p></td>
+<td><p>⚠️ Sécurité si source non fiable</p></td>
+<td><p><strong>✅ RETENU</strong> (source fiable)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ONNX</strong></p></td>
+<td><p>✅ Format ouvert<br>✅ Interopérable</p></td>
+<td><p>❌ Conversion complexe<br>❌ Perte de métadonnées</p></td>
+<td><p>❌ Rejeté</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>PMML</strong></p></td>
+<td><p>✅ Format XML standard</p></td>
+<td><p>❌ Support limité<br>❌ Conversion manuelle</p></td>
+<td><p>❌ Rejeté</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Joblib</strong></p></td>
+<td><p>✅ Plus rapide que pickle<br>✅ Compression</p></td>
+<td><p>⚠️ Mêmes risques que pickle</p></td>
+<td><p>⚠️ Alternative acceptable</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="recommandations-pour-la-production">
+<h3>Recommandations pour la production<a class="headerlink" href="#recommandations-pour-la-production" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p><strong>Validation du hash</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Générer le hash du modèle</span>
+</span><span data-line="2">sha256sum<span class="w"> </span>model/model.pkl<span class="w"> </span>&gt;<span class="w"> </span>model/model.pkl.sha256
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Vérifier avant chargement</span>
+</span><span data-line="5">sha256sum<span class="w"> </span>-c<span class="w"> </span>model/model.pkl.sha256
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Contrôle d’accès</strong>:</p>
+<ul class="simple">
+<li><p>Restreindre l’accès en écriture au répertoire <code class="docutils literal notranslate"><span class="pre">model/</span></code> aux seuls administrateurs</p></li>
+<li><p>Utiliser des permissions 440 (read-only) pour <code class="docutils literal notranslate"><span class="pre">model.pkl</span></code> en production</p></li>
+</ul>
+</li>
+<li><p><strong>Audit</strong>:</p>
+<ul class="simple">
+<li><p>Logger toutes les tentatives de chargement de modèle</p></li>
+<li><p>Alerter si le hash du modèle change de manière inattendue</p></li>
+</ul>
+</li>
+<li><p><strong>CI/CD</strong>:</p>
+<ul class="simple">
+<li><p>Scanner le modèle avec des outils de détection de malware</p></li>
+<li><p>Vérifier la signature du modèle avant déploiement</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="bind-a-toutes-les-interfaces-0-0-0-0">
+<h2>Bind à toutes les interfaces (0.0.0.0)<a class="headerlink" href="#bind-a-toutes-les-interfaces-0-0-0-0" title="Link to this heading">¶</a></h2>
+<section id="id1">
+<h3>Risques identifiés par Bandit<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">B104</span><span class="p">:</span> <span class="n">Possible</span> <span class="n">binding</span> <span class="n">to</span> <span class="nb">all</span> <span class="n">interfaces</span> <span class="p">(</span><span class="mf">0.0.0.0</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="justification">
+<h3>Justification<a class="headerlink" href="#justification" title="Link to this heading">¶</a></h3>
+<section id="requis-pour-docker">
+<h4>1. Requis pour Docker<a class="headerlink" href="#requis-pour-docker" title="Link to this heading">¶</a></h4>
+<p>Les conteneurs Docker doivent écouter sur <code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code> pour accepter les connexions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/config.py</span>
+</span><span data-line="2"><span class="n">API_HOST</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;API_HOST&quot;</span><span class="p">,</span> <span class="s2">&quot;0.0.0.0&quot;</span><span class="p">)</span>  <span class="c1"># Requis pour Docker</span>
+</span></pre></div>
+</div>
+<p>Si on utilisait <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code>, le conteneur ne serait accessible que depuis l’intérieur du conteneur.</p>
+</section>
+<section id="securite-reseau-assuree-par-l-infrastructure">
+<h4>2. Sécurité réseau assurée par l’infrastructure<a class="headerlink" href="#securite-reseau-assuree-par-l-infrastructure" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">Internet
+</span><span data-line="2">   ↓
+</span><span data-line="3">[Nginx Reverse Proxy]  ← Authentification, rate limiting, SSL/TLS
+</span><span data-line="4">   ↓
+</span><span data-line="5">[Docker Network]       ← Isolation réseau
+</span><span data-line="6">   ↓
+</span><span data-line="7">[API Container:8000]   ← Bind 0.0.0.0 (nécessaire)
+</span></pre></div>
+</div>
+<p><strong>Couches de sécurité:</strong></p>
+<ul class="simple">
+<li><p><strong>Nginx</strong>: Reverse proxy avec SSL/TLS, rate limiting, authentification</p></li>
+<li><p><strong>Docker network</strong>: Isolation réseau entre conteneurs</p></li>
+<li><p><strong>Firewall</strong>: Règles iptables limitant l’accès externe</p></li>
+<li><p><strong>Cloud provider</strong>: Security groups/Network policies</p></li>
+</ul>
+</section>
+<section id="configuration-par-environnement">
+<h4>3. Configuration par environnement<a class="headerlink" href="#configuration-par-environnement" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># .env.development</span>
+</span><span data-line="2"><span class="nv">API_HOST</span><span class="o">=</span><span class="m">0</span>.0.0.0<span class="w">  </span><span class="c1"># OK pour développement local et Docker</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># En production avec Nginx:</span>
+</span><span data-line="5"><span class="c1"># L&#39;API n&#39;est pas exposée directement sur Internet</span>
+</span><span data-line="6"><span class="c1"># Nginx fait le proxy vers http://api:8000</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="mesures-de-securite-complementaires">
+<h3>Mesures de sécurité complémentaires<a class="headerlink" href="#mesures-de-securite-complementaires" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p><strong>CORS configuré</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Limiter les origines autorisées en production</span>
+</span><span data-line="2"><span class="n">allowed_origins</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;https://app.example.com&quot;</span><span class="p">]</span>
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Rate limiting</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Via slowapi ou nginx</span>
+</span><span data-line="2"><span class="nd">@limiter</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="s2">&quot;10/minute&quot;</span><span class="p">)</span>
+</span><span data-line="3"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Authentification</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># OAuth2, JWT, ou API keys</span>
+</span><span data-line="2"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">verify_token</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">oauth2_scheme</span><span class="p">))</span>
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<section id="generateurs-pseudo-aleatoires-random">
+<h2>Générateurs pseudo-aléatoires (random)<a class="headerlink" href="#generateurs-pseudo-aleatoires-random" title="Link to this heading">¶</a></h2>
+<section id="id2">
+<h3>Risques identifiés par Bandit<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">B311</span><span class="p">:</span> <span class="n">Standard</span> <span class="n">pseudo</span><span class="o">-</span><span class="n">random</span> <span class="n">generators</span> <span class="n">are</span> <span class="ow">not</span> <span class="n">suitable</span> <span class="k">for</span>
+</span><span data-line="2"><span class="n">security</span><span class="o">/</span><span class="n">cryptographic</span> <span class="n">purposes</span><span class="o">.</span>
+</span></pre></div>
+</div>
+</section>
+<section id="contexte-d-utilisation">
+<h3>Contexte d’utilisation<a class="headerlink" href="#contexte-d-utilisation" title="Link to this heading">¶</a></h3>
+<p>Le module <code class="docutils literal notranslate"><span class="pre">random</span></code> est utilisé <strong>uniquement</strong> dans le simulateur de charge pour générer des données de test:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/simulator/simulator.py</span>
+</span><span data-line="2"><span class="k">def</span><span class="w"> </span><span class="nf">generate_random_patient</span><span class="p">():</span>
+</span><span data-line="3">    <span class="k">return</span> <span class="p">{</span>
+</span><span data-line="4">        <span class="s2">&quot;AGE&quot;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span>
+</span><span data-line="5">        <span class="s2">&quot;GENDER&quot;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+</span><span data-line="6">        <span class="c1"># ...</span>
+</span><span data-line="7">    <span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="pourquoi-c-est-acceptable">
+<h3>Pourquoi c’est acceptable<a class="headerlink" href="#pourquoi-c-est-acceptable" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Pas d’usage cryptographique</strong>: Les données générées ne sont jamais utilisées pour:</p>
+<ul class="simple">
+<li><p>Génération de tokens</p></li>
+<li><p>Mots de passe</p></li>
+<li><p>Clés de chiffrement</p></li>
+<li><p>Session IDs</p></li>
+</ul>
+</li>
+<li><p><strong>Usage limité aux tests</strong>: Le simulateur est un outil de test de charge, pas un composant de production</p></li>
+<li><p><strong>Pas d’impact sécurité</strong>: La prédictibilité de <code class="docutils literal notranslate"><span class="pre">random</span></code> n’a aucun impact sur la sécurité de l’application</p></li>
+</ol>
+</section>
+<section id="si-un-usage-cryptographique-etait-necessaire">
+<h3>Si un usage cryptographique était nécessaire<a class="headerlink" href="#si-un-usage-cryptographique-etait-necessaire" title="Link to this heading">¶</a></h3>
+<p>Utiliser <code class="docutils literal notranslate"><span class="pre">secrets</span></code> au lieu de <code class="docutils literal notranslate"><span class="pre">random</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">secrets</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Pour génération de tokens</span>
+</span><span data-line="4"><span class="n">token</span> <span class="o">=</span> <span class="n">secrets</span><span class="o">.</span><span class="n">token_urlsafe</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Pour nombres aléatoires cryptographiquement sûrs</span>
+</span><span data-line="7"><span class="n">secure_value</span> <span class="o">=</span> <span class="n">secrets</span><span class="o">.</span><span class="n">randbelow</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="vulnerabilite-gradio-cve-2024-39236">
+<h2>Vulnérabilité Gradio (CVE-2024-39236)<a class="headerlink" href="#vulnerabilite-gradio-cve-2024-39236" title="Link to this heading">¶</a></h2>
+<section id="statut-actuel">
+<h3>Statut actuel<a class="headerlink" href="#statut-actuel" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">Vulnerability</span> <span class="n">ID</span><span class="p">:</span> <span class="mi">72086</span>
+</span><span data-line="2"><span class="n">CVE</span><span class="p">:</span> <span class="n">CVE</span><span class="o">-</span><span class="mi">2024</span><span class="o">-</span><span class="mi">39236</span>
+</span><span data-line="3"><span class="n">Package</span><span class="p">:</span> <span class="n">gradio</span> <span class="mf">5.49.1</span>
+</span><span data-line="4"><span class="n">Severity</span><span class="p">:</span> <span class="n">DISPUTED</span>
+</span></pre></div>
+</div>
+</section>
+<section id="details-de-la-vulnerabilite">
+<h3>Détails de la vulnérabilité<a class="headerlink" href="#details-de-la-vulnerabilite" title="Link to this heading">¶</a></h3>
+<p><strong>Type</strong>: Code injection dans <code class="docutils literal notranslate"><span class="pre">/gradio/component_meta.py</span></code></p>
+<p><strong>Impact</strong>: Potentielle injection de code via les métadonnées des composants</p>
+<p><strong>Statut</strong>: DISPUTED - Hugging Face conteste la vulnérabilité</p>
+</section>
+<section id="mesures-d-attenuation-actuelles">
+<h3>Mesures d’atténuation actuelles<a class="headerlink" href="#mesures-d-attenuation-actuelles" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Isolation du composant Gradio</strong>:</p>
+<ul class="simple">
+<li><p>Gradio tourne dans un conteneur séparé</p></li>
+<li><p>Pas d’accès direct au modèle ou aux données sensibles</p></li>
+<li><p>Communication uniquement via l’API REST</p></li>
+</ul>
+</li>
+<li><p><strong>Accès limité</strong>:</p>
+<ul class="simple">
+<li><p>L’interface Gradio n’est pas exposée directement en production</p></li>
+<li><p>Déployée sur Hugging Face Spaces avec leurs contrôles de sécurité</p></li>
+</ul>
+</li>
+<li><p><strong>Pas de données sensibles</strong>:</p>
+<ul class="simple">
+<li><p>Les données de patients sont synthétiques</p></li>
+<li><p>Pas de stockage de données personnelles identifiables</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="plan-de-mise-a-jour">
+<h3>Plan de mise à jour<a class="headerlink" href="#plan-de-mise-a-jour" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vérifier les nouvelles versions</span>
+</span><span data-line="2">uv<span class="w"> </span>add<span class="w"> </span>gradio@latest
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Tester la compatibilité</span>
+</span><span data-line="5">make<span class="w"> </span>test-ui
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Mettre à jour si compatible</span>
+</span><span data-line="8">git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore: Update gradio to fix CVE-2024-39236&quot;</span>
+</span></pre></div>
+</div>
+<p><strong>Note</strong>: La mise à jour sera effectuée dès qu’une version corrigée non-disputed sera disponible.</p>
+</section>
+</section>
+<section id="surveillance-et-monitoring">
+<h2>Surveillance et Monitoring<a class="headerlink" href="#surveillance-et-monitoring" title="Link to this heading">¶</a></h2>
+<section id="logs-de-securite">
+<h3>Logs de sécurité<a class="headerlink" href="#logs-de-securite" title="Link to this heading">¶</a></h3>
+<p>Tous les événements de sécurité sont loggés:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tentative d&#39;accès non autorisé</span>
+</span><span data-line="2"><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unauthorized access attempt: </span><span class="si">{</span><span class="n">ip</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Erreur de validation</span>
+</span><span data-line="5"><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid input detected: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Chargement du modèle</span>
+</span><span data-line="8"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Model loaded from: </span><span class="si">{</span><span class="n">model_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="metriques-de-securite">
+<h3>Métriques de sécurité<a class="headerlink" href="#metriques-de-securite" title="Link to this heading">¶</a></h3>
+<p>Via Elasticsearch/Kibana:</p>
+<ul class="simple">
+<li><p>Nombre de requêtes par IP</p></li>
+<li><p>Taux d’erreur 4xx/5xx</p></li>
+<li><p>Tentatives d’accès à des endpoints non existants</p></li>
+<li><p>Temps de réponse anormaux (possible DoS)</p></li>
+</ul>
+</section>
+<section id="alertes">
+<h3>Alertes<a class="headerlink" href="#alertes" title="Link to this heading">¶</a></h3>
+<p>Configuration dans Kibana:</p>
+<ul class="simple">
+<li><p>Alerte si &gt; 100 requêtes/minute depuis une même IP</p></li>
+<li><p>Alerte si taux d’erreur &gt; 10%</p></li>
+<li><p>Alerte si temps de réponse moyen &gt; 5s</p></li>
+</ul>
+</section>
+</section>
+<section id="checklist-de-securite-pour-la-production">
+<h2>Checklist de sécurité pour la production<a class="headerlink" href="#checklist-de-securite-pour-la-production" title="Link to this heading">¶</a></h2>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Activer HTTPS (SSL/TLS) via Nginx</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Configurer CORS avec les origines spécifiques</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Implémenter rate limiting</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Ajouter authentification (OAuth2/JWT)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Valider le hash du modèle au démarrage</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Configurer les logs de sécurité</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Activer les alertes Kibana</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Mettre à jour Gradio quand patch disponible</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Restreindre les permissions du conteneur Docker</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Configurer le firewall/security groups</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Activer le monitoring de performance</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Planifier les audits de sécurité réguliers</p></li>
+</ul>
+</section>
+<section id="references">
+<h2>Références<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://owasp.org/www-project-top-ten/">OWASP Top 10</a></p></li>
+<li><p><a class="reference external" href="https://bandit.readthedocs.io/">Bandit Documentation</a></p></li>
+<li><p><a class="reference external" href="https://docs.safetycli.com/">Safety Documentation</a></p></li>
+<li><p><a class="reference external" href="https://docs.docker.com/engine/security/">Docker Security Best Practices</a></p></li>
+<li><p><a class="reference external" href="https://fastapi.tiangolo.com/tutorial/security/">FastAPI Security</a></p></li>
+<li><p><a class="reference external" href="https://scikit-learn.org/stable/model_persistence.html">scikit-learn Model Persistence</a></p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Dernière mise à jour</strong>: 22 novembre 2025
+<strong>Responsable sécurité</strong>: Équipe DevSecOps</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

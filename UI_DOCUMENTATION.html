@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Documentation de l’Interface Gradio - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Documentation de l’Interface Gradio"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#vue-d-ensemble">&#128203; Vue d&#8217;ensemble</a></li>
+<li><a class="reference internal" href="#interface-utilisateur">&#127912; Interface utilisateur</a><ul>
+<li><a class="reference internal" href="#sections-de-l-interface">Sections de l&#8217;interface</a><ul>
+<li><a class="reference internal" href="#informations-generales">1. Informations g&#233;n&#233;rales</a></li>
+<li><a class="reference internal" href="#facteurs-de-risque-comportementaux">2. Facteurs de risque comportementaux</a></li>
+<li><a class="reference internal" href="#signes-physiques">3. Signes physiques</a></li>
+<li><a class="reference internal" href="#symptomes-respiratoires">4. Sympt&#244;mes respiratoires</a></li>
+<li><a class="reference internal" href="#autres-symptomes">5. Autres sympt&#244;mes</a></li>
+<li><a class="reference internal" href="#resultat">6. R&#233;sultat</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilisation">&#128640; Utilisation</a><ul>
+<li><a class="reference internal" href="#lancement-de-l-interface">Lancement de l&#8217;interface</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#workflow-d-utilisation">Workflow d&#8217;utilisation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exemples-de-cas-d-utilisation">&#128202; Exemples de cas d&#8217;utilisation</a><ul>
+<li><a class="reference internal" href="#cas-1-patient-a-risque-eleve">Cas 1 : Patient &#224; risque &#233;lev&#233;</a></li>
+<li><a class="reference internal" href="#cas-2-patient-a-risque-faible">Cas 2 : Patient &#224; risque faible</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#architecture-technique">&#128295; Architecture technique</a><ul>
+<li><a class="reference internal" href="#communication-avec-l-api">Communication avec l&#8217;API</a></li>
+<li><a class="reference internal" href="#endpoints-api-proxy">Endpoints API Proxy</a><ul>
+<li><a class="reference internal" href="#health-check">1. Health Check</a></li>
+<li><a class="reference internal" href="#prediction-binaire">2. Pr&#233;diction binaire</a></li>
+<li><a class="reference internal" href="#prediction-avec-probabilites">3. Pr&#233;diction avec probabilit&#233;s</a></li>
+<li><a class="reference internal" href="#recuperation-des-logs">4. R&#233;cup&#233;ration des logs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#avantages-des-endpoints-proxy">Avantages des endpoints proxy</a></li>
+<li><a class="reference internal" href="#tester-les-endpoints-proxy">Tester les endpoints proxy</a></li>
+<li><a class="reference internal" href="#gestion-des-erreurs">Gestion des erreurs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#personnalisation">&#127912; Personnalisation</a><ul>
+<li><a class="reference internal" href="#modifier-le-theme">Modifier le th&#232;me</a></li>
+<li><a class="reference internal" href="#modifier-les-valeurs-par-defaut">Modifier les valeurs par d&#233;faut</a></li>
+<li><a class="reference internal" href="#activer-le-partage-public">Activer le partage public</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#securite">&#128274; S&#233;curit&#233;</a><ul>
+<li><a class="reference internal" href="#bonnes-pratiques">Bonnes pratiques</a></li>
+<li><a class="reference internal" href="#mode-developpement-vs-production">Mode d&#233;veloppement vs production</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#docker">&#128051; Docker</a></li>
+<li><a class="reference internal" href="#tests">&#129514; Tests</a><ul>
+<li><a class="reference internal" href="#test-manuel">Test manuel</a></li>
+<li><a class="reference internal" href="#test-de-connexion">Test de connexion</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#notes-importantes">&#128221; Notes importantes</a><ul>
+<li><a class="reference internal" href="#avertissement-medical">Avertissement m&#233;dical</a></li>
+<li><a class="reference internal" href="#feature-engineering-automatique">Feature engineering automatique</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#liens-utiles">&#128279; Liens utiles</a></li>
+<li><a class="reference internal" href="#depannage">&#127384; D&#233;pannage</a><ul>
+<li><a class="reference internal" href="#probleme-interface-inaccessible">Probl&#232;me : Interface inaccessible</a></li>
+<li><a class="reference internal" href="#probleme-erreur-de-connexion-a-l-api">Probl&#232;me : Erreur de connexion &#224; l&#8217;API</a></li>
+<li><a class="reference internal" href="#probleme-predictions-incorrectes">Probl&#232;me : Pr&#233;dictions incorrectes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ameliorations-futures">&#128202; Am&#233;liorations futures</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Documentation de l’Interface Gradio</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="documentation-de-l-interface-gradio">
+<h1>Documentation de l’Interface Gradio<a class="headerlink" href="#documentation-de-l-interface-gradio" title="Link to this heading">¶</a></h1>
+<section id="vue-d-ensemble">
+<h2>📋 Vue d’ensemble<a class="headerlink" href="#vue-d-ensemble" title="Link to this heading">¶</a></h2>
+<p>L’interface Gradio fournit une interface utilisateur web intuitive pour interagir avec le modèle de prédiction de cancer du poumon. Elle communique avec l’API FastAPI pour obtenir les prédictions.</p>
+</section>
+<section id="interface-utilisateur">
+<h2>🎨 Interface utilisateur<a class="headerlink" href="#interface-utilisateur" title="Link to this heading">¶</a></h2>
+<section id="sections-de-l-interface">
+<h3>Sections de l’interface<a class="headerlink" href="#sections-de-l-interface" title="Link to this heading">¶</a></h3>
+<p>L’interface est organisée en plusieurs sections logiques :</p>
+<section id="informations-generales">
+<h4>1. Informations générales<a class="headerlink" href="#informations-generales" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Âge</strong> : Slider de 0 à 120 ans</p></li>
+<li><p><strong>Genre</strong> : Liste déroulante (Féminin / Masculin)</p></li>
+</ul>
+</section>
+<section id="facteurs-de-risque-comportementaux">
+<h4>2. Facteurs de risque comportementaux<a class="headerlink" href="#facteurs-de-risque-comportementaux" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Fumeur</strong> : Case à cocher</p></li>
+<li><p><strong>Consommation d’alcool</strong> : Case à cocher</p></li>
+<li><p><strong>Pression des pairs</strong> : Case à cocher</p></li>
+</ul>
+</section>
+<section id="signes-physiques">
+<h4>3. Signes physiques<a class="headerlink" href="#signes-physiques" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Doigts jaunes</strong> : Case à cocher</p></li>
+<li><p><strong>Anxiété</strong> : Case à cocher</p></li>
+<li><p><strong>Fatigue chronique</strong> : Case à cocher</p></li>
+<li><p><strong>Allergies</strong> : Case à cocher</p></li>
+</ul>
+</section>
+<section id="symptomes-respiratoires">
+<h4>4. Symptômes respiratoires<a class="headerlink" href="#symptomes-respiratoires" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Respiration sifflante</strong> : Case à cocher</p></li>
+<li><p><strong>Toux persistante</strong> : Case à cocher</p></li>
+<li><p><strong>Essoufflement</strong> : Case à cocher</p></li>
+</ul>
+</section>
+<section id="autres-symptomes">
+<h4>5. Autres symptômes<a class="headerlink" href="#autres-symptomes" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Difficulté à avaler</strong> : Case à cocher</p></li>
+<li><p><strong>Douleur thoracique</strong> : Case à cocher</p></li>
+</ul>
+</section>
+<section id="resultat">
+<h4>6. Résultat<a class="headerlink" href="#resultat" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><strong>Bouton “Obtenir la prédiction”</strong> : Lance la prédiction</p></li>
+<li><p><strong>Niveau de risque</strong> : Affiche le niveau de risque (🟢 FAIBLE, 🔴 ÉLEVÉ, ⚫ ERREUR)</p></li>
+<li><p><strong>Message détaillé</strong> : Affiche le message de prédiction et la probabilité</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="utilisation">
+<h2>🚀 Utilisation<a class="headerlink" href="#utilisation" title="Link to this heading">¶</a></h2>
+<section id="lancement-de-l-interface">
+<h3>Lancement de l’interface<a class="headerlink" href="#lancement-de-l-interface" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Avec Make</span>
+</span><span data-line="2">make<span class="w"> </span>run-ui
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Directement avec Python</span>
+</span><span data-line="5">python<span class="w"> </span>-m<span class="w"> </span>src.ui.app
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Avec le module</span>
+</span><span data-line="8">python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from src.ui import launch_ui; launch_ui()&quot;</span>
+</span></pre></div>
+</div>
+<p>L’interface sera accessible sur : <strong>http://localhost:7860</strong></p>
+</section>
+<section id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h3>
+<p>L’interface utilise les variables d’environnement suivantes (définies dans <code class="docutils literal notranslate"><span class="pre">.env</span></code>) :</p>
+<div class="highlight-env notranslate"><div class="highlight"><pre><span></span><span data-line="1"># Configuration Gradio
+</span><span data-line="2">GRADIO_HOST=0.0.0.0
+</span><span data-line="3">GRADIO_PORT=7860
+</span><span data-line="4">API_URL=http://localhost:8000
+</span></pre></div>
+</div>
+</section>
+<section id="workflow-d-utilisation">
+<h3>Workflow d’utilisation<a class="headerlink" href="#workflow-d-utilisation" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Remplir les informations du patient</strong></p>
+<ul class="simple">
+<li><p>Ajuster l’âge avec le slider</p></li>
+<li><p>Sélectionner le genre dans la liste déroulante</p></li>
+<li><p>Cocher les cases correspondant aux symptômes et caractéristiques du patient</p></li>
+<li><p>Les cases non cochées correspondent à “Non” (0)</p></li>
+</ul>
+</li>
+<li><p><strong>Obtenir la prédiction</strong></p>
+<ul class="simple">
+<li><p>Cliquer sur le bouton “Obtenir la prédiction”</p></li>
+<li><p>Le système envoie automatiquement les données à l’API</p></li>
+<li><p>Les features dérivées sont calculées automatiquement par l’API</p></li>
+</ul>
+</li>
+<li><p><strong>Interpréter les résultats</strong></p>
+<ul class="simple">
+<li><p><strong>Niveau de risque</strong> : Indique si le risque est faible ou élevé</p></li>
+<li><p><strong>Message détaillé</strong> : Fournit des informations supplémentaires</p></li>
+<li><p><strong>Probabilité</strong> : Affiche la probabilité de la prédiction</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="exemples-de-cas-d-utilisation">
+<h2>📊 Exemples de cas d’utilisation<a class="headerlink" href="#exemples-de-cas-d-utilisation" title="Link to this heading">¶</a></h2>
+<section id="cas-1-patient-a-risque-eleve">
+<h3>Cas 1 : Patient à risque élevé<a class="headerlink" href="#cas-1-patient-a-risque-eleve" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">Âge: 65 ans
+</span><span data-line="2">Genre: Masculin
+</span><span data-line="3">Fumeur: ✓
+</span><span data-line="4">Consommation d&#39;alcool: ✓
+</span><span data-line="5">Doigts jaunes: ✓
+</span><span data-line="6">Fatigue chronique: ✓
+</span><span data-line="7">Respiration sifflante: ✓
+</span><span data-line="8">Toux persistante: ✓
+</span><span data-line="9">Essoufflement: ✓
+</span><span data-line="10">Douleur thoracique: ✓
+</span><span data-line="11">
+</span><span data-line="12">Résultat: 🔴 RISQUE ÉLEVÉ
+</span><span data-line="13">Probabilité: ~85%
+</span></pre></div>
+</div>
+</section>
+<section id="cas-2-patient-a-risque-faible">
+<h3>Cas 2 : Patient à risque faible<a class="headerlink" href="#cas-2-patient-a-risque-faible" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">Âge: 30 ans
+</span><span data-line="2">Genre: Féminin
+</span><span data-line="3">Tous les symptômes: Non
+</span><span data-line="4">
+</span><span data-line="5">Résultat: 🟢 RISQUE FAIBLE
+</span><span data-line="6">Probabilité: ~95%
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="architecture-technique">
+<h2>🔧 Architecture technique<a class="headerlink" href="#architecture-technique" title="Link to this heading">¶</a></h2>
+<section id="communication-avec-l-api">
+<h3>Communication avec l’API<a class="headerlink" href="#communication-avec-l-api" title="Link to this heading">¶</a></h3>
+<p>L’interface communique avec l’API via des requêtes HTTP POST :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Endpoint utilisé</span>
+</span><span data-line="2"><span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8000</span><span class="o">/</span><span class="n">predict</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Format du payload</span>
+</span><span data-line="5"><span class="p">{</span>
+</span><span data-line="6">  <span class="s2">&quot;AGE&quot;</span><span class="p">:</span> <span class="mi">65</span><span class="p">,</span>
+</span><span data-line="7">  <span class="s2">&quot;GENDER&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="8">  <span class="s2">&quot;SMOKING&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="9">  <span class="s2">&quot;ALCOHOL CONSUMING&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="10">  <span class="o">...</span>
+</span><span data-line="11"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="endpoints-api-proxy">
+<h3>Endpoints API Proxy<a class="headerlink" href="#endpoints-api-proxy" title="Link to this heading">¶</a></h3>
+<p>Gradio expose maintenant des <strong>endpoints API proxy</strong> qui redirigent vers l’API FastAPI. Cela permet d’accéder à l’API via le port Gradio (7860) au lieu du port FastAPI (8000).</p>
+<p><strong>Endpoints disponibles :</strong></p>
+<section id="health-check">
+<h4>1. Health Check<a class="headerlink" href="#health-check" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">GET<span class="w"> </span>http://localhost:7860/api/health
+</span></pre></div>
+</div>
+<p><strong>Exemple :</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>http://localhost:7860/api/health
+</span></pre></div>
+</div>
+<p><strong>Réponse :</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;healthy&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;model_loaded&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;redis_connected&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+</span><span data-line="5"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="prediction-binaire">
+<h4>2. Prédiction binaire<a class="headerlink" href="#prediction-binaire" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">POST<span class="w"> </span>http://localhost:7860/api/predict
+</span></pre></div>
+</div>
+<p><strong>Exemple :</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7860/api/predict<span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span data-line="4"><span class="s1">    &quot;AGE&quot;: 65,</span>
+</span><span data-line="5"><span class="s1">    &quot;GENDER&quot;: 1,</span>
+</span><span data-line="6"><span class="s1">    &quot;SMOKING&quot;: 1,</span>
+</span><span data-line="7"><span class="s1">    &quot;ALCOHOL CONSUMING&quot;: 1,</span>
+</span><span data-line="8"><span class="s1">    &quot;PEER_PRESSURE&quot;: 0,</span>
+</span><span data-line="9"><span class="s1">    &quot;YELLOW_FINGERS&quot;: 1,</span>
+</span><span data-line="10"><span class="s1">    &quot;ANXIETY&quot;: 0,</span>
+</span><span data-line="11"><span class="s1">    &quot;FATIGUE&quot;: 1,</span>
+</span><span data-line="12"><span class="s1">    &quot;ALLERGY&quot;: 0,</span>
+</span><span data-line="13"><span class="s1">    &quot;WHEEZING&quot;: 1,</span>
+</span><span data-line="14"><span class="s1">    &quot;COUGHING&quot;: 1,</span>
+</span><span data-line="15"><span class="s1">    &quot;SHORTNESS OF BREATH&quot;: 1,</span>
+</span><span data-line="16"><span class="s1">    &quot;SWALLOWING DIFFICULTY&quot;: 0,</span>
+</span><span data-line="17"><span class="s1">    &quot;CHEST PAIN&quot;: 1,</span>
+</span><span data-line="18"><span class="s1">    &quot;CHRONIC DISEASE&quot;: 0</span>
+</span><span data-line="19"><span class="s1">  }&#39;</span>
+</span></pre></div>
+</div>
+<p><strong>Réponse :</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;prediction&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Risque élevé de cancer du poumon&quot;</span>
+</span><span data-line="4"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="prediction-avec-probabilites">
+<h4>3. Prédiction avec probabilités<a class="headerlink" href="#prediction-avec-probabilites" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">POST<span class="w"> </span>http://localhost:7860/api/predict_proba
+</span></pre></div>
+</div>
+<p><strong>Exemple :</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7860/api/predict_proba<span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{...}&#39;</span><span class="w">  </span><span class="c1"># Même payload que /predict</span>
+</span></pre></div>
+</div>
+<p><strong>Réponse :</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;prediction&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;probability&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.87</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Risque élevé de cancer du poumon (probabilité: 87.0%)&quot;</span>
+</span><span data-line="5"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="recuperation-des-logs">
+<h4>4. Récupération des logs<a class="headerlink" href="#recuperation-des-logs" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">GET<span class="w"> </span>http://localhost:7860/api/logs?limit<span class="o">=</span><span class="m">100</span>
+</span></pre></div>
+</div>
+<p><strong>Exemple :</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span><span class="s2">&quot;http://localhost:7860/api/logs?limit=10&quot;</span>
+</span></pre></div>
+</div>
+<p><strong>Réponse :</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;logs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span data-line="3"><span class="w">    </span><span class="s2">&quot;2025-01-14 10:30:15 - INFO - Prediction received&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">    </span><span class="s2">&quot;2025-01-14 10:30:16 - INFO - Model prediction: 1&quot;</span>
+</span><span data-line="5"><span class="w">  </span><span class="p">],</span>
+</span><span data-line="6"><span class="w">  </span><span class="nt">&quot;count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span>
+</span><span data-line="7"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="avantages-des-endpoints-proxy">
+<h3>Avantages des endpoints proxy<a class="headerlink" href="#avantages-des-endpoints-proxy" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Un seul port à exposer</strong> : En production (HuggingFace Spaces), seul le port 7860 (Gradio) est exposé</p></li>
+<li><p><strong>Simplification du déploiement</strong> : Pas besoin d’exposer le port FastAPI (8000) publiquement</p></li>
+<li><p><strong>Accès unifié</strong> : Toute l’application accessible via une seule URL</p></li>
+<li><p><strong>Sécurité renforcée</strong> : L’API FastAPI reste en backend (localhost uniquement)</p></li>
+</ol>
+</section>
+<section id="tester-les-endpoints-proxy">
+<h3>Tester les endpoints proxy<a class="headerlink" href="#tester-les-endpoints-proxy" title="Link to this heading">¶</a></h3>
+<p>Un script de test est fourni :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Lancer l&#39;API et Gradio</span>
+</span><span data-line="2">make<span class="w"> </span>run-api<span class="w"> </span><span class="p">&amp;</span>
+</span><span data-line="3">make<span class="w"> </span>run-ui<span class="w"> </span><span class="p">&amp;</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Tester les endpoints proxy</span>
+</span><span data-line="6">python<span class="w"> </span>test_gradio_endpoints.py
+</span></pre></div>
+</div>
+</section>
+<section id="gestion-des-erreurs">
+<h3>Gestion des erreurs<a class="headerlink" href="#gestion-des-erreurs" title="Link to this heading">¶</a></h3>
+<p>L’interface gère automatiquement plusieurs types d’erreurs :</p>
+<ol class="arabic simple">
+<li><p><strong>Erreur de connexion</strong> : L’API n’est pas accessible</p></li>
+<li><p><strong>Timeout</strong> : L’API ne répond pas dans le délai imparti (10s)</p></li>
+<li><p><strong>Erreur HTTP</strong> : L’API retourne une erreur (4xx, 5xx)</p></li>
+<li><p><strong>Erreur inattendue</strong> : Toute autre erreur</p></li>
+</ol>
+<p>Chaque type d’erreur affiche un message approprié à l’utilisateur.</p>
+</section>
+</section>
+<section id="personnalisation">
+<h2>🎨 Personnalisation<a class="headerlink" href="#personnalisation" title="Link to this heading">¶</a></h2>
+<section id="modifier-le-theme">
+<h3>Modifier le thème<a class="headerlink" href="#modifier-le-theme" title="Link to this heading">¶</a></h3>
+<p>Le thème de l’interface peut être modifié dans <code class="docutils literal notranslate"><span class="pre">src/ui/app.py</span></code> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">interface</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Blocks</span><span class="p">(</span>
+</span><span data-line="2">    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Prédiction Cancer du Poumon&quot;</span><span class="p">,</span>
+</span><span data-line="3">    <span class="n">theme</span><span class="o">=</span><span class="n">gr</span><span class="o">.</span><span class="n">themes</span><span class="o">.</span><span class="n">Soft</span><span class="p">()</span>  <span class="c1"># Changer ici: Soft, Base, Monochrome, etc.</span>
+</span><span data-line="4"><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="modifier-les-valeurs-par-defaut">
+<h3>Modifier les valeurs par défaut<a class="headerlink" href="#modifier-les-valeurs-par-defaut" title="Link to this heading">¶</a></h3>
+<p>Les valeurs par défaut peuvent être ajustées :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">age_input</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">Slider</span><span class="p">(</span>
+</span><span data-line="2">    <span class="n">minimum</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+</span><span data-line="3">    <span class="n">maximum</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
+</span><span data-line="4">    <span class="n">value</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>  <span class="c1"># Valeur par défaut</span>
+</span><span data-line="5">    <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="6">    <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Âge&quot;</span>
+</span><span data-line="7"><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="activer-le-partage-public">
+<h3>Activer le partage public<a class="headerlink" href="#activer-le-partage-public" title="Link to this heading">¶</a></h3>
+<p>Pour créer un lien public partageable (utile pour les démos) :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">launch_ui</span><span class="p">(</span><span class="n">share</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p>Ou via la ligne de commande :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from src.ui import launch_ui; launch_ui(share=True)&quot;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="securite">
+<h2>🔒 Sécurité<a class="headerlink" href="#securite" title="Link to this heading">¶</a></h2>
+<section id="bonnes-pratiques">
+<h3>Bonnes pratiques<a class="headerlink" href="#bonnes-pratiques" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Ne jamais exposer l’interface publiquement en production</strong> sans authentification</p></li>
+<li><p><strong>Utiliser HTTPS</strong> en production avec un reverse proxy</p></li>
+<li><p><strong>Limiter l’accès</strong> via firewall ou réseau privé</p></li>
+<li><p><strong>Valider les données</strong> côté API (déjà implémenté avec Pydantic)</p></li>
+</ol>
+</section>
+<section id="mode-developpement-vs-production">
+<h3>Mode développement vs production<a class="headerlink" href="#mode-developpement-vs-production" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Développement (localhost uniquement)</span>
+</span><span data-line="2"><span class="nv">GRADIO_HOST</span><span class="o">=</span><span class="m">127</span>.0.0.1
+</span><span data-line="3"><span class="nv">GRADIO_PORT</span><span class="o">=</span><span class="m">7860</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Production (accessible depuis le réseau)</span>
+</span><span data-line="6"><span class="nv">GRADIO_HOST</span><span class="o">=</span><span class="m">0</span>.0.0.0
+</span><span data-line="7"><span class="nv">GRADIO_PORT</span><span class="o">=</span><span class="m">7860</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="docker">
+<h2>🐳 Docker<a class="headerlink" href="#docker" title="Link to this heading">¶</a></h2>
+<p>L’interface Gradio sera déployée dans un conteneur Docker séparé (Docker 2) :</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># À venir : docker-compose pour l&#39;UI</span>
+</span><span data-line="2"><span class="nt">services</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">ui</span><span class="p">:</span>
+</span><span data-line="4"><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./docker-ui</span>
+</span><span data-line="5"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="6"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;7860:7860&quot;</span>
+</span><span data-line="7"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="8"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">API_URL=http://api:8000</span>
+</span><span data-line="9"><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+</span><span data-line="10"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">api</span>
+</span></pre></div>
+</div>
+</section>
+<section id="tests">
+<h2>🧪 Tests<a class="headerlink" href="#tests" title="Link to this heading">¶</a></h2>
+<section id="test-manuel">
+<h3>Test manuel<a class="headerlink" href="#test-manuel" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Lancer l’API : <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">run-api</span></code></p></li>
+<li><p>Lancer l’interface : <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">run-ui</span></code></p></li>
+<li><p>Ouvrir http://localhost:7860</p></li>
+<li><p>Tester différentes combinaisons de paramètres</p></li>
+</ol>
+</section>
+<section id="test-de-connexion">
+<h3>Test de connexion<a class="headerlink" href="#test-de-connexion" title="Link to this heading">¶</a></h3>
+<p>Vérifier que l’API est accessible :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>http://localhost:8000/health
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="notes-importantes">
+<h2>📝 Notes importantes<a class="headerlink" href="#notes-importantes" title="Link to this heading">¶</a></h2>
+<section id="avertissement-medical">
+<h3>Avertissement médical<a class="headerlink" href="#avertissement-medical" title="Link to this heading">¶</a></h3>
+<p>L’interface affiche un avertissement clair :</p>
+<blockquote>
+<div><p><strong>Note</strong>: Cette application est à but éducatif uniquement et ne remplace pas un diagnostic médical professionnel.</p>
+</div></blockquote>
+</section>
+<section id="feature-engineering-automatique">
+<h3>Feature engineering automatique<a class="headerlink" href="#feature-engineering-automatique" title="Link to this heading">¶</a></h3>
+<p>L’utilisateur ne saisit que <strong>14 features</strong> (les features d’entrée). Les <strong>14 features dérivées</strong> sont calculées automatiquement par l’API :</p>
+<p><strong>Features saisies</strong> (14) :</p>
+<ul class="simple">
+<li><p>AGE, GENDER, SMOKING, ALCOHOL CONSUMING, PEER_PRESSURE</p></li>
+<li><p>YELLOW_FINGERS, ANXIETY, FATIGUE, ALLERGY</p></li>
+<li><p>WHEEZING, COUGHING, SHORTNESS OF BREATH</p></li>
+<li><p>SWALLOWING DIFFICULTY, CHEST PAIN</p></li>
+</ul>
+<p><strong>Features calculées automatiquement</strong> (14) :</p>
+<ul class="simple">
+<li><p>SMOKING_x_AGE, SMOKING_x_ALCOHOL, RESPIRATORY_SYMPTOMS</p></li>
+<li><p>TOTAL_SYMPTOMS, BEHAVIORAL_RISK_SCORE, etc.</p></li>
+</ul>
+<p>Voir <a class="reference internal" href="FEATURE_ENGINEERING.html"><span class="std std-doc">FEATURE_ENGINEERING.md</span></a> pour plus de détails.</p>
+</section>
+</section>
+<section id="liens-utiles">
+<h2>🔗 Liens utiles<a class="headerlink" href="#liens-utiles" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="API_DOCUMENTATION.html"><span class="std std-doc">Documentation API</span></a></p></li>
+<li><p><a class="reference internal" href="FEATURE_ENGINEERING.html"><span class="std std-doc">Feature Engineering</span></a></p></li>
+<li><p><a class="reference external" href="https://www.gradio.app/docs/">Documentation Gradio</a></p></li>
+<li><p><a class="reference internal" href="ENV_VARIABLES.html"><span class="std std-doc">Variables d’environnement</span></a></p></li>
+</ul>
+</section>
+<section id="depannage">
+<h2>🆘 Dépannage<a class="headerlink" href="#depannage" title="Link to this heading">¶</a></h2>
+<section id="probleme-interface-inaccessible">
+<h3>Problème : Interface inaccessible<a class="headerlink" href="#probleme-interface-inaccessible" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vérifier que le port n&#39;est pas déjà utilisé</span>
+</span><span data-line="2">lsof<span class="w"> </span>-i<span class="w"> </span>:7860
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Vérifier les logs</span>
+</span><span data-line="5">tail<span class="w"> </span>-f<span class="w"> </span>logs/gradio.log
+</span></pre></div>
+</div>
+</section>
+<section id="probleme-erreur-de-connexion-a-l-api">
+<h3>Problème : Erreur de connexion à l’API<a class="headerlink" href="#probleme-erreur-de-connexion-a-l-api" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vérifier que l&#39;API est lancée</span>
+</span><span data-line="2">curl<span class="w"> </span>http://localhost:8000/health
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Vérifier la configuration</span>
+</span><span data-line="5">cat<span class="w"> </span>.env<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>API_URL
+</span></pre></div>
+</div>
+</section>
+<section id="probleme-predictions-incorrectes">
+<h3>Problème : Prédictions incorrectes<a class="headerlink" href="#probleme-predictions-incorrectes" title="Link to this heading">¶</a></h3>
+<p>Vérifier que :</p>
+<ol class="arabic simple">
+<li><p>L’API utilise le bon modèle (<code class="docutils literal notranslate"><span class="pre">MODEL_PATH</span></code> correct)</p></li>
+<li><p>Le feature engineering est activé</p></li>
+<li><p>Les données sont correctement formatées</p></li>
+</ol>
+</section>
+</section>
+<section id="ameliorations-futures">
+<h2>📊 Améliorations futures<a class="headerlink" href="#ameliorations-futures" title="Link to this heading">¶</a></h2>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Ajouter l’authentification utilisateur</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Historique des prédictions</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Graphiques de visualisation des features</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Export des résultats en PDF</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Multi-langue (FR/EN)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Dark mode</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Batch predictions (plusieurs patients)</p></li>
+</ul>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

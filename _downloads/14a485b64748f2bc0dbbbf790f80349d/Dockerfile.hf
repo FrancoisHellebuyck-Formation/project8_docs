@@ -1,0 +1,117 @@
+# Dockerfile pour Hugging Face Spaces
+# Ce Dockerfile lance Redis, l'API FastAPI et l'UI Gradio dans le même conteneur
+FROM python:3.13-slim
+
+# Variables d'environnement
+ENV PYTHONUNBUFFERED=1 \
+  PYTHONDONTWRITEBYTECODE=1 \
+  PIP_NO_CACHE_DIR=1 \
+  PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Créer un utilisateur non-root
+RUN useradd -m -u 1000 appuser
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Installer les dépendances système (incluant Redis)
+RUN apt-get update && apt-get install -y \
+  gcc \
+  g++ \
+  redis-server \
+  curl \
+  && rm -rf /var/lib/apt/lists/*
+
+# Copier les fichiers de dépendances
+COPY pyproject.toml ./
+
+# Installer uv pour une installation rapide des dépendances
+RUN pip install uv
+
+# Installer les dépendances Python
+RUN uv pip install --system -e .
+
+# Copier le code de l'application
+COPY src/ ./src/
+COPY model/ ./model/
+COPY .env.example ./.env
+
+# Créer la configuration Redis pour utilisateur non-root
+RUN echo 'daemonize yes\n\
+  port 6379\n\
+  bind 127.0.0.1\n\
+  maxmemory 256mb\n\
+  maxmemory-policy allkeys-lru\n\
+  dir /app/redis-data\n\
+  logfile /app/redis.log\n\
+  pidfile /app/redis.pid\n\
+  ' > /app/redis.conf
+
+# Créer le répertoire pour Redis
+RUN mkdir -p /app/redis-data
+
+# Créer le script de démarrage pour lancer Redis, API et UI
+RUN echo '#!/bin/bash\n\
+  set -e\n\
+  \n\
+  echo "📦 Démarrage de Redis en arrière-plan..."\n\
+  redis-server /app/redis.conf\n\
+  \n\
+  echo "⏳ Attente que Redis soit prêt..."\n\
+  for i in {1..10}; do\n\
+  if redis-cli -h 127.0.0.1 -p 6379 ping > /dev/null 2>&1; then\n\
+  echo "✅ Redis prêt!"\n\
+  break\n\
+  fi\n\
+  echo "Tentative $i/10..."\n\
+  sleep 1\n\
+  done\n\
+  \n\
+  echo "🚀 Démarrage de l'\''API FastAPI en arrière-plan..."\n\
+  uvicorn src.api.main:app --host 0.0.0.0 --port 8000 &\n\
+  API_PID=$!\n\
+  \n\
+  echo "⏳ Attente que l'\''API soit prête..."\n\
+  for i in {1..30}; do\n\
+  if curl -s http://localhost:8000/health > /dev/null 2>&1; then\n\
+  echo "✅ API prête!"\n\
+  break\n\
+  fi\n\
+  echo "Tentative $i/30..."\n\
+  sleep 2\n\
+  done\n\
+  \n\
+  echo "🎨 Démarrage de l'\''UI FastAPI+Gradio sur le port 7860..."\n\
+  echo "📍 Interface UI: http://localhost:7860/"\n\
+  echo "📍 API REST: http://localhost:7860/api/*"\n\
+  python -m src.ui.fastapi_app\n\
+  ' > /app/start.sh && chmod +x /app/start.sh
+
+# Changer les permissions
+RUN chown -R appuser:appuser /app
+
+# Utiliser l'utilisateur non-root
+USER appuser
+
+# Exposer les ports (7860 pour Gradio, 6379 pour Redis interne)
+EXPOSE 7860 6379
+
+# Variables d'environnement pour HF Spaces
+ENV GRADIO_SERVER_NAME="0.0.0.0" \
+  GRADIO_SERVER_PORT=7860 \
+  API_URL="http://localhost:8000" \
+  REDIS_HOST="localhost" \
+  REDIS_PORT=6379 \
+  REDIS_DB=0 \
+  REDIS_LOGS_KEY="api_logs" \
+  REDIS_LOGS_MAX_SIZE=1000 \
+  LOGGING_HANDLER="redis" \
+  LOG_LEVEL="INFO" \
+  UI_LOG_LEVEL="INFO" 
+
+# Healthcheck pour Gradio
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+  CMD python -c "import requests; requests.get('http://localhost:7860')" || exit 1
+
+# Commande de démarrage
+CMD ["/app/start.sh"]

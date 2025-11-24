@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Projet ML API - README Principal - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Projet ML API - README Principal"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#">Projet ML API - README Principal</a></li>
+<li><a class="reference internal" href="#projet-8-mlops-api-de-prediction-ml">Projet 8 - MLOps : API de Prédiction ML</a><ul>
+<li><a class="reference internal" href="#table-des-matieres">📋 Table des matières</a></li>
+<li><a class="reference internal" href="#architecture">🏗️ Architecture</a><ul>
+<li><a class="reference internal" href="#modele-ml-model">1. Modèle ML (<code class="docutils literal notranslate"><span class="pre">./model</span></code>)</a></li>
+<li><a class="reference internal" href="#api-fastapi-src-api">2. API FastAPI (<code class="docutils literal notranslate"><span class="pre">./src/api</span></code>)</a></li>
+<li><a class="reference internal" href="#front-end-gradio-src-ui">3. Front-end Gradio (<code class="docutils literal notranslate"><span class="pre">./src/ui</span></code>)</a></li>
+<li><a class="reference internal" href="#application-fastapi-gradio-src-ui-fastapi-app-py">4. Application FastAPI+Gradio (<code class="docutils literal notranslate"><span class="pre">./src/ui/fastapi_app.py</span></code>)</a></li>
+<li><a class="reference internal" href="#package-proxy-src-proxy">5. Package Proxy (<code class="docutils literal notranslate"><span class="pre">./src/proxy</span></code>)</a></li>
+<li><a class="reference internal" href="#infrastructure">Infrastructure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fonctionnalites">✨ Fonctionnalités</a><ul>
+<li><a class="reference internal" href="#api">API</a></li>
+<li><a class="reference internal" href="#modele">Modèle</a></li>
+<li><a class="reference internal" href="#logs">Logs</a></li>
+<li><a class="reference internal" href="#interface-gradio">Interface Gradio</a></li>
+<li><a class="reference internal" href="#fastapi-gradio-huggingface-spaces">FastAPI+Gradio (HuggingFace Spaces)</a></li>
+<li><a class="reference internal" href="#package-proxy">Package Proxy</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installation">🚀 Installation</a><ul>
+<li><a class="reference internal" href="#prerequis">Prérequis</a></li>
+<li><a class="reference internal" href="#installation-rapide">Installation rapide</a></li>
+<li><a class="reference internal" href="#installation-manuelle">Installation manuelle</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilisation">📖 Utilisation</a><ul>
+<li><a class="reference internal" href="#commandes-make">Commandes Make</a></li>
+<li><a class="reference internal" href="#api-endpoints">API Endpoints</a><ul>
+<li><a class="reference internal" href="#health-check">Health Check</a></li>
+<li><a class="reference internal" href="#prediction">Prédiction</a></li>
+<li><a class="reference internal" href="#id1">Logs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id2">Interface Gradio</a></li>
+<li><a class="reference internal" href="#acces-http-direct-sur-huggingface-spaces">Accès HTTP Direct sur HuggingFace Spaces 🚀</a><ul>
+<li><a class="reference internal" href="#url-du-space">URL du Space</a></li>
+<li><a class="reference internal" href="#endpoints-disponibles">Endpoints Disponibles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#documentation-interactive-api">Documentation interactive API</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#documentation">📚 Documentation</a><ul>
+<li><a class="reference internal" href="#documentation-principale">Documentation principale</a></li>
+<li><a class="reference internal" href="#documentation-technique-dossier-docs">Documentation technique (dossier docs/)</a></li>
+<li><a class="reference internal" href="#huggingface-spaces">HuggingFace Spaces</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#developpement">🛠️ Développement</a><ul>
+<li><a class="reference internal" href="#structure-du-projet">Structure du projet</a></li>
+<li><a class="reference internal" href="#standards-de-code">Standards de code</a></li>
+<li><a class="reference internal" href="#workflow-de-developpement">Workflow de développement</a></li>
+<li><a class="reference internal" href="#variables-d-environnement">Variables d’environnement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tests">🧪 Tests</a></li>
+<li><a class="reference internal" href="#deploiement">🐳 Déploiement</a><ul>
+<li><a class="reference internal" href="#docker-compose">Docker Compose</a></li>
+<li><a class="reference internal" href="#ci-cd">CI/CD</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#features-du-modele">📝 Features du modèle</a><ul>
+<li><a class="reference internal" href="#features-d-entree-14">Features d’entrée (14)</a></li>
+<li><a class="reference internal" href="#features-derivees-14">Features dérivées (14)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contribution">🤝 Contribution</a></li>
+<li><a class="reference internal" href="#licence">📄 Licence</a></li>
+<li><a class="reference internal" href="#auteurs">👥 Auteurs</a></li>
+<li><a class="reference internal" href="#liens-utiles">🔗 Liens utiles</a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Projet ML API - README Principal</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="projet-ml-api-readme-principal">
+<h1>Projet ML API - README Principal<a class="headerlink" href="#projet-ml-api-readme-principal" title="Link to this heading">¶</a></h1>
+</section>
+<section id="projet-8-mlops-api-de-prediction-ml">
+<h1>Projet 8 - MLOps : API de Prédiction ML<a class="headerlink" href="#projet-8-mlops-api-de-prediction-ml" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://www.python.org/downloads/"><img alt="Python 3.13" src="https://img.shields.io/badge/python-3.13-blue.svg" /></a>
+<a class="reference external" href="https://fastapi.tiangolo.com/"><img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-0.115+-green.svg" /></a>
+<a class="reference external" href="https://redis.io/"><img alt="Redis" src="https://img.shields.io/badge/Redis-5.0+-red.svg" /></a></p>
+<p>API REST pour effectuer des prédictions avec un modèle de machine learning, avec gestion des logs dans Redis.</p>
+<section id="table-des-matieres">
+<h2>📋 Table des matières<a class="headerlink" href="#table-des-matieres" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#architecture"><span class="xref myst">Architecture</span></a></p></li>
+<li><p><a class="reference internal" href="#fonctionnalit%C3%A9s"><span class="xref myst">Fonctionnalités</span></a></p></li>
+<li><p><a class="reference internal" href="#installation"><span class="xref myst">Installation</span></a></p></li>
+<li><p><a class="reference internal" href="#utilisation"><span class="xref myst">Utilisation</span></a></p></li>
+<li><p><a class="reference internal" href="#documentation"><span class="xref myst">Documentation</span></a></p></li>
+<li><p><a class="reference internal" href="#d%C3%A9veloppement"><span class="xref myst">Développement</span></a></p></li>
+<li><p><a class="reference internal" href="#tests"><span class="xref myst">Tests</span></a></p></li>
+<li><p><a class="reference internal" href="#d%C3%A9ploiement"><span class="xref myst">Déploiement</span></a></p></li>
+</ul>
+</section>
+<section id="architecture">
+<h2>🏗️ Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h2>
+<p>Le projet est structuré en 3 parties principales :</p>
+<section id="modele-ml-model">
+<h3>1. Modèle ML (<code class="docutils literal notranslate"><span class="pre">./model</span></code>)<a class="headerlink" href="#modele-ml-model" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Modèle de machine learning entraîné</p></li>
+<li><p>Chargé une seule fois au démarrage (pattern Singleton)</p></li>
+<li><p>Feature engineering automatique</p></li>
+</ul>
+</section>
+<section id="api-fastapi-src-api">
+<h3>2. API FastAPI (<code class="docutils literal notranslate"><span class="pre">./src/api</span></code>)<a class="headerlink" href="#api-fastapi-src-api" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>API REST pour interroger le modèle</p></li>
+<li><p>Endpoints : <code class="docutils literal notranslate"><span class="pre">/predict</span></code>, <code class="docutils literal notranslate"><span class="pre">/health</span></code>, <code class="docutils literal notranslate"><span class="pre">/logs</span></code></p></li>
+<li><p>Logs stockés dans Redis</p></li>
+</ul>
+</section>
+<section id="front-end-gradio-src-ui">
+<h3>3. Front-end Gradio (<code class="docutils literal notranslate"><span class="pre">./src/ui</span></code>)<a class="headerlink" href="#front-end-gradio-src-ui" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Interface utilisateur Gradio</p></li>
+<li><p>Cases à cocher pour les paramètres binaires</p></li>
+<li><p>Communique avec l’API FastAPI</p></li>
+</ul>
+</section>
+<section id="application-fastapi-gradio-src-ui-fastapi-app-py">
+<h3>4. Application FastAPI+Gradio (<code class="docutils literal notranslate"><span class="pre">./src/ui/fastapi_app.py</span></code>)<a class="headerlink" href="#application-fastapi-gradio-src-ui-fastapi-app-py" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Architecture hybride</strong> : FastAPI principal avec Gradio monté dessus</p></li>
+<li><p><strong>Accès HTTP/REST direct</strong> via <code class="docutils literal notranslate"><span class="pre">/api/*</span></code> (sans client Gradio)</p></li>
+<li><p><strong>Interface UI</strong> accessible via la racine <code class="docutils literal notranslate"><span class="pre">/</span></code></p></li>
+<li><p>Compatible HuggingFace Spaces pour accès curl/HTTP standard</p></li>
+</ul>
+</section>
+<section id="package-proxy-src-proxy">
+<h3>5. Package Proxy (<code class="docutils literal notranslate"><span class="pre">./src/proxy</span></code>)<a class="headerlink" href="#package-proxy-src-proxy" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Proxy complet Gradio ↔ FastAPI</p></li>
+<li><p>Expose tous les endpoints de l’API via interface Gradio</p></li>
+<li><p>Client Python pour utilisation programmatique</p></li>
+<li><p>Tests unitaires complets (couverture ~95%)</p></li>
+</ul>
+</section>
+<section id="infrastructure">
+<h3>Infrastructure<a class="headerlink" href="#infrastructure" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Docker 1</strong> : API + Modèle ML</p></li>
+<li><p><strong>Docker 2</strong> : Interface Gradio</p></li>
+<li><p><strong>Redis</strong> : Cache pour les logs</p></li>
+</ul>
+</section>
+</section>
+<section id="fonctionnalites">
+<h2>✨ Fonctionnalités<a class="headerlink" href="#fonctionnalites" title="Link to this heading">¶</a></h2>
+<section id="api">
+<h3>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>✅ Prédictions ML via endpoint REST</p></li>
+<li><p>✅ Feature engineering automatique (14 → 28 features)</p></li>
+<li><p>✅ Logs stockés dans Redis</p></li>
+<li><p>✅ Health check endpoint</p></li>
+<li><p>✅ Documentation interactive (Swagger/ReDoc)</p></li>
+<li><p>✅ Validation des données avec Pydantic</p></li>
+<li><p>✅ CORS configuré</p></li>
+</ul>
+</section>
+<section id="modele">
+<h3>Modèle<a class="headerlink" href="#modele" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>✅ Chargement Singleton (une seule fois)</p></li>
+<li><p>✅ Calcul automatique des features dérivées</p></li>
+<li><p>✅ Support predict() et predict_proba()</p></li>
+<li><p>✅ Chemin du modèle paramétrable (.env)</p></li>
+</ul>
+</section>
+<section id="logs">
+<h3>Logs<a class="headerlink" href="#logs" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>✅ Stockage dans Redis (FIFO)</p></li>
+<li><p>✅ Consultation via endpoint <code class="docutils literal notranslate"><span class="pre">/logs</span></code></p></li>
+<li><p>✅ Statistiques disponibles</p></li>
+<li><p>✅ Filtrage par niveau et limite</p></li>
+</ul>
+</section>
+<section id="interface-gradio">
+<h3>Interface Gradio<a class="headerlink" href="#interface-gradio" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>✅ Interface web intuitive</p></li>
+<li><p>✅ Liste déroulante pour le genre</p></li>
+<li><p>✅ Cases à cocher pour paramètres binaires</p></li>
+<li><p>✅ Slider pour l’âge</p></li>
+<li><p>✅ Affichage du niveau de risque</p></li>
+<li><p>✅ Gestion des erreurs</p></li>
+<li><p>✅ Communication avec l’API</p></li>
+</ul>
+</section>
+<section id="fastapi-gradio-huggingface-spaces">
+<h3>FastAPI+Gradio (HuggingFace Spaces)<a class="headerlink" href="#fastapi-gradio-huggingface-spaces" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>✅ <strong>Accès HTTP/REST direct</strong> sans client Gradio</p></li>
+<li><p>✅ Endpoints <code class="docutils literal notranslate"><span class="pre">/api/*</span></code> accessibles via curl, requests, fetch</p></li>
+<li><p>✅ Interface Gradio montée sur la racine <code class="docutils literal notranslate"><span class="pre">/</span></code></p></li>
+<li><p>✅ Compatible avec tous les langages (Python, JavaScript, R, etc.)</p></li>
+<li><p>✅ Documentation interactive FastAPI (<code class="docutils literal notranslate"><span class="pre">/docs</span></code>)</p></li>
+<li><p>✅ Format JSON REST standard</p></li>
+</ul>
+</section>
+<section id="package-proxy">
+<h3>Package Proxy<a class="headerlink" href="#package-proxy" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>✅ Client Python pour tous les endpoints API</p></li>
+<li><p>✅ Interface Gradio complète (6 sections)</p></li>
+<li><p>✅ Gestion uniforme des erreurs et timeouts</p></li>
+<li><p>✅ Support des prédictions en batch</p></li>
+<li><p>✅ Tests unitaires avec mocks (~95% couverture)</p></li>
+<li><p>✅ Documentation complète avec exemples</p></li>
+</ul>
+</section>
+</section>
+<section id="installation">
+<h2>🚀 Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<section id="prerequis">
+<h3>Prérequis<a class="headerlink" href="#prerequis" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Python 3.13+</p></li>
+<li><p>Docker (pour Redis)</p></li>
+<li><p>make (optionnel mais recommandé)</p></li>
+</ul>
+</section>
+<section id="installation-rapide">
+<h3>Installation rapide<a class="headerlink" href="#installation-rapide" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Cloner le repository</span>
+</span><span data-line="2">git<span class="w"> </span>clone<span class="w"> </span>&lt;url&gt;
+</span><span data-line="3"><span class="nb">cd</span><span class="w"> </span>project8
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Configuration initiale (installe tout + lance Redis)</span>
+</span><span data-line="6">make<span class="w"> </span>dev
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># Dans un autre terminal, lancer l&#39;API</span>
+</span><span data-line="9">make<span class="w"> </span>run-api
+</span><span data-line="10">
+</span><span data-line="11"><span class="c1"># Dans un troisième terminal, lancer l&#39;interface Gradio</span>
+</span><span data-line="12">make<span class="w"> </span>run-ui
+</span><span data-line="13">
+</span><span data-line="14"><span class="c1"># Ou lancer le proxy complet (tous les endpoints)</span>
+</span><span data-line="15">make<span class="w"> </span>run-proxy
+</span></pre></div>
+</div>
+</section>
+<section id="installation-manuelle">
+<h3>Installation manuelle<a class="headerlink" href="#installation-manuelle" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Créer l&#39;environnement virtuel</span>
+</span><span data-line="2">python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+</span><span data-line="3"><span class="nb">source</span><span class="w"> </span>.venv/bin/activate<span class="w">  </span><span class="c1"># Linux/macOS</span>
+</span><span data-line="4"><span class="c1"># ou</span>
+</span><span data-line="5">.venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate<span class="w">  </span><span class="c1"># Windows</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Installer les dépendances</span>
+</span><span data-line="8">pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Copier le fichier .env</span>
+</span><span data-line="11">cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1"># Lancer Redis</span>
+</span><span data-line="14">docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-p<span class="w"> </span><span class="m">6379</span>:6379<span class="w"> </span>redis:latest
+</span><span data-line="15">
+</span><span data-line="16"><span class="c1"># Lancer l&#39;API</span>
+</span><span data-line="17">uvicorn<span class="w"> </span>src.api.main:app<span class="w"> </span>--reload
+</span><span data-line="18">
+</span><span data-line="19"><span class="c1"># Lancer l&#39;interface Gradio</span>
+</span><span data-line="20">python<span class="w"> </span>-m<span class="w"> </span>src.ui.app
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="utilisation">
+<h2>📖 Utilisation<a class="headerlink" href="#utilisation" title="Link to this heading">¶</a></h2>
+<section id="commandes-make">
+<h3>Commandes Make<a class="headerlink" href="#commandes-make" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Aide</span>
+</span><span data-line="2">make<span class="w"> </span><span class="nb">help</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Installation</span>
+</span><span data-line="5">make<span class="w"> </span>install<span class="w">          </span><span class="c1"># Production</span>
+</span><span data-line="6">make<span class="w"> </span>install-dev<span class="w">      </span><span class="c1"># Développement</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># Développement</span>
+</span><span data-line="9">make<span class="w"> </span>run-api<span class="w">          </span><span class="c1"># Lancer l&#39;API backend (port 8000)</span>
+</span><span data-line="10">make<span class="w"> </span>run-ui<span class="w">           </span><span class="c1"># Lancer l&#39;interface Gradio (port 7860)</span>
+</span><span data-line="11">make<span class="w"> </span>run-ui-fastapi<span class="w">   </span><span class="c1"># Lancer FastAPI+Gradio hybride (port 7860)</span>
+</span><span data-line="12">make<span class="w"> </span>run-proxy<span class="w">        </span><span class="c1"># Lancer le proxy (tous endpoints)</span>
+</span><span data-line="13">make<span class="w"> </span>run-redis<span class="w">        </span><span class="c1"># Lancer Redis</span>
+</span><span data-line="14">make<span class="w"> </span>dev<span class="w">             </span><span class="c1"># Environnement complet</span>
+</span><span data-line="15">
+</span><span data-line="16"><span class="c1"># Tests et qualité</span>
+</span><span data-line="17">make<span class="w"> </span>lint<span class="w">            </span><span class="c1"># Vérifier le code</span>
+</span><span data-line="18">make<span class="w"> </span><span class="nb">test</span><span class="w">            </span><span class="c1"># Lancer les tests</span>
+</span><span data-line="19">make<span class="w"> </span>test-coverage<span class="w">   </span><span class="c1"># Tests avec couverture</span>
+</span><span data-line="20">
+</span><span data-line="21"><span class="c1"># Docker</span>
+</span><span data-line="22">make<span class="w"> </span>docker-build<span class="w">    </span><span class="c1"># Construire les images</span>
+</span><span data-line="23">make<span class="w"> </span>docker-up<span class="w">       </span><span class="c1"># Lancer les conteneurs</span>
+</span><span data-line="24">make<span class="w"> </span>docker-down<span class="w">     </span><span class="c1"># Arrêter les conteneurs</span>
+</span><span data-line="25">
+</span><span data-line="26"><span class="c1"># Utilitaires</span>
+</span><span data-line="27">make<span class="w"> </span>health<span class="w">                   </span><span class="c1"># Vérifier l&#39;API</span>
+</span><span data-line="28">make<span class="w"> </span>predict-test<span class="w">             </span><span class="c1"># Tester une prédiction</span>
+</span><span data-line="29">make<span class="w"> </span>logs<span class="w">                     </span><span class="c1"># Afficher les logs</span>
+</span><span data-line="30">
+</span><span data-line="31"><span class="c1"># Gestion des logs Redis</span>
+</span><span data-line="32">make<span class="w"> </span>clear-logs<span class="w">               </span><span class="c1"># Vider logs (API locale)</span>
+</span><span data-line="33">make<span class="w"> </span>clear-logs-gradio-local<span class="w">  </span><span class="c1"># Vider logs (Gradio local)</span>
+</span><span data-line="34">make<span class="w"> </span>clear-logs-gradio-hf<span class="w">     </span><span class="c1"># Vider logs (Gradio HF Spaces)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="api-endpoints">
+<h3>API Endpoints<a class="headerlink" href="#api-endpoints" title="Link to this heading">¶</a></h3>
+<section id="health-check">
+<h4>Health Check<a class="headerlink" href="#health-check" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>http://localhost:8000/health
+</span></pre></div>
+</div>
+</section>
+<section id="prediction">
+<h4>Prédiction<a class="headerlink" href="#prediction" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/predict<span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span data-line="4"><span class="s1">    &quot;AGE&quot;: 65,</span>
+</span><span data-line="5"><span class="s1">    &quot;GENDER&quot;: 1,</span>
+</span><span data-line="6"><span class="s1">    &quot;SMOKING&quot;: 1,</span>
+</span><span data-line="7"><span class="s1">    &quot;ALCOHOL CONSUMING&quot;: 1,</span>
+</span><span data-line="8"><span class="s1">    &quot;PEER_PRESSURE&quot;: 0,</span>
+</span><span data-line="9"><span class="s1">    &quot;YELLOW_FINGERS&quot;: 1,</span>
+</span><span data-line="10"><span class="s1">    &quot;ANXIETY&quot;: 0,</span>
+</span><span data-line="11"><span class="s1">    &quot;FATIGUE&quot;: 1,</span>
+</span><span data-line="12"><span class="s1">    &quot;ALLERGY&quot;: 0,</span>
+</span><span data-line="13"><span class="s1">    &quot;WHEEZING&quot;: 1,</span>
+</span><span data-line="14"><span class="s1">    &quot;COUGHING&quot;: 1,</span>
+</span><span data-line="15"><span class="s1">    &quot;SHORTNESS OF BREATH&quot;: 1,</span>
+</span><span data-line="16"><span class="s1">    &quot;SWALLOWING DIFFICULTY&quot;: 0,</span>
+</span><span data-line="17"><span class="s1">    &quot;CHEST PAIN&quot;: 1</span>
+</span><span data-line="18"><span class="s1">  }&#39;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="id1">
+<h4>Logs<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Récupérer les logs</span>
+</span><span data-line="2">curl<span class="w"> </span>http://localhost:8000/logs?limit<span class="o">=</span><span class="m">50</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Vider le cache Redis</span>
+</span><span data-line="5">curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8000/logs
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="id2">
+<h3>Interface Gradio<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p>Accéder à l’interface web : <strong>http://localhost:7860</strong></p>
+<p>L’interface permet de :</p>
+<ul class="simple">
+<li><p>Saisir l’âge du patient (slider)</p></li>
+<li><p>Sélectionner le genre (liste déroulante)</p></li>
+<li><p>Cocher les cases pour les symptômes et facteurs de risque</p></li>
+<li><p>Obtenir une prédiction en un clic</p></li>
+<li><p>Visualiser le niveau de risque et la probabilité</p></li>
+</ul>
+</section>
+<section id="acces-http-direct-sur-huggingface-spaces">
+<h3>Accès HTTP Direct sur HuggingFace Spaces 🚀<a class="headerlink" href="#acces-http-direct-sur-huggingface-spaces" title="Link to this heading">¶</a></h3>
+<p>L’application déployée sur HuggingFace Spaces expose des endpoints REST accessibles directement via HTTP (curl, requests, fetch, etc.) <strong>sans nécessiter le client Gradio</strong>.</p>
+<section id="url-du-space">
+<h4>URL du Space<a class="headerlink" href="#url-du-space" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">francoisformation</span><span class="o">-</span><span class="n">oc</span><span class="o">-</span><span class="n">project8</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">space</span>
+</span></pre></div>
+</div>
+</section>
+<section id="endpoints-disponibles">
+<h4>Endpoints Disponibles<a class="headerlink" href="#endpoints-disponibles" title="Link to this heading">¶</a></h4>
+<p><strong>Health Check</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>https://francoisformation-oc-project8.hf.space/api/health
+</span></pre></div>
+</div>
+<p><strong>Prédiction</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://francoisformation-oc-project8.hf.space/api/predict<span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span data-line="4"><span class="s1">    &quot;AGE&quot;: 65,</span>
+</span><span data-line="5"><span class="s1">    &quot;GENDER&quot;: 1,</span>
+</span><span data-line="6"><span class="s1">    &quot;SMOKING&quot;: 1,</span>
+</span><span data-line="7"><span class="s1">    &quot;ALCOHOL CONSUMING&quot;: 1,</span>
+</span><span data-line="8"><span class="s1">    &quot;PEER_PRESSURE&quot;: 0,</span>
+</span><span data-line="9"><span class="s1">    &quot;YELLOW_FINGERS&quot;: 1,</span>
+</span><span data-line="10"><span class="s1">    &quot;ANXIETY&quot;: 0,</span>
+</span><span data-line="11"><span class="s1">    &quot;FATIGUE&quot;: 1,</span>
+</span><span data-line="12"><span class="s1">    &quot;ALLERGY&quot;: 0,</span>
+</span><span data-line="13"><span class="s1">    &quot;WHEEZING&quot;: 1,</span>
+</span><span data-line="14"><span class="s1">    &quot;COUGHING&quot;: 1,</span>
+</span><span data-line="15"><span class="s1">    &quot;SHORTNESS OF BREATH&quot;: 1,</span>
+</span><span data-line="16"><span class="s1">    &quot;SWALLOWING DIFFICULTY&quot;: 0,</span>
+</span><span data-line="17"><span class="s1">    &quot;CHEST PAIN&quot;: 1,</span>
+</span><span data-line="18"><span class="s1">    &quot;CHRONIC DISEASE&quot;: 0</span>
+</span><span data-line="19"><span class="s1">  }&#39;</span>
+</span></pre></div>
+</div>
+<p><strong>Logs</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Récupérer les logs</span>
+</span><span data-line="2">curl<span class="w"> </span><span class="s2">&quot;https://francoisformation-oc-project8.hf.space/api/logs?limit=10&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Vider les logs</span>
+</span><span data-line="5">curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>https://francoisformation-oc-project8.hf.space/api/logs
+</span></pre></div>
+</div>
+<p><strong>Interface Gradio</strong>: Accessible sur la racine <code class="docutils literal notranslate"><span class="pre">/</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">francoisformation</span><span class="o">-</span><span class="n">oc</span><span class="o">-</span><span class="n">project8</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">space</span><span class="o">/</span>
+</span></pre></div>
+</div>
+<p>📖 <strong>Documentation complète</strong>: Voir <a class="reference internal" href="#docs/DIRECT_HTTP_ACCESS.md"><span class="xref myst">docs/DIRECT_HTTP_ACCESS.md</span></a> pour:</p>
+<ul class="simple">
+<li><p>Tous les endpoints disponibles</p></li>
+<li><p>Exemples d’intégration (Python, JavaScript, R)</p></li>
+<li><p>Codes de statut HTTP</p></li>
+<li><p>Dépannage</p></li>
+</ul>
+</section>
+</section>
+<section id="documentation-interactive-api">
+<h3>Documentation interactive API<a class="headerlink" href="#documentation-interactive-api" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Swagger UI</strong> : http://localhost:8000/docs</p></li>
+<li><p><strong>ReDoc</strong> : http://localhost:8000/redoc</p></li>
+</ul>
+</section>
+</section>
+<section id="documentation">
+<h2>📚 Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h2>
+<section id="documentation-principale">
+<h3>Documentation principale<a class="headerlink" href="#documentation-principale" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="#GEMINI.md"><span class="xref myst">GEMINI.md</span></a> - Règles de développement et architecture</p></li>
+<li><p><a class="reference internal" href="#"><span class="std std-doc">README.md</span></a> - Ce fichier</p></li>
+</ul>
+</section>
+<section id="documentation-technique-dossier-docs">
+<h3>Documentation technique (dossier docs/)<a class="headerlink" href="#documentation-technique-dossier-docs" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="#docs/ARCHITECTURE.md"><span class="xref myst">docs/ARCHITECTURE.md</span></a> - Architecture technique complète et flux de données</p></li>
+<li><p><a class="reference internal" href="#docs/API_DOCUMENTATION.md"><span class="xref myst">docs/API_DOCUMENTATION.md</span></a> - Documentation complète de l’API</p></li>
+<li><p><a class="reference internal" href="#docs/UI_DOCUMENTATION.md"><span class="xref myst">docs/UI_DOCUMENTATION.md</span></a> - Documentation de l’interface Gradio</p></li>
+<li><p><a class="reference internal" href="#docs/PROXY_DOCUMENTATION.md"><span class="xref myst">docs/PROXY_DOCUMENTATION.md</span></a> - Documentation du package proxy complet</p></li>
+<li><p><a class="reference internal" href="#docs/FEATURE_ENGINEERING.md"><span class="xref myst">docs/FEATURE_ENGINEERING.md</span></a> - Feature engineering automatique</p></li>
+<li><p><a class="reference internal" href="#docs/ENV_VARIABLES.md"><span class="xref myst">docs/ENV_VARIABLES.md</span></a> - Variables d’environnement</p></li>
+<li><p><a class="reference internal" href="#docs/MAKEFILE_GUIDE.md"><span class="xref myst">docs/MAKEFILE_GUIDE.md</span></a> - Guide du Makefile</p></li>
+<li><p><a class="reference internal" href="#docs/PERFORMANCE_METRICS.md"><span class="xref myst">docs/PERFORMANCE_METRICS.md</span></a> - Métriques de performance détaillées</p></li>
+<li><p><a class="reference internal" href="#docs/CLEAR_LOGS_ENDPOINT.md"><span class="xref myst">docs/CLEAR_LOGS_ENDPOINT.md</span></a> - Endpoint pour vider le cache Redis</p></li>
+</ul>
+</section>
+<section id="huggingface-spaces">
+<h3>HuggingFace Spaces<a class="headerlink" href="#huggingface-spaces" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="#docs/README_HF.md"><span class="xref myst">docs/README_HF.md</span></a> - README pour HuggingFace Spaces</p></li>
+<li><p><a class="reference internal" href="#docs/SETUP_HF_TOKEN.md"><span class="xref myst">docs/SETUP_HF_TOKEN.md</span></a> - Configuration du token HuggingFace</p></li>
+<li><p><strong><a class="reference internal" href="#docs/QUICK_START_HTTP_ACCESS.md"><span class="xref myst">docs/QUICK_START_HTTP_ACCESS.md</span></a></strong> - <strong>⚡ Quick Start - Exemples curl rapides</strong></p></li>
+<li><p><strong><a class="reference internal" href="#docs/DIRECT_HTTP_ACCESS.md"><span class="xref myst">docs/DIRECT_HTTP_ACCESS.md</span></a></strong> - <strong>Accès HTTP/REST complet (curl, requests, fetch)</strong></p></li>
+<li><p><a class="reference internal" href="#docs/PROXY_REFACTOR_SUMMARY.md"><span class="xref myst">docs/PROXY_REFACTOR_SUMMARY.md</span></a> - Résumé de la refactorisation proxy</p></li>
+</ul>
+</section>
+</section>
+<section id="developpement">
+<h2>🛠️ Développement<a class="headerlink" href="#developpement" title="Link to this heading">¶</a></h2>
+<section id="structure-du-projet">
+<h3>Structure du projet<a class="headerlink" href="#structure-du-projet" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">project8/
+</span><span data-line="2">├── src/
+</span><span data-line="3">│   ├── api/              # API FastAPI
+</span><span data-line="4">│   │   ├── main.py       # Application principale
+</span><span data-line="5">│   │   ├── schemas.py    # Modèles Pydantic
+</span><span data-line="6">│   │   └── logging_config.py
+</span><span data-line="7">│   ├── model/            # Package modèle ML
+</span><span data-line="8">│   │   ├── model_loader.py
+</span><span data-line="9">│   │   ├── predictor.py
+</span><span data-line="10">│   │   └── feature_engineering.py
+</span><span data-line="11">│   ├── ui/               # Interface Gradio
+</span><span data-line="12">│   │   ├── app.py        # Application Gradio simple
+</span><span data-line="13">│   │   ├── fastapi_app.py # FastAPI+Gradio (HF Spaces)
+</span><span data-line="14">│   │   └── api_routes.py # Routes REST API
+</span><span data-line="15">│   ├── proxy/            # Package proxy
+</span><span data-line="16">│   │   ├── client.py     # Client API
+</span><span data-line="17">│   │   └── gradio_app.py # Interface proxy
+</span><span data-line="18">│   └── config.py         # Configuration (.env)
+</span><span data-line="19">├── model/                # Modèle ML entraîné
+</span><span data-line="20">│   └── model.pkl
+</span><span data-line="21">├── tests/                # Tests
+</span><span data-line="22">│   └── test_proxy.py     # Tests du proxy
+</span><span data-line="23">├── docs/                 # Documentation
+</span><span data-line="24">│   └── PROXY_DOCUMENTATION.md
+</span><span data-line="25">├── .env                  # Variables d&#39;environnement (ne pas commiter)
+</span><span data-line="26">├── .env.example          # Template .env
+</span><span data-line="27">├── run_proxy.py          # Script de lancement proxy
+</span><span data-line="28">├── pyproject.toml        # Dépendances
+</span><span data-line="29">├── Makefile              # Commandes utiles
+</span><span data-line="30">└── README.md
+</span></pre></div>
+</div>
+</section>
+<section id="standards-de-code">
+<h3>Standards de code<a class="headerlink" href="#standards-de-code" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Longueur de ligne</strong> : 88 caractères max</p></li>
+<li><p><strong>Linting</strong> : flake8 (voir <code class="docutils literal notranslate"><span class="pre">.flake8</span></code>)</p></li>
+<li><p><strong>Style</strong> : PEP 8</p></li>
+<li><p><strong>Tests</strong> : pytest</p></li>
+</ul>
+</section>
+<section id="workflow-de-developpement">
+<h3>Workflow de développement<a class="headerlink" href="#workflow-de-developpement" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># 1. Créer une branche</span>
+</span><span data-line="2">git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>feature/ma-feature
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># 2. Développer et tester</span>
+</span><span data-line="5">make<span class="w"> </span>lint
+</span><span data-line="6">make<span class="w"> </span><span class="nb">test</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># 3. Commiter</span>
+</span><span data-line="9">git<span class="w"> </span>add<span class="w"> </span>.
+</span><span data-line="10">git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;feat: ma nouvelle fonctionnalité&quot;</span>
+</span><span data-line="11">
+</span><span data-line="12"><span class="c1"># 4. Push</span>
+</span><span data-line="13">git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>feature/ma-feature
+</span></pre></div>
+</div>
+</section>
+<section id="variables-d-environnement">
+<h3>Variables d’environnement<a class="headerlink" href="#variables-d-environnement" title="Link to this heading">¶</a></h3>
+<p>Voir <a class="reference internal" href="ENV_VARIABLES.html"><span class="std std-doc">ENV_VARIABLES.md</span></a> pour la liste complète.</p>
+<p>Principales variables :</p>
+<div class="highlight-env notranslate"><div class="highlight"><pre><span></span><span data-line="1">MODEL_PATH=./model/model.pkl
+</span><span data-line="2">API_HOST=0.0.0.0
+</span><span data-line="3">API_PORT=8000
+</span><span data-line="4">REDIS_HOST=localhost
+</span><span data-line="5">REDIS_PORT=6379
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="tests">
+<h2>🧪 Tests<a class="headerlink" href="#tests" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tous les tests</span>
+</span><span data-line="2">make<span class="w"> </span><span class="nb">test</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Avec couverture</span>
+</span><span data-line="5">make<span class="w"> </span>test-coverage
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Ouvrir le rapport</span>
+</span><span data-line="8">open<span class="w"> </span>htmlcov/index.html<span class="w">  </span><span class="c1"># macOS</span>
+</span></pre></div>
+</div>
+</section>
+<section id="deploiement">
+<h2>🐳 Déploiement<a class="headerlink" href="#deploiement" title="Link to this heading">¶</a></h2>
+<section id="docker-compose">
+<h3>Docker Compose<a class="headerlink" href="#docker-compose" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Construire et lancer</span>
+</span><span data-line="2">make<span class="w"> </span>docker-build
+</span><span data-line="3">make<span class="w"> </span>docker-up
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Vérifier</span>
+</span><span data-line="6">make<span class="w"> </span>health
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># Arrêter</span>
+</span><span data-line="9">make<span class="w"> </span>docker-down
+</span></pre></div>
+</div>
+</section>
+<section id="ci-cd">
+<h3>CI/CD<a class="headerlink" href="#ci-cd" title="Link to this heading">¶</a></h3>
+<p>Pipeline GitHub Actions :</p>
+<ul class="simple">
+<li><p>Linting avec flake8</p></li>
+<li><p>Tests avec pytest</p></li>
+<li><p>Build des images Docker</p></li>
+<li><p>Déploiement automatisé</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Commande CI</span>
+</span><span data-line="2">make<span class="w"> </span>ci
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="features-du-modele">
+<h2>📝 Features du modèle<a class="headerlink" href="#features-du-modele" title="Link to this heading">¶</a></h2>
+<section id="features-d-entree-14">
+<h3>Features d’entrée (14)<a class="headerlink" href="#features-d-entree-14" title="Link to this heading">¶</a></h3>
+<p>L’utilisateur fournit uniquement ces 14 features :</p>
+<ul class="simple">
+<li><p>AGE, GENDER, SMOKING, ALCOHOL CONSUMING</p></li>
+<li><p>PEER_PRESSURE, YELLOW_FINGERS, ANXIETY, FATIGUE</p></li>
+<li><p>ALLERGY, WHEEZING, COUGHING, SHORTNESS OF BREATH</p></li>
+<li><p>SWALLOWING DIFFICULTY, CHEST PAIN</p></li>
+</ul>
+</section>
+<section id="features-derivees-14">
+<h3>Features dérivées (14)<a class="headerlink" href="#features-derivees-14" title="Link to this heading">¶</a></h3>
+<p>Calculées automatiquement par le système :</p>
+<ul class="simple">
+<li><p>SMOKING_x_AGE, SMOKING_x_ALCOHOL</p></li>
+<li><p>RESPIRATORY_SYMPTOMS, TOTAL_SYMPTOMS</p></li>
+<li><p>BEHAVIORAL_RISK_SCORE, SEVERE_SYMPTOMS</p></li>
+<li><p>AGE_GROUP, HIGH_RISK_PROFILE</p></li>
+<li><p>AGE_SQUARED, CANCER_TRIAD</p></li>
+<li><p>SMOKER_WITH_RESP_SYMPTOMS, ADVANCED_SYMPTOMS</p></li>
+<li><p>SYMPTOMS_PER_AGE, RESP_SYMPTOM_RATIO</p></li>
+</ul>
+<p>Voir <a class="reference internal" href="FEATURE_ENGINEERING.html"><span class="std std-doc">FEATURE_ENGINEERING.md</span></a> pour plus de détails.</p>
+</section>
+</section>
+<section id="contribution">
+<h2>🤝 Contribution<a class="headerlink" href="#contribution" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Fork le projet</p></li>
+<li><p>Créer une branche (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">-b</span> <span class="pre">feature/AmazingFeature</span></code>)</p></li>
+<li><p>Commiter les changements (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-m</span> <span class="pre">'Add</span> <span class="pre">AmazingFeature'</span></code>)</p></li>
+<li><p>Push vers la branche (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">feature/AmazingFeature</span></code>)</p></li>
+<li><p>Ouvrir une Pull Request</p></li>
+</ol>
+</section>
+<section id="licence">
+<h2>📄 Licence<a class="headerlink" href="#licence" title="Link to this heading">¶</a></h2>
+<p>Ce projet fait partie du parcours OpenClassrooms MLOps.</p>
+</section>
+<section id="auteurs">
+<h2>👥 Auteurs<a class="headerlink" href="#auteurs" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>OpenClassrooms - Projet 8</p></li>
+</ul>
+</section>
+<section id="liens-utiles">
+<h2>🔗 Liens utiles<a class="headerlink" href="#liens-utiles" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://fastapi.tiangolo.com/">Documentation FastAPI</a></p></li>
+<li><p><a class="reference external" href="https://redis.io/docs/">Documentation Redis</a></p></li>
+<li><p><a class="reference external" href="https://docs.pydantic.dev/">Pydantic</a></p></li>
+<li><p><a class="reference external" href="https://scikit-learn.org/">scikit-learn</a></p></li>
+</ul>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

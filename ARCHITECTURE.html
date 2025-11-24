@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Architecture Technique du Projet MLOps - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Architecture Technique du Projet MLOps"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#vue-d-ensemble">Vue d&#8217;ensemble</a></li>
+<li><a class="reference internal" href="#table-des-matieres">Table des mati&#232;res</a></li>
+<li><a class="reference internal" href="#architecture-globale">Architecture globale</a></li>
+<li><a class="reference internal" href="#composants-principaux">Composants principaux</a><ul>
+<li><a class="reference internal" href="#interface-utilisateur-gradio-fastapi">1. Interface utilisateur (Gradio + FastAPI)</a><ul>
+<li><a class="reference internal" href="#mode-1-gradio-standalone-developpement-local">Mode 1: Gradio standalone (d&#233;veloppement local)</a></li>
+<li><a class="reference internal" href="#mode-2-fastapi-gradio-hybride-huggingface-spaces">Mode 2: FastAPI+Gradio hybride (HuggingFace Spaces)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api-rest-fastapi">2. API REST (FastAPI)</a></li>
+<li><a class="reference internal" href="#modele-ml-scikit-learn">3. Mod&#232;le ML (scikit-learn)</a></li>
+<li><a class="reference internal" href="#model-pool-parallelisme">3.5. Model Pool (Parall&#233;lisme)</a></li>
+<li><a class="reference internal" href="#cache-redis">4. Cache Redis</a></li>
+<li><a class="reference internal" href="#pipeline-de-logs-elasticsearch">5. Pipeline de logs Elasticsearch</a></li>
+<li><a class="reference internal" href="#elasticsearch-kibana">6. Elasticsearch + Kibana</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#deploiement-huggingface-spaces">D&#233;ploiement HuggingFace Spaces</a><ul>
+<li><a class="reference internal" href="#architecture-hybride-fastapi-gradio">Architecture hybride FastAPI + Gradio</a></li>
+<li><a class="reference internal" href="#composants-du-deploiement">Composants du d&#233;ploiement</a></li>
+<li><a class="reference internal" href="#avantages-de-cette-architecture">Avantages de cette architecture</a></li>
+<li><a class="reference internal" href="#utilisation">Utilisation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-elasticsearch">Migration Elasticsearch</a><ul>
+<li><a class="reference internal" href="#script-de-migration">Script de migration</a></li>
+<li><a class="reference internal" href="#cas-d-usage">Cas d&#8217;usage</a></li>
+<li><a class="reference internal" href="#architecture-technique">Architecture technique</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#flux-de-donnees">Flux de donn&#233;es</a><ul>
+<li><a class="reference internal" href="#flux-1-prediction-utilisateur-nominal">Flux 1 : Pr&#233;diction utilisateur (nominal)</a></li>
+<li><a class="reference internal" href="#flux-2-pipeline-de-logs-vers-elasticsearch">Flux 2 : Pipeline de logs vers Elasticsearch</a></li>
+<li><a class="reference internal" href="#flux-3-monitoring-de-performance">Flux 3 : Monitoring de performance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#infrastructure-docker">Infrastructure Docker</a><ul>
+<li><a class="reference internal" href="#architecture-docker-compose">Architecture Docker Compose</a></li>
+<li><a class="reference internal" href="#network-isolation">Network isolation</a></li>
+<li><a class="reference internal" href="#volumes-persistants">Volumes persistants</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#monitoring-et-performance">Monitoring et performance</a><ul>
+<li><a class="reference internal" href="#metriques-collectees">M&#233;triques collect&#233;es</a></li>
+<li><a class="reference internal" href="#dashboards-kibana-recommandes">Dashboards Kibana recommand&#233;s</a></li>
+<li><a class="reference internal" href="#alertes-recommandees">Alertes recommand&#233;es</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#securite-et-scalabilite">S&#233;curit&#233; et scalabilit&#233;</a><ul>
+<li><a class="reference internal" href="#securite">S&#233;curit&#233;</a></li>
+<li><a class="reference internal" href="#scalabilite">Scalabilit&#233;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li><a class="reference internal" href="#variables-d-environnement">Variables d&#8217;environnement</a></li>
+<li><a class="reference internal" href="#fichiers-de-configuration">Fichiers de configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#commandes-utiles">Commandes utiles</a></li>
+<li><a class="reference internal" href="#references">R&#233;f&#233;rences</a><ul>
+<li><a class="reference internal" href="#documentation-generale">Documentation g&#233;n&#233;rale</a></li>
+<li><a class="reference internal" href="#api-et-deploiement">API et d&#233;ploiement</a></li>
+<li><a class="reference internal" href="#logs-et-monitoring">Logs et monitoring</a></li>
+<li><a class="reference internal" href="#modele-ml">Mod&#232;le ML</a></li>
+<li><a class="reference internal" href="#changelog">Changelog</a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Architecture Technique du Projet MLOps</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="architecture-technique-du-projet-mlops">
+<h1>Architecture Technique du Projet MLOps<a class="headerlink" href="#architecture-technique-du-projet-mlops" title="Link to this heading">¶</a></h1>
+<section id="vue-d-ensemble">
+<h2>Vue d’ensemble<a class="headerlink" href="#vue-d-ensemble" title="Link to this heading">¶</a></h2>
+<p>Ce document décrit l’architecture technique complète du projet, incluant les composants, les flux de données et les interactions entre les différents services.</p>
+</section>
+<section id="table-des-matieres">
+<h2>Table des matières<a class="headerlink" href="#table-des-matieres" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#architecture-globale"><span class="xref myst">Architecture globale</span></a></p></li>
+<li><p><a class="reference internal" href="#composants-principaux"><span class="xref myst">Composants principaux</span></a></p></li>
+<li><p><a class="reference internal" href="#d%C3%A9ploiement-huggingface-spaces"><span class="xref myst">Déploiement HuggingFace Spaces</span></a></p></li>
+<li><p><a class="reference internal" href="#flux-de-donn%C3%A9es"><span class="xref myst">Flux de données</span></a></p></li>
+<li><p><a class="reference internal" href="#infrastructure-docker"><span class="xref myst">Infrastructure Docker</span></a></p></li>
+<li><p><a class="reference internal" href="#pipeline-de-logs"><span class="xref myst">Pipeline de logs</span></a></p></li>
+<li><p><a class="reference internal" href="#migration-elasticsearch"><span class="xref myst">Migration Elasticsearch</span></a></p></li>
+<li><p><a class="reference internal" href="#monitoring-et-performance"><span class="xref myst">Monitoring et performance</span></a></p></li>
+<li><p><a class="reference internal" href="#s%C3%A9curit%C3%A9-et-scalabilit%C3%A9"><span class="xref myst">Sécurité et scalabilité</span></a></p></li>
+</ul>
+</section>
+<section id="architecture-globale">
+<h2>Architecture globale<a class="headerlink" href="#architecture-globale" title="Link to this heading">¶</a></h2>
+<p><img alt="Diagramme d'architecture du projet MLOps" src="_images/projet8.drawio.png" /></p>
+</section>
+<section id="composants-principaux">
+<h2>Composants principaux<a class="headerlink" href="#composants-principaux" title="Link to this heading">¶</a></h2>
+<section id="interface-utilisateur-gradio-fastapi">
+<h3>1. Interface utilisateur (Gradio + FastAPI)<a class="headerlink" href="#interface-utilisateur-gradio-fastapi" title="Link to this heading">¶</a></h3>
+<p><strong>Localisation</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">src/ui/app.py</span></code> - Interface Gradio</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/ui/fastapi_app.py</span></code> - Application FastAPI+Gradio hybride (HuggingFace Spaces)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/ui/api_routes.py</span></code> - Routes API REST</p></li>
+</ul>
+<p><strong>Deux modes de déploiement</strong> :</p>
+<section id="mode-1-gradio-standalone-developpement-local">
+<h4>Mode 1: Gradio standalone (développement local)<a class="headerlink" href="#mode-1-gradio-standalone-developpement-local" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">Gradio UI (Port 7860) → API FastAPI (Port 8000)
+</span></pre></div>
+</div>
+</section>
+<section id="mode-2-fastapi-gradio-hybride-huggingface-spaces">
+<h4>Mode 2: FastAPI+Gradio hybride (HuggingFace Spaces)<a class="headerlink" href="#mode-2-fastapi-gradio-hybride-huggingface-spaces" title="Link to this heading">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">FastAPI (Port 7860)
+</span><span data-line="2">├── /api/* → Endpoints REST (curl, HTTP)
+</span><span data-line="3">└── / → Interface Gradio UI
+</span></pre></div>
+</div>
+<p><strong>Responsabilités</strong> :</p>
+<ul class="simple">
+<li><p>Interface web intuitive pour les utilisateurs finaux</p></li>
+<li><p>Formulaire de saisie des données patient (14 features)</p></li>
+<li><p>Communication avec l’API FastAPI (proxy client)</p></li>
+<li><p>Affichage des résultats de prédiction</p></li>
+<li><p><strong>[NOUVEAU]</strong> Accès HTTP direct sans client Gradio (HF Spaces)</p></li>
+</ul>
+<p><strong>Technologies</strong> :</p>
+<ul class="simple">
+<li><p>Gradio 4.0+</p></li>
+<li><p>FastAPI 0.104+</p></li>
+<li><p>Python 3.13+</p></li>
+</ul>
+<p><strong>Endpoints exposés</strong> :</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Endpoint</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/</span></code></p></td>
+<td><p>Gradio UI</p></td>
+<td><p>Interface principale</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/logs_api</span></code></p></td>
+<td><p>Gradio</p></td>
+<td><p>Endpoint pour le pipeline de logs</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/api/health</span></code></p></td>
+<td><p>REST</p></td>
+<td><p>Health check (HF Spaces)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/api/predict</span></code></p></td>
+<td><p>REST</p></td>
+<td><p>Prédiction ML (HF Spaces)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/api/predict_proba</span></code></p></td>
+<td><p>REST</p></td>
+<td><p>Probabilités (HF Spaces)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/api/logs</span></code></p></td>
+<td><p>REST</p></td>
+<td><p>Récupération logs (HF Spaces)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Documentation complète: <a class="reference internal" href="DIRECT_HTTP_ACCESS.html"><span class="std std-doc">DIRECT_HTTP_ACCESS.md</span></a></p>
+<p><strong>Flux de données</strong> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">Utilisateur → Formulaire Gradio → Validation → HTTP POST → API FastAPI
+</span><span data-line="2">                                                                  ↓
+</span><span data-line="3">Utilisateur ← Affichage résultat ← JSON Response ← Prédiction ML ←
+</span><span data-line="4">
+</span><span data-line="5">OU (HuggingFace Spaces):
+</span><span data-line="6">
+</span><span data-line="7">curl/HTTP → /api/predict → API Proxy → API FastAPI (8000) → Résultat JSON
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="api-rest-fastapi">
+<h3>2. API REST (FastAPI)<a class="headerlink" href="#api-rest-fastapi" title="Link to this heading">¶</a></h3>
+<p><strong>Localisation</strong> : <code class="docutils literal notranslate"><span class="pre">src/api/main.py</span></code></p>
+<p><strong>Responsabilités</strong> :</p>
+<ul class="simple">
+<li><p>Exposition des endpoints REST</p></li>
+<li><p>Validation des données (Pydantic)</p></li>
+<li><p>Orchestration des prédictions</p></li>
+<li><p>Gestion des logs (Redis)</p></li>
+<li><p>Monitoring des performances</p></li>
+</ul>
+<p><strong>Endpoints</strong> :</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Endpoint</p></th>
+<th class="head"><p>Méthode</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Documentation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/</span></code></p></td>
+<td><p>GET</p></td>
+<td><p>Informations API</p></td>
+<td><p><a class="reference internal" href="API_DOCUMENTATION.html"><span class="std std-doc">API_DOCUMENTATION.md</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/health</span></code></p></td>
+<td><p>GET</p></td>
+<td><p>Health check</p></td>
+<td><p><a class="reference internal" href="API_DOCUMENTATION.html"><span class="std std-doc">API_DOCUMENTATION.md</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/predict</span></code></p></td>
+<td><p>POST</p></td>
+<td><p>Prédiction simple</p></td>
+<td><p><a class="reference internal" href="API_DOCUMENTATION.html"><span class="std std-doc">API_DOCUMENTATION.md</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/predict_proba</span></code></p></td>
+<td><p>POST</p></td>
+<td><p>Prédiction avec probabilités</p></td>
+<td><p><a class="reference internal" href="API_DOCUMENTATION.html"><span class="std std-doc">API_DOCUMENTATION.md</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/logs</span></code></p></td>
+<td><p>GET</p></td>
+<td><p>Récupération des logs</p></td>
+<td><p><a class="reference internal" href="API_DOCUMENTATION.html"><span class="std std-doc">API_DOCUMENTATION.md</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/logs</span></code></p></td>
+<td><p>DELETE</p></td>
+<td><p>Suppression des logs Redis</p></td>
+<td><p><a class="reference internal" href="CLEAR_LOGS_ENDPOINT.html"><span class="std std-doc">CLEAR_LOGS_ENDPOINT.md</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/logs/stats</span></code></p></td>
+<td><p>GET</p></td>
+<td><p>Statistiques des logs</p></td>
+<td><p><a class="reference internal" href="API_DOCUMENTATION.html"><span class="std std-doc">API_DOCUMENTATION.md</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/pool/stats</span></code></p></td>
+<td><p>GET</p></td>
+<td><p>Statistiques du pool de modèles</p></td>
+<td><p>Section 3.5 ci-dessous</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Middlewares</strong> :</p>
+<ul class="simple">
+<li><p>CORS (toutes origines en développement)</p></li>
+<li><p>Logging middleware (transaction ID, timing)</p></li>
+<li><p>Performance monitoring (cProfile)</p></li>
+</ul>
+<p><strong>Configuration</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Variables d&#39;environnement (.env)</span>
+</span><span data-line="2"><span class="n">MODEL_PATH</span><span class="o">=./</span><span class="n">model</span><span class="o">/</span><span class="n">model</span><span class="o">.</span><span class="n">pkl</span>
+</span><span data-line="3"><span class="n">MODEL_POOL_SIZE</span><span class="o">=</span><span class="mi">4</span>                    <span class="c1"># Nombre d&#39;instances du modèle</span>
+</span><span data-line="4"><span class="n">API_HOST</span><span class="o">=</span><span class="mf">0.0.0.0</span>
+</span><span data-line="5"><span class="n">API_PORT</span><span class="o">=</span><span class="mi">8000</span>
+</span><span data-line="6"><span class="n">REDIS_HOST</span><span class="o">=</span><span class="n">localhost</span>
+</span><span data-line="7"><span class="n">REDIS_PORT</span><span class="o">=</span><span class="mi">6379</span>
+</span><span data-line="8"><span class="n">REDIS_DB</span><span class="o">=</span><span class="mi">0</span>
+</span><span data-line="9"><span class="n">LOG_TO_REDIS</span><span class="o">=</span><span class="n">true</span>
+</span><span data-line="10"><span class="n">REDIS_LOGS_MAX_SIZE</span><span class="o">=</span><span class="mi">1000</span>
+</span><span data-line="11"><span class="n">ENABLE_PERFORMANCE_MONITORING</span><span class="o">=</span><span class="n">true</span>
+</span></pre></div>
+</div>
+</section>
+<section id="modele-ml-scikit-learn">
+<h3>3. Modèle ML (scikit-learn)<a class="headerlink" href="#modele-ml-scikit-learn" title="Link to this heading">¶</a></h3>
+<p><strong>Localisation</strong> : <code class="docutils literal notranslate"><span class="pre">src/model/</span></code></p>
+<p><strong>Architecture</strong> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">model_loader.py        → Singleton pattern pour chargement unique (mode legacy)
+</span><span data-line="2">model_pool.py          → Pool de modèles pour parallélisme (mode actif)
+</span><span data-line="3">predictor.py           → Orchestration prédiction + feature engineering
+</span><span data-line="4">feature_engineering.py → Calcul des 14 features dérivées
+</span></pre></div>
+</div>
+<p><strong>Features</strong> :</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Nombre</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Entrée</strong></p></td>
+<td><p>14</p></td>
+<td><p>Fournies par l’utilisateur</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Dérivées</strong></p></td>
+<td><p>14</p></td>
+<td><p>Calculées automatiquement</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Total</strong></p></td>
+<td><p>28</p></td>
+<td><p>Utilisées par le modèle</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Détails : <a class="reference internal" href="FEATURE_ENGINEERING.html"><span class="std std-doc">FEATURE_ENGINEERING.md</span></a></p>
+</section>
+<section id="model-pool-parallelisme">
+<h3>3.5. Model Pool (Parallélisme)<a class="headerlink" href="#model-pool-parallelisme" title="Link to this heading">¶</a></h3>
+<p><strong>Fichier</strong> : <code class="docutils literal notranslate"><span class="pre">src/model/model_pool.py</span></code></p>
+<p><strong>Objectif</strong> : Permettre le traitement parallèle de plusieurs requêtes de prédiction en maintenant plusieurs instances du modèle ML en mémoire.</p>
+<p><strong>Architecture du Pool</strong> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌─────────────────────────────────────────────────────────┐
+</span><span data-line="2">│                    ModelPool (Singleton)                │
+</span><span data-line="3">├─────────────────────────────────────────────────────────┤
+</span><span data-line="4">│                                                         │
+</span><span data-line="5">│  ┌──────────────────────────────────────────────────┐  │
+</span><span data-line="6">│  │         Queue (Thread-safe)                      │  │
+</span><span data-line="7">│  │  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐│  │
+</span><span data-line="8">│  │  │Model #0│  │Model #1│  │Model #2│  │Model #3││  │
+</span><span data-line="9">│  │  └────────┘  └────────┘  └────────┘  └────────┘│  │
+</span><span data-line="10">│  └──────────────────────────────────────────────────┘  │
+</span><span data-line="11">│                                                         │
+</span><span data-line="12">│  Methods:                                               │
+</span><span data-line="13">│  • initialize(pool_size, model_path)                    │
+</span><span data-line="14">│  • acquire(timeout) → ModelInstance                     │
+</span><span data-line="15">│  • acquire_async(timeout) → ModelInstance               │
+</span><span data-line="16">│  • release(instance)                                    │
+</span><span data-line="17">│  • get_stats() → dict                                   │
+</span><span data-line="18">└─────────────────────────────────────────────────────────┘
+</span><span data-line="19">           ↓                                ↓
+</span><span data-line="20">┌──────────────────────┐       ┌──────────────────────┐
+</span><span data-line="21">│  ModelInstance #0    │       │  ModelInstance #N    │
+</span><span data-line="22">│  • model (copy)      │       │  • model (copy)      │
+</span><span data-line="23">│  • instance_id       │       │  • instance_id       │
+</span><span data-line="24">│  • lock (thread)     │       │  • lock (thread)     │
+</span><span data-line="25">│  • usage_count       │       │  • usage_count       │
+</span><span data-line="26">│  • predict()         │       │  • predict()         │
+</span><span data-line="27">│  • predict_proba()   │       │  • predict_proba()   │
+</span><span data-line="28">└──────────────────────┘       └──────────────────────┘
+</span></pre></div>
+</div>
+<p><strong>Patterns utilisés</strong> :</p>
+<ol class="arabic simple">
+<li><p><strong>Object Pool Pattern</strong> : Réutilisation d’instances pré-créées</p></li>
+<li><p><strong>Singleton Pattern</strong> : Une seule instance du pool</p></li>
+<li><p><strong>Thread-Safety</strong> : Lock par instance + Queue thread-safe</p></li>
+<li><p><strong>Async Context Manager</strong> : Acquisition/libération automatique</p></li>
+</ol>
+<p><strong>Configuration</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># .env</span>
+</span><span data-line="2"><span class="nv">MODEL_POOL_SIZE</span><span class="o">=</span><span class="m">4</span><span class="w">  </span><span class="c1"># Nombre d&#39;instances du modèle (défaut: 4)</span>
+</span></pre></div>
+</div>
+<p><strong>Initialisation au démarrage de l’API</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># src/api/main.py</span>
+</span><span data-line="2"><span class="nd">@asynccontextmanager</span>
+</span><span data-line="3"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">lifespan</span><span class="p">(</span><span class="n">app</span><span class="p">:</span> <span class="n">FastAPI</span><span class="p">):</span>
+</span><span data-line="4">    <span class="k">global</span> <span class="n">model_pool</span><span class="p">,</span> <span class="n">feature_engineer</span>
+</span><span data-line="5">
+</span><span data-line="6">    <span class="c1"># Initialisation du pool</span>
+</span><span data-line="7">    <span class="n">model_pool</span> <span class="o">=</span> <span class="n">ModelPool</span><span class="p">()</span>
+</span><span data-line="8">    <span class="n">model_pool</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span>
+</span><span data-line="9">        <span class="n">pool_size</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">MODEL_POOL_SIZE</span><span class="p">,</span>
+</span><span data-line="10">        <span class="n">model_path</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">MODEL_PATH</span>
+</span><span data-line="11">    <span class="p">)</span>
+</span><span data-line="12">    <span class="n">feature_engineer</span> <span class="o">=</span> <span class="n">FeatureEngineer</span><span class="p">()</span>
+</span><span data-line="13">
+</span><span data-line="14">    <span class="k">yield</span>
+</span><span data-line="15">
+</span><span data-line="16">    <span class="c1"># Affichage des stats au shutdown</span>
+</span><span data-line="17">    <span class="n">stats</span> <span class="o">=</span> <span class="n">model_pool</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+</span><span data-line="18">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Statistiques du pool: </span><span class="si">{</span><span class="n">stats</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p><strong>Utilisation dans les endpoints</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Acquisition avec context manager (recommandé)</span>
+</span><span data-line="2"><span class="k">async</span> <span class="k">with</span> <span class="n">ModelContextManager</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">30.0</span><span class="p">)</span> <span class="k">as</span> <span class="n">model_instance</span><span class="p">:</span>
+</span><span data-line="3">    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">feature_engineer</span><span class="o">.</span><span class="n">engineer_features</span><span class="p">(</span><span class="n">patient_dict</span><span class="p">)</span>
+</span><span data-line="4">    <span class="n">prediction</span> <span class="o">=</span> <span class="n">model_instance</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
+</span><span data-line="5">    <span class="n">proba</span> <span class="o">=</span> <span class="n">model_instance</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># L&#39;instance est automatiquement libérée après le bloc</span>
+</span></pre></div>
+</div>
+<p><strong>Mécanisme de copie des modèles</strong> :</p>
+<p>Les instances sont créées via <code class="docutils literal notranslate"><span class="pre">pickle.loads(pickle.dumps(base_model))</span></code> :</p>
+<ul class="simple">
+<li><p>Chaque instance est une copie profonde indépendante</p></li>
+<li><p>Pas de partage de mémoire entre instances</p></li>
+<li><p>Permet le vrai parallélisme (pas de GIL blocking)</p></li>
+</ul>
+<p><strong>Thread-Safety</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">ModelInstance</span><span class="p">:</span>
+</span><span data-line="2">    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+</span><span data-line="3">        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>  <span class="c1"># Acquisition du lock thread</span>
+</span><span data-line="4">            <span class="bp">self</span><span class="o">.</span><span class="n">usage_count</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span data-line="5">            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p><strong>Endpoint de monitoring</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">GET<span class="w"> </span>/pool/stats
+</span><span data-line="2">
+</span><span data-line="3">Response:
+</span><span data-line="4"><span class="o">{</span>
+</span><span data-line="5"><span class="w">  </span><span class="s2">&quot;pool_enabled&quot;</span>:<span class="w"> </span>true,
+</span><span data-line="6"><span class="w">  </span><span class="s2">&quot;stats&quot;</span>:<span class="w"> </span><span class="o">{</span>
+</span><span data-line="7"><span class="w">    </span><span class="s2">&quot;pool_size&quot;</span>:<span class="w"> </span><span class="m">4</span>,
+</span><span data-line="8"><span class="w">    </span><span class="s2">&quot;available&quot;</span>:<span class="w"> </span><span class="m">3</span>,
+</span><span data-line="9"><span class="w">    </span><span class="s2">&quot;in_use&quot;</span>:<span class="w"> </span><span class="m">1</span>,
+</span><span data-line="10"><span class="w">    </span><span class="s2">&quot;total_predictions&quot;</span>:<span class="w"> </span><span class="m">1523</span>,
+</span><span data-line="11"><span class="w">    </span><span class="s2">&quot;avg_usage_per_instance&quot;</span>:<span class="w"> </span><span class="m">380</span>.75,
+</span><span data-line="12"><span class="w">    </span><span class="s2">&quot;model_path&quot;</span>:<span class="w"> </span><span class="s2">&quot;./model/model.pkl&quot;</span>
+</span><span data-line="13"><span class="w">  </span><span class="o">}</span>
+</span><span data-line="14"><span class="o">}</span>
+</span></pre></div>
+</div>
+<p><strong>Métriques du pool</strong> :</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Métrique</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pool_size</span></code></p></td>
+<td><p>Nombre total d’instances</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">available</span></code></p></td>
+<td><p>Instances disponibles</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">in_use</span></code></p></td>
+<td><p>Instances en cours d’utilisation</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">total_predictions</span></code></p></td>
+<td><p>Total de prédictions effectuées</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">avg_usage_per_instance</span></code></p></td>
+<td><p>Moyenne d’utilisation par instance</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Fallback mode singleton</strong> :</p>
+<p>Si l’initialisation du pool échoue, l’API bascule automatiquement en mode singleton :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">try</span><span class="p">:</span>
+</span><span data-line="2">    <span class="n">model_pool</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+</span><span data-line="3"><span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="4">    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pool init failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="5">    <span class="c1"># Fallback to singleton</span>
+</span><span data-line="6">    <span class="n">model_loader</span> <span class="o">=</span> <span class="n">ModelLoader</span><span class="p">()</span>
+</span><span data-line="7">    <span class="n">predictor</span> <span class="o">=</span> <span class="n">Predictor</span><span class="p">()</span>
+</span></pre></div>
+</div>
+<p><strong>Avantages du pool</strong> :</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Avant (Singleton)</p></th>
+<th class="head"><p>Après (Pool)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>❌ 1 seule requête à la fois</p></td>
+<td><p>✅ 4 requêtes simultanées (configurable)</p></td>
+</tr>
+<tr class="row-odd"><td><p>❌ Latence élevée sous charge</p></td>
+<td><p>✅ Latence optimisée</p></td>
+</tr>
+<tr class="row-even"><td><p>❌ Throughput limité</p></td>
+<td><p>✅ Throughput x4</p></td>
+</tr>
+<tr class="row-odd"><td><p>⚠️ GIL blocking</p></td>
+<td><p>✅ Vrai parallélisme</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Tests</strong> :</p>
+<ul class="simple">
+<li><p>Couverture : 90.99% (111 lignes, 10 lignes non couvertes)</p></li>
+<li><p>Tests unitaires : <code class="docutils literal notranslate"><span class="pre">tests/model/test_model_pool.py</span></code> (18 tests)</p></li>
+<li><p>Tests de charge : <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">simulate-load</span></code> (1000 requêtes)</p></li>
+</ul>
+<p><strong>Processus de prédiction avec pool</strong> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">HTTP Request → FastAPI Endpoint
+</span><span data-line="2">    ↓
+</span><span data-line="3">async with ModelContextManager() as instance
+</span><span data-line="4">    ↓
+</span><span data-line="5">Pool.acquire_async(timeout=30.0)
+</span><span data-line="6">    ↓
+</span><span data-line="7">Queue.get() → ModelInstance disponible
+</span><span data-line="8">    ↓
+</span><span data-line="9">Feature Engineering (14 → 28 features)
+</span><span data-line="10">    ↓
+</span><span data-line="11">ModelInstance.predict(data)  [avec lock thread]
+</span><span data-line="12">    ↓
+</span><span data-line="13">Pool.release(instance)
+</span><span data-line="14">    ↓
+</span><span data-line="15">HTTP Response
+</span></pre></div>
+</div>
+<p><strong>Temps de réponse typique</strong> : 20-60ms (avec pool actif)</p>
+</section>
+<section id="cache-redis">
+<h3>4. Cache Redis<a class="headerlink" href="#cache-redis" title="Link to this heading">¶</a></h3>
+<p><strong>Localisation</strong> : Redis standalone (Docker ou local)</p>
+<p><strong>Responsabilités</strong> :</p>
+<ul class="simple">
+<li><p>Stockage temporaire des logs API</p></li>
+<li><p>FIFO (First In First Out) avec limite configurable</p></li>
+<li><p>Consultation via endpoint <code class="docutils literal notranslate"><span class="pre">/logs</span></code></p></li>
+<li><p>Source de données pour le pipeline Elasticsearch</p></li>
+</ul>
+<p><strong>Structure des logs</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-11-20T10:30:45.123456&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[transaction_id] POST /predict - 200 - 45ms - input - result&quot;</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="6"><span class="w">    </span><span class="nt">&quot;transaction_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
+</span><span data-line="7"><span class="w">    </span><span class="nt">&quot;input_data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">...</span><span class="p">},</span>
+</span><span data-line="8"><span class="w">    </span><span class="nt">&quot;result&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">...</span><span class="p">},</span>
+</span><span data-line="9"><span class="w">    </span><span class="nt">&quot;performance_metrics&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">...</span><span class="p">}</span>
+</span><span data-line="10"><span class="w">  </span><span class="p">}</span>
+</span><span data-line="11"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Configuration</strong> :</p>
+<ul class="simple">
+<li><p>Limite : 1000 logs (configurable via <code class="docutils literal notranslate"><span class="pre">REDIS_LOGS_MAX_SIZE</span></code>)</p></li>
+<li><p>Clé Redis : <code class="docutils literal notranslate"><span class="pre">api_logs</span></code></p></li>
+<li><p>Format : Liste (LPUSH/LRANGE)</p></li>
+</ul>
+</section>
+<section id="pipeline-de-logs-elasticsearch">
+<h3>5. Pipeline de logs Elasticsearch<a class="headerlink" href="#pipeline-de-logs-elasticsearch" title="Link to this heading">¶</a></h3>
+<p><strong>Localisation</strong> : <code class="docutils literal notranslate"><span class="pre">src/logs_pipeline/</span></code></p>
+<p><strong>Architecture</strong> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">collector.py  →  Récupération des logs depuis Redis ou Gradio
+</span><span data-line="2">     ↓
+</span><span data-line="3">filter.py     →  Filtrage des logs pertinents
+</span><span data-line="4">     ↓
+</span><span data-line="5">indexer.py    →  Triple indexation Elasticsearch
+</span><span data-line="6">     ↓
+</span><span data-line="7">pipeline.py   →  Orchestration du processus complet
+</span></pre></div>
+</div>
+<p><strong>Flux détaillé</strong> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌─────────────────────────────────────────────────────────────────┐
+</span><span data-line="2">│                    SOURCES DE LOGS                              │
+</span><span data-line="3">├────────────────────────┬────────────────────────────────────────┤
+</span><span data-line="4">│    Redis (API logs)    │  Gradio (/logs_api endpoint)          │
+</span><span data-line="5">└────────────────────────┴────────────────────────────────────────┘
+</span><span data-line="6">                              ↓
+</span><span data-line="7">                    ┌─────────────────┐
+</span><span data-line="8">                    │   COLLECTOR     │
+</span><span data-line="9">                    │  - Connexion    │
+</span><span data-line="10">                    │  - Déduplication│
+</span><span data-line="11">                    │  - Parsing      │
+</span><span data-line="12">                    └─────────────────┘
+</span><span data-line="13">                              ↓
+</span><span data-line="14">                    ┌─────────────────┐
+</span><span data-line="15">                    │     FILTER      │
+</span><span data-line="16">                    │  - Pattern match│
+</span><span data-line="17">                    │  - HTTP method  │
+</span><span data-line="18">                    │  - Performance  │
+</span><span data-line="19">                    └─────────────────┘
+</span><span data-line="20">                              ↓
+</span><span data-line="21">                    ┌─────────────────────────────────────┐
+</span><span data-line="22">                    │           INDEXER                   │
+</span><span data-line="23">                    │                                     │
+</span><span data-line="24">                    │  ┌───────────────────────────────┐ │
+</span><span data-line="25">                    │  │  ALL_DOCUMENTS (non filtrés)  │ │
+</span><span data-line="26">                    │  └───────────────────────────────┘ │
+</span><span data-line="27">                    │              ↓                      │
+</span><span data-line="28">                    │  ┌───────────────────────────────┐ │
+</span><span data-line="29">                    │  │    ml-api-logs (TOUS)         │ │
+</span><span data-line="30">                    │  └───────────────────────────────┘ │
+</span><span data-line="31">                    │                                     │
+</span><span data-line="32">                    │  ┌───────────────────────────────┐ │
+</span><span data-line="33">                    │  │ FILTERED_DOCUMENTS (filtrés)  │ │
+</span><span data-line="34">                    │  └───────────────────────────────┘ │
+</span><span data-line="35">                    │         ↓              ↓            │
+</span><span data-line="36">                    │  ┌─────────────┐ ┌──────────────┐ │
+</span><span data-line="37">                    │  │ml-api-message│ │ml-api-perfs │ │
+</span><span data-line="38">                    │  └─────────────┘ └──────────────┘ │
+</span><span data-line="39">                    └─────────────────────────────────────┘
+</span><span data-line="40">                              ↓
+</span><span data-line="41">                    ┌─────────────────┐
+</span><span data-line="42">                    │  ELASTICSEARCH  │
+</span><span data-line="43">                    │  3 index créés  │
+</span><span data-line="44">                    └─────────────────┘
+</span></pre></div>
+</div>
+<p><strong>Quadruple indexation</strong> :</p>
+<ol class="arabic simple">
+<li><p><strong>ml-api-logs</strong> : TOUS les logs sans filtrage</p>
+<ul class="simple">
+<li><p>Usage : Débogage complet, audit</p></li>
+<li><p>Contenu : Tous les champs bruts</p></li>
+</ul>
+</li>
+<li><p><strong>ml-api-message</strong> : Logs filtrés avec données de prédiction</p>
+<ul class="simple">
+<li><p>Usage : Analyse du drift de données</p></li>
+<li><p>Contenu : input_data, result, transaction_id</p></li>
+</ul>
+</li>
+<li><p><strong>ml-api-perfs</strong> : Logs filtrés avec métriques de performance</p>
+<ul class="simple">
+<li><p>Usage : Optimisation du modèle</p></li>
+<li><p>Contenu : inference_time_ms, cpu_time_ms, memory_mb, etc.</p></li>
+</ul>
+</li>
+<li><p><strong>ml-api-top-func</strong> : Top fonctions coûteuses par transaction</p>
+<ul class="simple">
+<li><p>Usage : Profiling détaillé, optimisation du code</p></li>
+<li><p>Contenu : transaction_id, function_name, cumulative_time, calls, etc.</p></li>
+</ul>
+</li>
+</ol>
+<p>Documentation complète : <span class="xref myst">src/logs_pipeline/README.md</span></p>
+</section>
+<section id="elasticsearch-kibana">
+<h3>6. Elasticsearch + Kibana<a class="headerlink" href="#elasticsearch-kibana" title="Link to this heading">¶</a></h3>
+<p><strong>Elasticsearch (Port 9200)</strong> :</p>
+<ul class="simple">
+<li><p>Stockage persistant des logs</p></li>
+<li><p>Recherche full-text</p></li>
+<li><p>Agrégations pour dashboards</p></li>
+</ul>
+<p><strong>Kibana (Port 5601)</strong> :</p>
+<ul class="simple">
+<li><p>Visualisation des logs</p></li>
+<li><p>Création de dashboards</p></li>
+<li><p>Exploration des données</p></li>
+</ul>
+<p><strong>Index patterns recommandés</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ml-api-logs*</span></code> : Tous les logs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ml-api-message*</span></code> : Logs de prédictions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ml-api-perfs*</span></code> : Métriques de performance</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ml-api-top-func*</span></code> : Profiling fonctions</p></li>
+</ul>
+<p><strong>Dashboards recommandés</strong> :</p>
+<ol class="arabic simple">
+<li><p><strong>Dashboard Prédictions</strong> :</p>
+<ul class="simple">
+<li><p>Nombre de prédictions par heure</p></li>
+<li><p>Distribution des résultats (YES/NO)</p></li>
+<li><p>Top 10 features les plus fréquentes</p></li>
+<li><p>Temps de réponse moyen</p></li>
+</ul>
+</li>
+<li><p><strong>Dashboard Performance</strong> :</p>
+<ul class="simple">
+<li><p>Latence moyenne (p50, p95, p99)</p></li>
+<li><p>CPU usage</p></li>
+<li><p>Mémoire utilisée</p></li>
+<li><p>Top fonctions coûteuses</p></li>
+</ul>
+</li>
+</ol>
+<p>Documentation : <a class="reference internal" href="PERFORMANCE_METRICS.html"><span class="std std-doc">PERFORMANCE_METRICS.md</span></a></p>
+</section>
+</section>
+<section id="deploiement-huggingface-spaces">
+<h2>Déploiement HuggingFace Spaces<a class="headerlink" href="#deploiement-huggingface-spaces" title="Link to this heading">¶</a></h2>
+<section id="architecture-hybride-fastapi-gradio">
+<h3>Architecture hybride FastAPI + Gradio<a class="headerlink" href="#architecture-hybride-fastapi-gradio" title="Link to this heading">¶</a></h3>
+<p>Le projet utilise une architecture hybride innovante pour le déploiement sur HuggingFace Spaces, permettant <strong>l’accès HTTP/REST direct sans client Gradio</strong>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌─────────────────────────────────────────────────────────────┐
+</span><span data-line="2">│        HuggingFace Space (Port 7860)                        │
+</span><span data-line="3">├─────────────────────────────────────────────────────────────┤
+</span><span data-line="4">│                                                             │
+</span><span data-line="5">│  ┌────────────────────────────────────────────────────┐   │
+</span><span data-line="6">│  │  FastAPI (Application principale)                  │   │
+</span><span data-line="7">│  │                                                      │   │
+</span><span data-line="8">│  │  Endpoints REST API (/api/*)                       │   │
+</span><span data-line="9">│  │  ├── GET  /api/health                              │   │
+</span><span data-line="10">│  │  ├── GET  /api/                                    │   │
+</span><span data-line="11">│  │  ├── POST /api/predict                             │   │
+</span><span data-line="12">│  │  ├── POST /api/predict_proba                       │   │
+</span><span data-line="13">│  │  ├── GET  /api/logs                                │   │
+</span><span data-line="14">│  │  └── DELETE /api/logs                              │   │
+</span><span data-line="15">│  │                                                      │   │
+</span><span data-line="16">│  └────────────────────────────────────────────────────┘   │
+</span><span data-line="17">│                       ↑                                     │
+</span><span data-line="18">│                       │ gr.mount_gradio_app()               │
+</span><span data-line="19">│                       ↓                                     │
+</span><span data-line="20">│  ┌────────────────────────────────────────────────────┐   │
+</span><span data-line="21">│  │  Gradio UI (Interface montée sur /)               │   │
+</span><span data-line="22">│  │  - Formulaire de prédiction                        │   │
+</span><span data-line="23">│  │  - Affichage résultats                             │   │
+</span><span data-line="24">│  └────────────────────────────────────────────────────┘   │
+</span><span data-line="25">│                                                             │
+</span><span data-line="26">└─────────────────────────────────────────────────────────────┘
+</span><span data-line="27">                              ↓
+</span><span data-line="28">                    Proxy vers API interne
+</span><span data-line="29">                              ↓
+</span><span data-line="30">                   ┌──────────────────┐
+</span><span data-line="31">                   │ API FastAPI      │
+</span><span data-line="32">                   │ (Port 8000)      │
+</span><span data-line="33">                   │ - Modèle ML      │
+</span><span data-line="34">                   │ - Redis logs     │
+</span><span data-line="35">                   └──────────────────┘
+</span></pre></div>
+</div>
+</section>
+<section id="composants-du-deploiement">
+<h3>Composants du déploiement<a class="headerlink" href="#composants-du-deploiement" title="Link to this heading">¶</a></h3>
+<p><strong>Fichiers clés</strong> :</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Fichier</p></th>
+<th class="head"><p>Rôle</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src/ui/fastapi_app.py</span></code></p></td>
+<td><p>App FastAPI principale avec Gradio monté</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">src/ui/api_routes.py</span></code></p></td>
+<td><p>Définition des routes REST (référence)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src/proxy/client.py</span></code></p></td>
+<td><p>Client HTTP pour communiquer avec l’API (port 8000)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">docker/Dockerfile.hf</span></code></p></td>
+<td><p>Dockerfile HuggingFace avec start.sh</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="avantages-de-cette-architecture">
+<h3>Avantages de cette architecture<a class="headerlink" href="#avantages-de-cette-architecture" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Avant</p></th>
+<th class="head"><p>Après</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>❌ Client Gradio Python requis</p></td>
+<td><p>✅ Accès HTTP standard (curl, fetch, requests)</p></td>
+</tr>
+<tr class="row-odd"><td><p>❌ Format propriétaire Gradio</p></td>
+<td><p>✅ Format JSON REST standard</p></td>
+</tr>
+<tr class="row-even"><td><p>❌ Intégration difficile</p></td>
+<td><p>✅ Compatible tous langages (Python, JS, R)</p></td>
+</tr>
+<tr class="row-odd"><td><p>⚠️ UI seulement</p></td>
+<td><p>✅ UI <strong>ET</strong> API REST</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="utilisation">
+<h3>Utilisation<a class="headerlink" href="#utilisation" title="Link to this heading">¶</a></h3>
+<p><strong>Via l’interface web</strong> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">francoisformation</span><span class="o">-</span><span class="n">oc</span><span class="o">-</span><span class="n">project8</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">space</span><span class="o">/</span>
+</span></pre></div>
+</div>
+<p><strong>Via API REST</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Health check</span>
+</span><span data-line="2">curl<span class="w"> </span>https://francoisformation-oc-project8.hf.space/api/health
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Prédiction</span>
+</span><span data-line="5">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>https://francoisformation-oc-project8.hf.space/api/predict<span class="w"> </span><span class="se">\</span>
+</span><span data-line="6"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="7"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;AGE&quot;: 65, &quot;GENDER&quot;: 1, &quot;SMOKING&quot;: 1, ...}&#39;</span>
+</span></pre></div>
+</div>
+<p>Documentation complète :</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="DIRECT_HTTP_ACCESS.html"><span class="std std-doc">DIRECT_HTTP_ACCESS.md</span></a> - Guide complet (550 lignes)</p></li>
+<li><p><a class="reference internal" href="QUICK_START_HTTP_ACCESS.html"><span class="std std-doc">QUICK_START_HTTP_ACCESS.md</span></a> - Quick start (5 min)</p></li>
+<li><p><a class="reference internal" href="PROXY_REFACTOR_SUMMARY.html"><span class="std std-doc">PROXY_REFACTOR_SUMMARY.md</span></a> - Résumé technique</p></li>
+</ul>
+</section>
+</section>
+<section id="migration-elasticsearch">
+<h2>Migration Elasticsearch<a class="headerlink" href="#migration-elasticsearch" title="Link to this heading">¶</a></h2>
+<section id="script-de-migration">
+<h3>Script de migration<a class="headerlink" href="#script-de-migration" title="Link to this heading">¶</a></h3>
+<p>Le projet inclut un script complet de migration Elasticsearch/Kibana (<code class="docutils literal notranslate"><span class="pre">scripts/migrate_elasticsearch.py</span></code>) permettant de:</p>
+<ul class="simple">
+<li><p>✅ Exporter/Importer les index Elasticsearch (mapping + documents)</p></li>
+<li><p>✅ Exporter/Importer les dataviews (index patterns) Kibana</p></li>
+<li><p>✅ Exporter/Importer les dashboards et visualisations Kibana</p></li>
+<li><p>✅ Backup/Restore complets avec timestamp</p></li>
+</ul>
+</section>
+<section id="cas-d-usage">
+<h3>Cas d’usage<a class="headerlink" href="#cas-d-usage" title="Link to this heading">¶</a></h3>
+<p><strong>1. Sauvegarde quotidienne automatisée</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Export complet</span>
+</span><span data-line="2">python<span class="w"> </span>scripts/migrate_elasticsearch.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>--output<span class="w"> </span>./backup
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Structure créée</span>
+</span><span data-line="5">backup_20250121_153000/
+</span><span data-line="6">├──<span class="w"> </span>indexes/<span class="w">           </span><span class="c1"># Index ES avec documents (NDJSON)</span>
+</span><span data-line="7">├──<span class="w"> </span>dataviews/<span class="w">         </span><span class="c1"># Index patterns Kibana</span>
+</span><span data-line="8">├──<span class="w"> </span>dashboards/<span class="w">        </span><span class="c1"># Dashboards + visualizations</span>
+</span><span data-line="9">└──<span class="w"> </span>migration_stats.json
+</span></pre></div>
+</div>
+<p><strong>2. Migration local → production</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Export depuis local</span>
+</span><span data-line="2">python<span class="w"> </span>scripts/migrate_elasticsearch.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>--output<span class="w"> </span>./backup<span class="w"> </span><span class="se">\</span>
+</span><span data-line="4"><span class="w">  </span>--es-host<span class="w"> </span>localhost:9200
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Import vers production</span>
+</span><span data-line="7">python<span class="w"> </span>scripts/migrate_elasticsearch.py<span class="w"> </span>import<span class="w"> </span><span class="se">\</span>
+</span><span data-line="8"><span class="w">  </span>--input<span class="w"> </span>./backup/backup_20250121_153000<span class="w"> </span><span class="se">\</span>
+</span><span data-line="9"><span class="w">  </span>--es-host<span class="w"> </span>production:9200<span class="w"> </span><span class="se">\</span>
+</span><span data-line="10"><span class="w">  </span>--username<span class="w"> </span>elastic<span class="w"> </span><span class="se">\</span>
+</span><span data-line="11"><span class="w">  </span>--password<span class="w"> </span>changeme
+</span></pre></div>
+</div>
+<p><strong>3. Restauration après incident</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Import depuis le dernier backup</span>
+</span><span data-line="2">python<span class="w"> </span>scripts/migrate_elasticsearch.py<span class="w"> </span>import<span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>--input<span class="w"> </span>/data/backups/elasticsearch/backup_20250121_020000
+</span></pre></div>
+</div>
+</section>
+<section id="architecture-technique">
+<h3>Architecture technique<a class="headerlink" href="#architecture-technique" title="Link to this heading">¶</a></h3>
+<p><strong>APIs utilisées</strong> :</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Opération</p></th>
+<th class="head"><p>API</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Récupérer documents</p></td>
+<td><p>Scroll API (batch 1000)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Bulk insert</p></td>
+<td><p>Bulk API (batch 1000)</p></td>
+</tr>
+<tr class="row-even"><td><p>Dataviews</p></td>
+<td><p>Kibana Saved Objects API</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dashboards</p></td>
+<td><p>Kibana Saved Objects API</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Format NDJSON</strong> (Newline Delimited JSON) :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span><span class="nt">&quot;index&quot;</span><span class="p">:{</span><span class="nt">&quot;_index&quot;</span><span class="p">:</span><span class="s2">&quot;ml-api-logs&quot;</span><span class="p">,</span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="s2">&quot;doc-1&quot;</span><span class="p">}}</span>
+</span><span data-line="2"><span class="p">{</span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="s2">&quot;2025-01-21T15:30:00Z&quot;</span><span class="p">,</span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="s2">&quot;...&quot;</span><span class="p">}</span>
+</span><span data-line="3"><span class="p">{</span><span class="nt">&quot;index&quot;</span><span class="p">:{</span><span class="nt">&quot;_index&quot;</span><span class="p">:</span><span class="s2">&quot;ml-api-logs&quot;</span><span class="p">,</span><span class="nt">&quot;_id&quot;</span><span class="p">:</span><span class="s2">&quot;doc-2&quot;</span><span class="p">}}</span>
+</span><span data-line="4"><span class="p">{</span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="s2">&quot;2025-01-21T15:31:00Z&quot;</span><span class="p">,</span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="s2">&quot;ERROR&quot;</span><span class="p">,</span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="s2">&quot;...&quot;</span><span class="p">}</span>
+</span></pre></div>
+</div>
+<p>Documentation complète : <a class="reference internal" href="ELASTIC.html"><span class="std std-doc">ELASTIC.md</span></a></p>
+</section>
+</section>
+<section id="flux-de-donnees">
+<h2>Flux de données<a class="headerlink" href="#flux-de-donnees" title="Link to this heading">¶</a></h2>
+<section id="flux-1-prediction-utilisateur-nominal">
+<h3>Flux 1 : Prédiction utilisateur (nominal)<a class="headerlink" href="#flux-1-prediction-utilisateur-nominal" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌──────────────┐
+</span><span data-line="2">│ Utilisateur  │
+</span><span data-line="3">└──────┬───────┘
+</span><span data-line="4">       │ 1. Remplit formulaire (14 features)
+</span><span data-line="5">       ↓
+</span><span data-line="6">┌──────────────┐
+</span><span data-line="7">│  Gradio UI   │
+</span><span data-line="8">└──────┬───────┘
+</span><span data-line="9">       │ 2. POST /predict
+</span><span data-line="10">       │    Content-Type: application/json
+</span><span data-line="11">       │    Body: {AGE: 65, GENDER: 1, ...}
+</span><span data-line="12">       ↓
+</span><span data-line="13">┌──────────────┐
+</span><span data-line="14">│  FastAPI API │
+</span><span data-line="15">│  Middleware  │
+</span><span data-line="16">└──────┬───────┘
+</span><span data-line="17">       │ 3. Génération transaction_id (UUID)
+</span><span data-line="18">       │ 4. Validation Pydantic (PatientData)
+</span><span data-line="19">       │ 5. Log request (Redis)
+</span><span data-line="20">       ↓
+</span><span data-line="21">┌──────────────┐
+</span><span data-line="22">│  Predictor   │
+</span><span data-line="23">└──────┬───────┘
+</span><span data-line="24">       │ 6. Feature Engineering (14 → 28 features)
+</span><span data-line="25">       ↓
+</span><span data-line="26">┌──────────────┐
+</span><span data-line="27">│ Model Loader │
+</span><span data-line="28">│  (Singleton) │
+</span><span data-line="29">└──────┬───────┘
+</span><span data-line="30">       │ 7. model.predict(X)
+</span><span data-line="31">       │ 8. model.predict_proba(X)
+</span><span data-line="32">       ↓
+</span><span data-line="33">┌──────────────┐
+</span><span data-line="34">│  Predictor   │
+</span><span data-line="35">└──────┬───────┘
+</span><span data-line="36">       │ 9. Formatage résultat
+</span><span data-line="37">       │    {prediction: 1, probability: 0.85, message: &quot;...&quot;}
+</span><span data-line="38">       ↓
+</span><span data-line="39">┌──────────────┐
+</span><span data-line="40">│  FastAPI API │
+</span><span data-line="41">└──────┬───────┘
+</span><span data-line="42">       │ 10. Log response (Redis)
+</span><span data-line="43">       │ 11. Performance metrics (Redis)
+</span><span data-line="44">       │ 12. Return JSON
+</span><span data-line="45">       ↓
+</span><span data-line="46">┌──────────────┐
+</span><span data-line="47">│  Gradio UI   │
+</span><span data-line="48">└──────┬───────┘
+</span><span data-line="49">       │ 13. Affichage résultat
+</span><span data-line="50">       ↓
+</span><span data-line="51">┌──────────────┐
+</span><span data-line="52">│ Utilisateur  │
+</span><span data-line="53">└──────────────┘
+</span></pre></div>
+</div>
+<p><strong>Temps de réponse typique</strong> : 20-60ms</p>
+</section>
+<section id="flux-2-pipeline-de-logs-vers-elasticsearch">
+<h3>Flux 2 : Pipeline de logs vers Elasticsearch<a class="headerlink" href="#flux-2-pipeline-de-logs-vers-elasticsearch" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌──────────────┐        ┌──────────────┐
+</span><span data-line="2">│  Redis Cache │        │  Gradio API  │
+</span><span data-line="3">│  (API logs)  │        │ (/logs_api)  │
+</span><span data-line="4">└──────┬───────┘        └──────┬───────┘
+</span><span data-line="5">       │                       │
+</span><span data-line="6">       │ 1. Collecte           │
+</span><span data-line="7">       └───────┬───────────────┘
+</span><span data-line="8">               ↓
+</span><span data-line="9">       ┌──────────────┐
+</span><span data-line="10">       │  Collector   │
+</span><span data-line="11">       │  - Fetch     │
+</span><span data-line="12">       │  - Dedupe    │
+</span><span data-line="13">       │  - Parse     │
+</span><span data-line="14">       └──────┬───────┘
+</span><span data-line="15">              │ 2. Documents bruts
+</span><span data-line="16">              ↓
+</span><span data-line="17">       ┌──────────────┐
+</span><span data-line="18">       │   Filter     │
+</span><span data-line="19">       │  - Pattern   │
+</span><span data-line="20">       │  - HTTP path │
+</span><span data-line="21">       └──────┬───────┘
+</span><span data-line="22">              │ 3. Documents filtrés
+</span><span data-line="23">              ↓
+</span><span data-line="24">       ┌──────────────────────────┐
+</span><span data-line="25">       │      Indexer             │
+</span><span data-line="26">       │                          │
+</span><span data-line="27">       │  all_documents →         │
+</span><span data-line="28">       │    ml-api-logs (TOUS)    │
+</span><span data-line="29">       │                          │
+</span><span data-line="30">       │  filtered_documents →    │
+</span><span data-line="31">       │    ml-api-message        │
+</span><span data-line="32">       │    ml-api-perfs          │
+</span><span data-line="33">       └──────┬───────────────────┘
+</span><span data-line="34">              │ 4. Bulk insert
+</span><span data-line="35">              ↓
+</span><span data-line="36">       ┌──────────────┐
+</span><span data-line="37">       │Elasticsearch │
+</span><span data-line="38">       │  - Index 1   │
+</span><span data-line="39">       │  - Index 2   │
+</span><span data-line="40">       │  - Index 3   │
+</span><span data-line="41">       └──────┬───────┘
+</span><span data-line="42">              │ 5. Visualisation
+</span><span data-line="43">              ↓
+</span><span data-line="44">       ┌──────────────┐
+</span><span data-line="45">       │    Kibana    │
+</span><span data-line="46">       └──────────────┘
+</span></pre></div>
+</div>
+<p><strong>Fréquence de collecte</strong> : Configurable (défaut : 10 secondes)</p>
+</section>
+<section id="flux-3-monitoring-de-performance">
+<h3>Flux 3 : Monitoring de performance<a class="headerlink" href="#flux-3-monitoring-de-performance" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌──────────────┐
+</span><span data-line="2">│  API Request │
+</span><span data-line="3">└──────┬───────┘
+</span><span data-line="4">       │ 1. Entrée endpoint /predict
+</span><span data-line="5">       ↓
+</span><span data-line="6">┌──────────────────┐
+</span><span data-line="7">│ PerformanceMonitor│
+</span><span data-line="8">│   .start()        │
+</span><span data-line="9">└──────┬────────────┘
+</span><span data-line="10">       │ 2. cProfile.enable()
+</span><span data-line="11">       │ 3. Capture mémoire initiale
+</span><span data-line="12">       │ 4. Capture temps CPU initial
+</span><span data-line="13">       ↓
+</span><span data-line="14">┌──────────────┐
+</span><span data-line="15">│  Predictor   │
+</span><span data-line="16">│  .predict()  │
+</span><span data-line="17">└──────┬───────┘
+</span><span data-line="18">       │ 5. Exécution prédiction
+</span><span data-line="19">       ↓
+</span><span data-line="20">┌──────────────────┐
+</span><span data-line="21">│ PerformanceMonitor│
+</span><span data-line="22">│   .stop()         │
+</span><span data-line="23">└──────┬────────────┘
+</span><span data-line="24">       │ 6. cProfile.disable()
+</span><span data-line="25">       │ 7. Calcul delta mémoire
+</span><span data-line="26">       │ 8. Calcul temps CPU
+</span><span data-line="27">       │ 9. Analyse top fonctions
+</span><span data-line="28">       ↓
+</span><span data-line="29">┌──────────────┐
+</span><span data-line="30">│  Métriques   │
+</span><span data-line="31">│  - inference_time_ms     │
+</span><span data-line="32">│  - cpu_time_ms          │
+</span><span data-line="33">│  - memory_mb            │
+</span><span data-line="34">│  - memory_delta_mb      │
+</span><span data-line="35">│  - function_calls       │
+</span><span data-line="36">│  - latency_ms           │
+</span><span data-line="37">│  - top_functions (top 5)│
+</span><span data-line="38">└──────┬─────────────────┘
+</span><span data-line="39">       │ 10. Log vers Redis
+</span><span data-line="40">       ↓
+</span><span data-line="41">┌──────────────┐
+</span><span data-line="42">│ Redis Cache  │
+</span><span data-line="43">└──────┬───────┘
+</span><span data-line="44">       │ 11. Pipeline collecte
+</span><span data-line="45">       ↓
+</span><span data-line="46">┌──────────────┐
+</span><span data-line="47">│Elasticsearch │
+</span><span data-line="48">│ ml-api-perfs │
+</span><span data-line="49">└──────────────┘
+</span></pre></div>
+</div>
+<p>Documentation : <a class="reference internal" href="PERFORMANCE_METRICS.html"><span class="std std-doc">PERFORMANCE_METRICS.md</span></a></p>
+</section>
+</section>
+<section id="infrastructure-docker">
+<h2>Infrastructure Docker<a class="headerlink" href="#infrastructure-docker" title="Link to this heading">¶</a></h2>
+<section id="architecture-docker-compose">
+<h3>Architecture Docker Compose<a class="headerlink" href="#architecture-docker-compose" title="Link to this heading">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nt">services</span><span class="p">:</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">api</span><span class="p">:</span>
+</span><span data-line="3"><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+</span><span data-line="4"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="5"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8000:8000&quot;</span>
+</span><span data-line="6"><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+</span><span data-line="7"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis</span>
+</span><span data-line="8"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="9"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./model:/app/model</span>
+</span><span data-line="10"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="11"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REDIS_HOST=redis</span>
+</span><span data-line="12"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MODEL_PATH=/app/model/model.pkl</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="w">  </span><span class="nt">ui</span><span class="p">:</span>
+</span><span data-line="15"><span class="w">    </span><span class="nt">build</span><span class="p">:</span>
+</span><span data-line="16"><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+</span><span data-line="17"><span class="w">      </span><span class="nt">dockerfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Dockerfile.ui</span>
+</span><span data-line="18"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="19"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;7860:7860&quot;</span>
+</span><span data-line="20"><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+</span><span data-line="21"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">api</span>
+</span><span data-line="22"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="23"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">API_URL=http://api:8000</span>
+</span><span data-line="24">
+</span><span data-line="25"><span class="w">  </span><span class="nt">redis</span><span class="p">:</span>
+</span><span data-line="26"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis:latest</span>
+</span><span data-line="27"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="28"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;6379:6379&quot;</span>
+</span><span data-line="29"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="30"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis_data:/data</span>
+</span><span data-line="31">
+</span><span data-line="32"><span class="w">  </span><span class="nt">elasticsearch</span><span class="p">:</span>
+</span><span data-line="33"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker.elastic.co/elasticsearch/elasticsearch:8.10.0</span>
+</span><span data-line="34"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="35"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;9200:9200&quot;</span>
+</span><span data-line="36"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="37"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.type=single-node</span>
+</span><span data-line="38"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.security.enabled=false</span>
+</span><span data-line="39"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+</span><span data-line="40"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">es_data:/usr/share/elasticsearch/data</span>
+</span><span data-line="41">
+</span><span data-line="42"><span class="w">  </span><span class="nt">kibana</span><span class="p">:</span>
+</span><span data-line="43"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker.elastic.co/kibana/kibana:8.10.0</span>
+</span><span data-line="44"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+</span><span data-line="45"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;5601:5601&quot;</span>
+</span><span data-line="46"><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+</span><span data-line="47"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch</span>
+</span><span data-line="48"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="49"><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ELASTICSEARCH_HOSTS=http://elasticsearch:9200</span>
+</span></pre></div>
+</div>
+</section>
+<section id="network-isolation">
+<h3>Network isolation<a class="headerlink" href="#network-isolation" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌────────────────────────────────────────────┐
+</span><span data-line="2">│         Docker Network: project8_default   │
+</span><span data-line="3">│                                            │
+</span><span data-line="4">│  ┌──────┐  ┌──────┐  ┌───────┐  ┌──────┐ │
+</span><span data-line="5">│  │  API │←→│  UI  │←→│ Redis │←→│  ES  │ │
+</span><span data-line="6">│  └──────┘  └──────┘  └───────┘  └──────┘ │
+</span><span data-line="7">│      ↑                                ↑    │
+</span><span data-line="8">└──────┼────────────────────────────────┼────┘
+</span><span data-line="9">       │                                │
+</span><span data-line="10">    Port 8000                       Port 9200
+</span><span data-line="11">    Port 7860                       Port 5601
+</span></pre></div>
+</div>
+</section>
+<section id="volumes-persistants">
+<h3>Volumes persistants<a class="headerlink" href="#volumes-persistants" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Service</p></th>
+<th class="head"><p>Volume</p></th>
+<th class="head"><p>Contenu</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Redis</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">redis_data</span></code></p></td>
+<td><p>Cache des logs</p></td>
+</tr>
+<tr class="row-odd"><td><p>Elasticsearch</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">es_data</span></code></p></td>
+<td><p>Index Elasticsearch</p></td>
+</tr>
+<tr class="row-even"><td><p>API</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">./model</span></code></p></td>
+<td><p>Modèle ML (bind mount)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="monitoring-et-performance">
+<h2>Monitoring et performance<a class="headerlink" href="#monitoring-et-performance" title="Link to this heading">¶</a></h2>
+<section id="metriques-collectees">
+<h3>Métriques collectées<a class="headerlink" href="#metriques-collectees" title="Link to this heading">¶</a></h3>
+<p><strong>8 métriques principales de performance</strong> :</p>
+<ol class="arabic simple">
+<li><p><strong>transaction_id</strong> : UUID unique</p></li>
+<li><p><strong>inference_time_ms</strong> : Temps d’inférence ML</p></li>
+<li><p><strong>cpu_time_ms</strong> : Temps CPU utilisé</p></li>
+<li><p><strong>memory_mb</strong> : Mémoire totale</p></li>
+<li><p><strong>memory_delta_mb</strong> : Variation mémoire</p></li>
+<li><p><strong>function_calls</strong> : Nombre d’appels</p></li>
+<li><p><strong>latency_ms</strong> : Latence totale</p></li>
+<li><p><strong>top_functions</strong> : Top 5 fonctions coûteuses</p></li>
+</ol>
+<p><strong>5 métriques du pool de modèles</strong> :</p>
+<ol class="arabic simple">
+<li><p><strong>pool_size</strong> : Nombre total d’instances</p></li>
+<li><p><strong>available</strong> : Instances disponibles</p></li>
+<li><p><strong>in_use</strong> : Instances en cours d’utilisation</p></li>
+<li><p><strong>total_predictions</strong> : Total de prédictions</p></li>
+<li><p><strong>avg_usage_per_instance</strong> : Moyenne d’utilisation</p></li>
+</ol>
+<p>Documentation complète : <a class="reference internal" href="PERFORMANCE_METRICS.html"><span class="std std-doc">PERFORMANCE_METRICS.md</span></a></p>
+</section>
+<section id="dashboards-kibana-recommandes">
+<h3>Dashboards Kibana recommandés<a class="headerlink" href="#dashboards-kibana-recommandes" title="Link to this heading">¶</a></h3>
+<p><strong>Dashboard 1 : Vue d’ensemble ML</strong></p>
+<ul class="simple">
+<li><p>Graphe : Prédictions par heure (time series)</p></li>
+<li><p>Pie chart : Distribution YES/NO</p></li>
+<li><p>Table : Temps de réponse (p50, p95, p99)</p></li>
+<li><p>Heatmap : Patterns horaires</p></li>
+</ul>
+<p><strong>Dashboard 2 : Performance détaillée</strong></p>
+<ul class="simple">
+<li><p>Graphe : Latence moyenne (time series)</p></li>
+<li><p>Graphe : CPU usage (time series)</p></li>
+<li><p>Graphe : Mémoire utilisée (time series)</p></li>
+<li><p>Table : Top 10 fonctions coûteuses</p></li>
+</ul>
+</section>
+<section id="alertes-recommandees">
+<h3>Alertes recommandées<a class="headerlink" href="#alertes-recommandees" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Métrique</p></th>
+<th class="head"><p>Seuil Warning</p></th>
+<th class="head"><p>Seuil Critical</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Latence</p></td>
+<td><p>&gt; 100ms</p></td>
+<td><p>&gt; 200ms</p></td>
+</tr>
+<tr class="row-odd"><td><p>CPU time</p></td>
+<td><p>&gt; 100ms</p></td>
+<td><p>&gt; 200ms</p></td>
+</tr>
+<tr class="row-even"><td><p>Memory delta</p></td>
+<td><p>&gt; 50MB</p></td>
+<td><p>&gt; 100MB</p></td>
+</tr>
+<tr class="row-odd"><td><p>Inference time</p></td>
+<td><p>&gt; 50ms</p></td>
+<td><p>&gt; 100ms</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="securite-et-scalabilite">
+<h2>Sécurité et scalabilité<a class="headerlink" href="#securite-et-scalabilite" title="Link to this heading">¶</a></h2>
+<section id="securite">
+<h3>Sécurité<a class="headerlink" href="#securite" title="Link to this heading">¶</a></h3>
+<p><strong>Niveau actuel (développement)</strong> :</p>
+<ul class="simple">
+<li><p>CORS : Toutes origines</p></li>
+<li><p>Authentification : Aucune</p></li>
+<li><p>HTTPS : Non configuré</p></li>
+</ul>
+<p><strong>Recommandations production</strong> :</p>
+<ol class="arabic simple">
+<li><p><strong>CORS restreint</strong> :</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">app</span><span class="o">.</span><span class="n">add_middleware</span><span class="p">(</span>
+</span><span data-line="2">    <span class="n">CORSMiddleware</span><span class="p">,</span>
+</span><span data-line="3">    <span class="n">allow_origins</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;https://votre-domaine.com&quot;</span><span class="p">],</span>
+</span><span data-line="4">    <span class="n">allow_credentials</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="5">    <span class="n">allow_methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">],</span>
+</span><span data-line="6">    <span class="n">allow_headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span>
+</span><span data-line="7"><span class="p">)</span>
+</span></pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Authentification API</strong> :</p>
+<ul class="simple">
+<li><p>API Key dans headers</p></li>
+<li><p>OAuth 2.0 / JWT</p></li>
+<li><p>Rate limiting</p></li>
+</ul>
+</li>
+<li><p><strong>HTTPS</strong> :</p>
+<ul class="simple">
+<li><p>Certificat SSL/TLS</p></li>
+<li><p>Reverse proxy (nginx)</p></li>
+</ul>
+</li>
+<li><p><strong>Validation renforcée</strong> :</p>
+<ul class="simple">
+<li><p>Sanitisation des inputs</p></li>
+<li><p>Limites de taille de requête</p></li>
+<li><p>Timeout des connexions</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="scalabilite">
+<h3>Scalabilité<a class="headerlink" href="#scalabilite" title="Link to this heading">¶</a></h3>
+<p><strong>Architecture actuelle</strong> : Monolithique</p>
+<p><strong>Évolution horizontale</strong> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">                    ┌──────────────┐
+</span><span data-line="2">                    │ Load Balancer│
+</span><span data-line="3">                    │   (nginx)    │
+</span><span data-line="4">                    └──────┬───────┘
+</span><span data-line="5">                           │
+</span><span data-line="6">        ┌──────────────────┼──────────────────┐
+</span><span data-line="7">        ↓                  ↓                  ↓
+</span><span data-line="8">┌──────────────┐   ┌──────────────┐   ┌──────────────┐
+</span><span data-line="9">│  API Node 1  │   │  API Node 2  │   │  API Node 3  │
+</span><span data-line="10">└──────┬───────┘   └──────┬───────┘   └──────┬───────┘
+</span><span data-line="11">       │                  │                  │
+</span><span data-line="12">       └──────────────────┼──────────────────┘
+</span><span data-line="13">                          ↓
+</span><span data-line="14">                  ┌──────────────┐
+</span><span data-line="15">                  │ Redis Cluster│
+</span><span data-line="16">                  └──────┬───────┘
+</span><span data-line="17">                         ↓
+</span><span data-line="18">                  ┌──────────────┐
+</span><span data-line="19">                  │ ES Cluster   │
+</span><span data-line="20">                  └──────────────┘
+</span></pre></div>
+</div>
+<p><strong>Optimisations</strong> :</p>
+<ol class="arabic simple">
+<li><p><strong>Model Pool</strong> :</p>
+<ul class="simple">
+<li><p>Pool de 4 instances du modèle (configurable) ✅</p></li>
+<li><p>Traitement parallèle de 4 requêtes simultanées</p></li>
+<li><p>Pas de rechargement à chaque requête</p></li>
+<li><p>Fallback automatique vers mode Singleton</p></li>
+</ul>
+</li>
+<li><p><strong>Connection pooling</strong> :</p>
+<ul class="simple">
+<li><p>Redis connection pool</p></li>
+<li><p>Elasticsearch connection pool</p></li>
+</ul>
+</li>
+<li><p><strong>Batch predictions</strong> :</p>
+<ul class="simple">
+<li><p>Endpoint pour prédictions multiples</p></li>
+<li><p>Vectorisation avec numpy</p></li>
+</ul>
+</li>
+<li><p><strong>Async endpoints</strong> :</p>
+<ul class="simple">
+<li><p>FastAPI async/await</p></li>
+<li><p>Non-blocking I/O</p></li>
+<li><p>Context manager async pour le pool</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
+<section id="variables-d-environnement">
+<h3>Variables d’environnement<a class="headerlink" href="#variables-d-environnement" title="Link to this heading">¶</a></h3>
+<p>Documentation complète : <a class="reference internal" href="ENV_VARIABLES.html"><span class="std std-doc">ENV_VARIABLES.md</span></a></p>
+<p><strong>Principales variables</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># API</span>
+</span><span data-line="2"><span class="nv">API_HOST</span><span class="o">=</span><span class="m">0</span>.0.0.0
+</span><span data-line="3"><span class="nv">API_PORT</span><span class="o">=</span><span class="m">8000</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Modèle</span>
+</span><span data-line="6"><span class="nv">MODEL_PATH</span><span class="o">=</span>./model/model.pkl
+</span><span data-line="7"><span class="nv">MODEL_POOL_SIZE</span><span class="o">=</span><span class="m">4</span><span class="w">                    </span><span class="c1"># Nombre d&#39;instances pour le parallélisme</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="c1"># Redis</span>
+</span><span data-line="10"><span class="nv">REDIS_HOST</span><span class="o">=</span>localhost
+</span><span data-line="11"><span class="nv">REDIS_PORT</span><span class="o">=</span><span class="m">6379</span>
+</span><span data-line="12"><span class="nv">REDIS_DB</span><span class="o">=</span><span class="m">0</span>
+</span><span data-line="13"><span class="nv">LOG_TO_REDIS</span><span class="o">=</span><span class="nb">true</span>
+</span><span data-line="14"><span class="nv">REDIS_LOGS_MAX_SIZE</span><span class="o">=</span><span class="m">1000</span>
+</span><span data-line="15">
+</span><span data-line="16"><span class="c1"># Elasticsearch</span>
+</span><span data-line="17"><span class="nv">ES_HOST</span><span class="o">=</span>localhost
+</span><span data-line="18"><span class="nv">ES_PORT</span><span class="o">=</span><span class="m">9200</span>
+</span><span data-line="19">
+</span><span data-line="20"><span class="c1"># Gradio</span>
+</span><span data-line="21"><span class="nv">GRADIO_URL</span><span class="o">=</span>http://localhost:7860
+</span><span data-line="22">
+</span><span data-line="23"><span class="c1"># Performance</span>
+</span><span data-line="24"><span class="nv">ENABLE_PERFORMANCE_MONITORING</span><span class="o">=</span><span class="nb">true</span>
+</span><span data-line="25">
+</span><span data-line="26"><span class="c1"># HuggingFace (optionnel)</span>
+</span><span data-line="27"><span class="nv">HF_TOKEN</span><span class="o">=</span>hf_xxxxx
+</span></pre></div>
+</div>
+</section>
+<section id="fichiers-de-configuration">
+<h3>Fichiers de configuration<a class="headerlink" href="#fichiers-de-configuration" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Fichier</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.env</span></code></p></td>
+<td><p>Variables d’environnement (ne pas commiter)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.env.example</span></code></p></td>
+<td><p>Template de configuration</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></p></td>
+<td><p>Dépendances Python</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code></p></td>
+<td><p>Infrastructure Docker</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.flake8</span></code></p></td>
+<td><p>Configuration linting</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GEMINI.md</span></code></p></td>
+<td><p>Règles de développement</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="commandes-utiles">
+<h2>Commandes utiles<a class="headerlink" href="#commandes-utiles" title="Link to this heading">¶</a></h2>
+<p>Documentation complète : <a class="reference internal" href="MAKEFILE_GUIDE.html"><span class="std std-doc">MAKEFILE_GUIDE.md</span></a></p>
+<p><strong>Développement</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>dev<span class="w">                </span><span class="c1"># Setup complet</span>
+</span><span data-line="2">make<span class="w"> </span>run-api<span class="w">            </span><span class="c1"># Lancer API (port 8000)</span>
+</span><span data-line="3">make<span class="w"> </span>run-ui<span class="w">             </span><span class="c1"># Lancer Gradio simple (port 7860)</span>
+</span><span data-line="4">make<span class="w"> </span>run-ui-fastapi<span class="w">     </span><span class="c1"># Lancer FastAPI+Gradio hybride (port 7860)</span>
+</span></pre></div>
+</div>
+<p><strong>Tests</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span><span class="nb">test</span><span class="w">               </span><span class="c1"># Tous les tests</span>
+</span><span data-line="2">make<span class="w"> </span>test-coverage<span class="w">      </span><span class="c1"># Avec couverture (80% minimum)</span>
+</span><span data-line="3">make<span class="w"> </span>test-api<span class="w">           </span><span class="c1"># Tests API uniquement</span>
+</span><span data-line="4">make<span class="w"> </span>lint<span class="w">               </span><span class="c1"># Vérifier le code (flake8)</span>
+</span></pre></div>
+</div>
+<p><strong>Docker</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>docker-build<span class="w">       </span><span class="c1"># Construire images</span>
+</span><span data-line="2">make<span class="w"> </span>docker-up<span class="w">          </span><span class="c1"># Lancer conteneurs</span>
+</span><span data-line="3">make<span class="w"> </span>docker-down<span class="w">        </span><span class="c1"># Arrêter conteneurs</span>
+</span><span data-line="4">make<span class="w"> </span>docker-logs<span class="w">        </span><span class="c1"># Voir logs conteneurs</span>
+</span></pre></div>
+</div>
+<p><strong>Pipeline Elasticsearch</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>pipeline-elasticsearch-up<span class="w">    </span><span class="c1"># Lancer ES + Kibana</span>
+</span><span data-line="2">make<span class="w"> </span>pipeline-once<span class="w">               </span><span class="c1"># Exécuter pipeline une fois</span>
+</span><span data-line="3">make<span class="w"> </span>pipeline-continuous<span class="w">         </span><span class="c1"># Pipeline continu (loop)</span>
+</span><span data-line="4">make<span class="w"> </span>pipeline-clear-indexes<span class="w">      </span><span class="c1"># Vider les 4 index ES</span>
+</span></pre></div>
+</div>
+<p><strong>Migration Elasticsearch</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Export complet</span>
+</span><span data-line="2">python<span class="w"> </span>scripts/migrate_elasticsearch.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>--output<span class="w"> </span>./backup
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Import complet</span>
+</span><span data-line="5">python<span class="w"> </span>scripts/migrate_elasticsearch.py<span class="w"> </span>import<span class="w"> </span>--input<span class="w"> </span>./backup/backup_YYYYMMDD_HHMMSS
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Export seulement les index</span>
+</span><span data-line="8">python<span class="w"> </span>scripts/migrate_elasticsearch.py<span class="w"> </span>export-indexes<span class="w"> </span>--output<span class="w"> </span>./backup
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Avec authentification</span>
+</span><span data-line="11">python<span class="w"> </span>scripts/migrate_elasticsearch.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="12"><span class="w">  </span>--output<span class="w"> </span>./backup<span class="w"> </span><span class="se">\</span>
+</span><span data-line="13"><span class="w">  </span>--username<span class="w"> </span>elastic<span class="w"> </span><span class="se">\</span>
+</span><span data-line="14"><span class="w">  </span>--password<span class="w"> </span>changeme
+</span></pre></div>
+</div>
+<p><strong>Logs</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>logs<span class="w">               </span><span class="c1"># Afficher logs Redis</span>
+</span><span data-line="2">make<span class="w"> </span>clear-logs<span class="w">         </span><span class="c1"># Vider cache Redis</span>
+</span></pre></div>
+</div>
+<p><strong>Simulateur de charge</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">make<span class="w"> </span>simulate<span class="w">           </span><span class="c1"># Simulation standard (100 requêtes)</span>
+</span><span data-line="2">make<span class="w"> </span>simulate-quick<span class="w">     </span><span class="c1"># Simulation rapide (10 requêtes)</span>
+</span><span data-line="3">make<span class="w"> </span>simulate-load<span class="w">      </span><span class="c1"># Test de charge (1000 requêtes)</span>
+</span><span data-line="4">make<span class="w"> </span>simulate-drift<span class="w">     </span><span class="c1"># Simulation avec drift de données</span>
+</span></pre></div>
+</div>
+</section>
+<section id="references">
+<h2>Références<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<section id="documentation-generale">
+<h3>Documentation générale<a class="headerlink" href="#documentation-generale" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="xref myst">README.md</span> - Documentation principale</p></li>
+<li><p><span class="xref myst">GEMINI.md</span> - Règles de développement</p></li>
+<li><p><a class="reference internal" href="MAKEFILE_GUIDE.html"><span class="std std-doc">MAKEFILE_GUIDE.md</span></a> - Guide Makefile complet</p></li>
+</ul>
+</section>
+<section id="api-et-deploiement">
+<h3>API et déploiement<a class="headerlink" href="#api-et-deploiement" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="API_DOCUMENTATION.html"><span class="std std-doc">API_DOCUMENTATION.md</span></a> - Documentation API complète</p></li>
+<li><p><a class="reference internal" href="DIRECT_HTTP_ACCESS.html"><span class="std std-doc">DIRECT_HTTP_ACCESS.md</span></a> - Accès HTTP sur HuggingFace Spaces (550 lignes)</p></li>
+<li><p><a class="reference internal" href="QUICK_START_HTTP_ACCESS.html"><span class="std std-doc">QUICK_START_HTTP_ACCESS.md</span></a> - Quick start HTTP (5 min)</p></li>
+<li><p><a class="reference internal" href="PROXY_REFACTOR_SUMMARY.html"><span class="std std-doc">PROXY_REFACTOR_SUMMARY.md</span></a> - Résumé technique du proxy</p></li>
+</ul>
+</section>
+<section id="logs-et-monitoring">
+<h3>Logs et monitoring<a class="headerlink" href="#logs-et-monitoring" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><span class="xref myst">src/logs_pipeline/README.md</span> - Pipeline de logs (quadruple indexation)</p></li>
+<li><p><a class="reference internal" href="PERFORMANCE_METRICS.html"><span class="std std-doc">PERFORMANCE_METRICS.md</span></a> - Métriques de performance</p></li>
+<li><p><a class="reference internal" href="ELASTIC.html"><span class="std std-doc">ELASTIC.md</span></a> - Migration Elasticsearch/Kibana</p></li>
+</ul>
+</section>
+<section id="modele-ml">
+<h3>Modèle ML<a class="headerlink" href="#modele-ml" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="FEATURE_ENGINEERING.html"><span class="std std-doc">FEATURE_ENGINEERING.md</span></a> - Features du modèle (28 features)</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Version</strong> : 2.1.0
+<strong>Dernière mise à jour</strong> : 22 novembre 2025
+<strong>Projet</strong> : OpenClassrooms MLOps - Projet 8</p>
+</section>
+<section id="changelog">
+<h3>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h3>
+<p><strong>Version 2.1.0</strong> (22 novembre 2025):</p>
+<ul class="simple">
+<li><p>✅ Ajout Model Pool pour parallélisme (4 instances configurables)</p></li>
+<li><p>✅ Endpoint <code class="docutils literal notranslate"><span class="pre">/pool/stats</span></code> pour monitoring du pool</p></li>
+<li><p>✅ Context manager async pour acquisition/libération automatique</p></li>
+<li><p>✅ Thread-safety avec lock par instance</p></li>
+<li><p>✅ Fallback automatique vers mode Singleton</p></li>
+<li><p>✅ Tests unitaires complets (90.99% coverage)</p></li>
+<li><p>✅ Configuration <code class="docutils literal notranslate"><span class="pre">MODEL_POOL_SIZE</span></code> dans .env</p></li>
+<li><p>✅ Documentation complète dans ARCHITECTURE.md</p></li>
+</ul>
+<p><strong>Version 2.0.0</strong> (21 janvier 2025):</p>
+<ul class="simple">
+<li><p>✅ Ajout architecture hybride FastAPI+Gradio pour HuggingFace Spaces</p></li>
+<li><p>✅ Ajout accès HTTP/REST direct sans client Gradio</p></li>
+<li><p>✅ Ajout script de migration Elasticsearch/Kibana</p></li>
+<li><p>✅ Ajout 4ème index Elasticsearch (ml-api-top-func)</p></li>
+<li><p>✅ Mise à jour diagrammes d’architecture</p></li>
+<li><p>✅ Ajout commandes Makefile (run-ui-fastapi, pipeline-clear-indexes)</p></li>
+</ul>
+<p><strong>Version 1.0.0</strong> (20 novembre 2024):</p>
+<ul class="simple">
+<li><p>Architecture initiale avec 3 composants (API, UI, Pipeline)</p></li>
+<li><p>Triple indexation Elasticsearch</p></li>
+<li><p>Monitoring de performance avec cProfile</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Déploiement du Package Proxy sur HuggingFace Spaces - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Déploiement du Package Proxy sur HuggingFace Spaces"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#verification-du-deploiement">&#9989; V&#233;rification du d&#233;ploiement</a><ul>
+<li><a class="reference internal" href="#le-package-proxy-sera-t-il-deploye-sur-hf">1. Le package proxy sera-t-il d&#233;ploy&#233; sur HF ?</a><ul>
+<li><a class="reference internal" href="#preuve-dans-le-workflow-ci-cd">Preuve dans le workflow CI/CD</a></li>
+<li><a class="reference internal" href="#preuve-dans-le-dockerfile-hf">Preuve dans le Dockerfile HF</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dependances-du-package-proxy">2. D&#233;pendances du package proxy</a></li>
+<li><a class="reference internal" href="#structure-deployee-sur-hf">3. Structure d&#233;ploy&#233;e sur HF</a></li>
+<li><a class="reference internal" href="#tests-d-import">4. Tests d&#8217;import</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilisation-du-package-proxy-sur-hf">&#128295; Utilisation du package proxy sur HF</a><ul>
+<li><a class="reference internal" href="#option-1-utiliser-l-ui-gradio-existante-deployee">Option 1 : Utiliser l&#8217;UI Gradio existante (d&#233;ploy&#233;e)</a></li>
+<li><a class="reference internal" href="#option-2-utiliser-le-client-proxy-programmatiquement">Option 2 : Utiliser le client proxy programmatiquement</a></li>
+<li><a class="reference internal" href="#option-3-lancer-l-interface-proxy-standalone-developpement-local">Option 3 : Lancer l&#8217;interface proxy standalone (d&#233;veloppement local)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#comparaison-des-interfaces">&#128202; Comparaison des interfaces</a><ul>
+<li><a class="reference internal" href="#interface-principale-src-ui-app-py-deployee-sur-hf">Interface principale (<code class="docutils literal notranslate"><span class="pre">src/ui/app.py</span></code>) - D&#233;ploy&#233;e sur HF</a></li>
+<li><a class="reference internal" href="#interface-proxy-src-proxy-gradio-app-py-pour-developpement">Interface proxy (<code class="docutils literal notranslate"><span class="pre">src/proxy/gradio_app.py</span></code>) - Pour d&#233;veloppement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cas-d-usage-du-package-proxy">&#127919; Cas d&#8217;usage du package proxy</a><ul>
+<li><a class="reference internal" href="#sur-huggingface-spaces">Sur HuggingFace Spaces</a></li>
+<li><a class="reference internal" href="#en-developpement-local">En d&#233;veloppement local</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#workflow-de-deploiement">&#128640; Workflow de d&#233;ploiement</a><ul>
+<li><a class="reference internal" href="#etapes-de-deploiement-hf">&#201;tapes de d&#233;ploiement HF</a></li>
+<li><a class="reference internal" href="#ce-qui-est-accessible-sur-hf">Ce qui est accessible sur HF</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resume">&#128221; R&#233;sum&#233;</a><ul>
+<li><a class="reference internal" href="#package-proxy-deploye-sur-hf">&#9989; Package proxy d&#233;ploy&#233; sur HF ?</a></li>
+<li><a class="reference internal" href="#package-proxy-utilise-sur-hf">&#9989; Package proxy utilis&#233; sur HF ?</a></li>
+<li><a class="reference internal" href="#package-proxy-utile">&#9989; Package proxy utile ?</a></li>
+<li><a class="reference internal" href="#detection-automatique">&#9989; D&#233;tection automatique ?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#verification-apres-deploiement">&#128269; V&#233;rification apr&#232;s d&#233;ploiement</a><ul>
+<li><a class="reference internal" href="#verifier-que-le-package-est-present">1. V&#233;rifier que le package est pr&#233;sent</a></li>
+<li><a class="reference internal" href="#verifier-l-import">2. V&#233;rifier l&#8217;import</a></li>
+<li><a class="reference internal" href="#verifier-l-interface-principale">3. V&#233;rifier l&#8217;interface principale</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#recommandations">&#127891; Recommandations</a><ul>
+<li><a class="reference internal" href="#pour-huggingface-spaces">Pour HuggingFace Spaces</a></li>
+<li><a class="reference internal" href="#pour-le-developpement-local">Pour le d&#233;veloppement local</a></li>
+<li><a class="reference internal" href="#pour-l-utilisation-programmatique">Pour l&#8217;utilisation programmatique</a></li>
+</ul>
+</li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Déploiement du Package Proxy sur HuggingFace Spaces</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="deploiement-du-package-proxy-sur-huggingface-spaces">
+<h1>Déploiement du Package Proxy sur HuggingFace Spaces<a class="headerlink" href="#deploiement-du-package-proxy-sur-huggingface-spaces" title="Link to this heading">¶</a></h1>
+<section id="verification-du-deploiement">
+<h2>✅ Vérification du déploiement<a class="headerlink" href="#verification-du-deploiement" title="Link to this heading">¶</a></h2>
+<section id="le-package-proxy-sera-t-il-deploye-sur-hf">
+<h3>1. Le package proxy sera-t-il déployé sur HF ?<a class="headerlink" href="#le-package-proxy-sera-t-il-deploye-sur-hf" title="Link to this heading">¶</a></h3>
+<p><strong>OUI</strong>, le package <code class="docutils literal notranslate"><span class="pre">src/proxy/</span></code> sera bien déployé sur HuggingFace Spaces.</p>
+<section id="preuve-dans-le-workflow-ci-cd">
+<h4>Preuve dans le workflow CI/CD<a class="headerlink" href="#preuve-dans-le-workflow-ci-cd" title="Link to this heading">¶</a></h4>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">.github/workflows/cicd.yml</span></code> (lignes 134-138) supprime uniquement :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">docs/</span></code> (documentation)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code> (tests unitaires)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sql/</span></code> (fichiers SQL)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docker/</span></code> (Dockerfiles locaux)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code></p></li>
+</ul>
+<p><strong>Le dossier <code class="docutils literal notranslate"><span class="pre">src/</span></code> est conservé intégralement</strong>, incluant <code class="docutils literal notranslate"><span class="pre">src/proxy/</span></code>.</p>
+</section>
+<section id="preuve-dans-le-dockerfile-hf">
+<h4>Preuve dans le Dockerfile HF<a class="headerlink" href="#preuve-dans-le-dockerfile-hf" title="Link to this heading">¶</a></h4>
+<p>Le <code class="docutils literal notranslate"><span class="pre">docker/Dockerfile.hf</span></code> (ligne 35) copie explicitement :</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">COPY</span><span class="w"> </span>src/<span class="w"> </span>./src/
+</span></pre></div>
+</div>
+<p>Cela inclut :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">src/api/</span></code> ✅</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/model/</span></code> ✅</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/ui/</span></code> ✅</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">src/proxy/</span></code> ✅</strong> ← Package proxy inclus</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/config.py</span></code> ✅</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/logs_pipeline/</span></code> ✅</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">src/simulator/</span></code> ✅</p></li>
+</ul>
+</section>
+</section>
+<section id="dependances-du-package-proxy">
+<h3>2. Dépendances du package proxy<a class="headerlink" href="#dependances-du-package-proxy" title="Link to this heading">¶</a></h3>
+<p>Toutes les dépendances nécessaires sont déjà dans <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> :</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dépendance</p></th>
+<th class="head"><p>Version</p></th>
+<th class="head"><p>Statut</p></th>
+<th class="head"><p>Usage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>gradio</p></td>
+<td><p>≥5.0.0</p></td>
+<td><p>✅ Présente</p></td>
+<td><p>Interface Gradio</p></td>
+</tr>
+<tr class="row-odd"><td><p>requests</p></td>
+<td><p>≥2.31.0</p></td>
+<td><p>✅ Présente</p></td>
+<td><p>Client HTTP</p></td>
+</tr>
+<tr class="row-even"><td><p>python-dotenv</p></td>
+<td><p>≥1.0.0</p></td>
+<td><p>✅ Présente</p></td>
+<td><p>Configuration</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Aucune dépendance supplémentaire requise</strong>.</p>
+</section>
+<section id="structure-deployee-sur-hf">
+<h3>3. Structure déployée sur HF<a class="headerlink" href="#structure-deployee-sur-hf" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">/app/
+</span><span data-line="2">├── src/
+</span><span data-line="3">│   ├── api/              ✅ Déployé
+</span><span data-line="4">│   ├── model/            ✅ Déployé
+</span><span data-line="5">│   ├── ui/               ✅ Déployé
+</span><span data-line="6">│   ├── proxy/            ✅ Déployé (nouveau)
+</span><span data-line="7">│   │   ├── __init__.py
+</span><span data-line="8">│   │   ├── client.py
+</span><span data-line="9">│   │   └── gradio_app.py
+</span><span data-line="10">│   ├── logs_pipeline/    ✅ Déployé
+</span><span data-line="11">│   ├── simulator/        ✅ Déployé
+</span><span data-line="12">│   └── config.py         ✅ Déployé
+</span><span data-line="13">├── model/
+</span><span data-line="14">│   └── model.pkl         ✅ Déployé (via Git LFS)
+</span><span data-line="15">└── .env                  ✅ Déployé (copie de .env.example)
+</span></pre></div>
+</div>
+</section>
+<section id="tests-d-import">
+<h3>4. Tests d’import<a class="headerlink" href="#tests-d-import" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Test local avec uv</span>
+</span><span data-line="2">uv<span class="w"> </span>run<span class="w"> </span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;from src.proxy import APIProxyClient; print(&#39;✅ OK&#39;)&quot;</span>
+</span><span data-line="3"><span class="c1"># Résultat: ✅ Import du package proxy: OK</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="utilisation-du-package-proxy-sur-hf">
+<h2>🔧 Utilisation du package proxy sur HF<a class="headerlink" href="#utilisation-du-package-proxy-sur-hf" title="Link to this heading">¶</a></h2>
+<section id="option-1-utiliser-l-ui-gradio-existante-deployee">
+<h3>Option 1 : Utiliser l’UI Gradio existante (déployée)<a class="headerlink" href="#option-1-utiliser-l-ui-gradio-existante-deployee" title="Link to this heading">¶</a></h3>
+<p>L’interface Gradio déployée (<code class="docutils literal notranslate"><span class="pre">src/ui/app.py</span></code>) utilise <strong>automatiquement</strong> le package proxy sur HuggingFace Spaces :</p>
+<p><strong>Détection automatique</strong> :</p>
+<ul class="simple">
+<li><p>✅ Sur HuggingFace (détecté via <code class="docutils literal notranslate"><span class="pre">SPACE_ID</span></code>) → Utilise <code class="docutils literal notranslate"><span class="pre">APIProxyClient</span></code></p></li>
+<li><p>✅ En local → Utilise les fonctions proxy simples (requests direct)</p></li>
+</ul>
+<p><strong>Fonctions proxy disponibles</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">api_health_proxy()</span></code> → <code class="docutils literal notranslate"><span class="pre">proxy_client.get_health()</span></code> (sur HF)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api_predict_proxy()</span></code> → <code class="docutils literal notranslate"><span class="pre">proxy_client.post_predict()</span></code> (sur HF)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api_predict_proba_proxy()</span></code> → <code class="docutils literal notranslate"><span class="pre">proxy_client.post_predict_proba()</span></code> (sur HF)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api_logs_proxy()</span></code> → <code class="docutils literal notranslate"><span class="pre">proxy_client.get_logs()</span></code> (sur HF)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">api_clear_logs_proxy()</span></code> → <code class="docutils literal notranslate"><span class="pre">proxy_client.delete_logs()</span></code> (sur HF)</p></li>
+</ul>
+<p><strong>Cette interface est celle qui sera accessible sur HF Spaces</strong> à l’URL :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">francoisformation</span><span class="o">-</span><span class="n">oc</span><span class="o">-</span><span class="n">project8</span><span class="o">.</span><span class="n">hf</span><span class="o">.</span><span class="n">space</span>
+</span></pre></div>
+</div>
+<p><strong>Avantages du package proxy sur HF</strong> :</p>
+<ul class="simple">
+<li><p>✅ Gestion d’erreurs unifiée et robuste</p></li>
+<li><p>✅ Timeouts configurables</p></li>
+<li><p>✅ Logging amélioré</p></li>
+<li><p>✅ Code maintenu et testé</p></li>
+</ul>
+</section>
+<section id="option-2-utiliser-le-client-proxy-programmatiquement">
+<h3>Option 2 : Utiliser le client proxy programmatiquement<a class="headerlink" href="#option-2-utiliser-le-client-proxy-programmatiquement" title="Link to this heading">¶</a></h3>
+<p>Si vous avez accès au backend HF ou pour des scripts de test :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">from</span><span class="w"> </span><span class="nn">src.proxy</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIProxyClient</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Créer un client pointant vers l&#39;API HF</span>
+</span><span data-line="4"><span class="n">client</span> <span class="o">=</span> <span class="n">APIProxyClient</span><span class="p">(</span>
+</span><span data-line="5">    <span class="n">api_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:8000&quot;</span>  <span class="c1"># API interne au conteneur HF</span>
+</span><span data-line="6"><span class="p">)</span>
+</span><span data-line="7">
+</span><span data-line="8"><span class="c1"># Utiliser le client</span>
+</span><span data-line="9"><span class="n">response</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_health</span><span class="p">()</span>
+</span><span data-line="10"><span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="option-3-lancer-l-interface-proxy-standalone-developpement-local">
+<h3>Option 3 : Lancer l’interface proxy standalone (développement local)<a class="headerlink" href="#option-3-lancer-l-interface-proxy-standalone-developpement-local" title="Link to this heading">¶</a></h3>
+<p><strong>Pour le développement local uniquement</strong>, pas sur HF Spaces :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Terminal 1 : API</span>
+</span><span data-line="2">make<span class="w"> </span>run-api
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Terminal 2 : Interface proxy complète</span>
+</span><span data-line="5">make<span class="w"> </span>run-proxy
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Accès : http://localhost:7860</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="comparaison-des-interfaces">
+<h2>📊 Comparaison des interfaces<a class="headerlink" href="#comparaison-des-interfaces" title="Link to this heading">¶</a></h2>
+<section id="interface-principale-src-ui-app-py-deployee-sur-hf">
+<h3>Interface principale (<code class="docutils literal notranslate"><span class="pre">src/ui/app.py</span></code>) - Déployée sur HF<a class="headerlink" href="#interface-principale-src-ui-app-py-deployee-sur-hf" title="Link to this heading">¶</a></h3>
+<p><strong>Usage</strong> : Interface utilisateur pour les prédictions
+<strong>Endpoints exposés</strong> :</p>
+<ul class="simple">
+<li><p>✅ Health check</p></li>
+<li><p>✅ Prédiction ML</p></li>
+<li><p>✅ Probabilités</p></li>
+<li><p>✅ Logs (consultation + suppression)</p></li>
+</ul>
+<p><strong>Caractéristiques</strong> :</p>
+<ul class="simple">
+<li><p>Interface orientée utilisateur final</p></li>
+<li><p>Formulaire de saisie des symptômes</p></li>
+<li><p>Affichage du résultat de prédiction</p></li>
+<li><p>Consultation des logs récents</p></li>
+</ul>
+</section>
+<section id="interface-proxy-src-proxy-gradio-app-py-pour-developpement">
+<h3>Interface proxy (<code class="docutils literal notranslate"><span class="pre">src/proxy/gradio_app.py</span></code>) - Pour développement<a class="headerlink" href="#interface-proxy-src-proxy-gradio-app-py-pour-developpement" title="Link to this heading">¶</a></h3>
+<p><strong>Usage</strong> : Outil de développement et test
+<strong>Endpoints exposés</strong> :</p>
+<ul class="simple">
+<li><p>✅ Informations API (GET /)</p></li>
+<li><p>✅ Health check</p></li>
+<li><p>✅ Prédiction ML</p></li>
+<li><p>✅ Probabilités</p></li>
+<li><p>✅ Logs (consultation + suppression)</p></li>
+<li><p>✅ Vérification de connexion</p></li>
+</ul>
+<p><strong>Caractéristiques</strong> :</p>
+<ul class="simple">
+<li><p>Interface orientée développeur</p></li>
+<li><p>Tous les endpoints exposés</p></li>
+<li><p>Format de réponse JSON brut</p></li>
+<li><p>Tests et debugging</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="cas-d-usage-du-package-proxy">
+<h2>🎯 Cas d’usage du package proxy<a class="headerlink" href="#cas-d-usage-du-package-proxy" title="Link to this heading">¶</a></h2>
+<section id="sur-huggingface-spaces">
+<h3>Sur HuggingFace Spaces<a class="headerlink" href="#sur-huggingface-spaces" title="Link to this heading">¶</a></h3>
+<p>Le package <code class="docutils literal notranslate"><span class="pre">src/proxy/</span></code> sera <strong>disponible mais non utilisé directement</strong> sur HF Spaces.</p>
+<p><strong>Pourquoi déployé alors ?</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Cohérence</strong> : Le code source complet est déployé</p></li>
+<li><p><strong>Flexibilité</strong> : Possibilité d’utiliser le client dans des scripts</p></li>
+<li><p><strong>Maintenance</strong> : Facilite les mises à jour futures</p></li>
+<li><p><strong>Pas de surcoût</strong> : Le package est léger (~700 lignes)</p></li>
+</ol>
+</section>
+<section id="en-developpement-local">
+<h3>En développement local<a class="headerlink" href="#en-developpement-local" title="Link to this heading">¶</a></h3>
+<p>Le package proxy est <strong>essentiel</strong> pour :</p>
+<ol class="arabic simple">
+<li><p><strong>Tester tous les endpoints</strong> sans interface utilisateur</p></li>
+<li><p><strong>Développer des scripts</strong> de monitoring ou de batch</p></li>
+<li><p><strong>Débugger l’API</strong> avec une interface complète</p></li>
+<li><p><strong>Automatiser des tâches</strong> via le client Python</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="workflow-de-deploiement">
+<h2>🚀 Workflow de déploiement<a class="headerlink" href="#workflow-de-deploiement" title="Link to this heading">¶</a></h2>
+<section id="etapes-de-deploiement-hf">
+<h3>Étapes de déploiement HF<a class="headerlink" href="#etapes-de-deploiement-hf" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Build</strong> : GitHub Actions construit l’image Docker</p></li>
+<li><p><strong>Préparation</strong> :</p>
+<ul class="simple">
+<li><p>Copie <code class="docutils literal notranslate"><span class="pre">docker/Dockerfile.hf</span></code> → <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code></p></li>
+<li><p>Copie <code class="docutils literal notranslate"><span class="pre">docs/README_HF.md</span></code> → <code class="docutils literal notranslate"><span class="pre">README.md</span></code></p></li>
+<li><p>Supprime <code class="docutils literal notranslate"><span class="pre">docs/</span></code>, <code class="docutils literal notranslate"><span class="pre">tests/</span></code>, <code class="docutils literal notranslate"><span class="pre">sql/</span></code>, <code class="docutils literal notranslate"><span class="pre">docker/</span></code></p></li>
+<li><p><strong>Conserve <code class="docutils literal notranslate"><span class="pre">src/</span></code> intégralement</strong> (incluant <code class="docutils literal notranslate"><span class="pre">src/proxy/</span></code>)</p></li>
+</ul>
+</li>
+<li><p><strong>Push</strong> : Push vers HuggingFace Spaces</p></li>
+<li><p><strong>Démarrage</strong> : Le conteneur HF :</p>
+<ul class="simple">
+<li><p>Lance Redis (port 6379)</p></li>
+<li><p>Lance FastAPI (port 8000)</p></li>
+<li><p>Lance Gradio UI (port 7860) ← Interface principale</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="ce-qui-est-accessible-sur-hf">
+<h3>Ce qui est accessible sur HF<a class="headerlink" href="#ce-qui-est-accessible-sur-hf" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>✅ <strong>Interface Gradio principale</strong> : https://francoisformation-oc-project8.hf.space</p></li>
+<li><p>✅ <strong>API FastAPI interne</strong> : http://localhost:8000 (dans le conteneur)</p></li>
+<li><p>✅ <strong>Redis interne</strong> : localhost:6379 (dans le conteneur)</p></li>
+<li><p>❌ <strong>Interface proxy standalone</strong> : Non lancée (car <code class="docutils literal notranslate"><span class="pre">src/ui/app.py</span></code> est lancé)</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="resume">
+<h2>📝 Résumé<a class="headerlink" href="#resume" title="Link to this heading">¶</a></h2>
+<section id="package-proxy-deploye-sur-hf">
+<h3>✅ Package proxy déployé sur HF ?<a class="headerlink" href="#package-proxy-deploye-sur-hf" title="Link to this heading">¶</a></h3>
+<p><strong>OUI</strong> - Le code est déployé dans <code class="docutils literal notranslate"><span class="pre">/app/src/proxy/</span></code></p>
+</section>
+<section id="package-proxy-utilise-sur-hf">
+<h3>✅ Package proxy utilisé sur HF ?<a class="headerlink" href="#package-proxy-utilise-sur-hf" title="Link to this heading">¶</a></h3>
+<p><strong>OUI (automatiquement)</strong> - L’interface <code class="docutils literal notranslate"><span class="pre">src/ui/app.py</span></code> détecte HF et utilise <code class="docutils literal notranslate"><span class="pre">APIProxyClient</span></code></p>
+</section>
+<section id="package-proxy-utile">
+<h3>✅ Package proxy utile ?<a class="headerlink" href="#package-proxy-utile" title="Link to this heading">¶</a></h3>
+<p><strong>OUI</strong> - Utilisé automatiquement sur HF + développement local + scripts</p>
+</section>
+<section id="detection-automatique">
+<h3>✅ Détection automatique ?<a class="headerlink" href="#detection-automatique" title="Link to this heading">¶</a></h3>
+<p><strong>OUI</strong> - Via variable d’environnement <code class="docutils literal notranslate"><span class="pre">SPACE_ID</span></code> (présente uniquement sur HF)</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="verification-apres-deploiement">
+<h2>🔍 Vérification après déploiement<a class="headerlink" href="#verification-apres-deploiement" title="Link to this heading">¶</a></h2>
+<section id="verifier-que-le-package-est-present">
+<h3>1. Vérifier que le package est présent<a class="headerlink" href="#verifier-que-le-package-est-present" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Se connecter au conteneur HF (si accès)</span>
+</span><span data-line="2">ls<span class="w"> </span>/app/src/proxy/
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Devrait afficher:</span>
+</span><span data-line="5"><span class="c1"># __init__.py</span>
+</span><span data-line="6"><span class="c1"># client.py</span>
+</span><span data-line="7"><span class="c1"># gradio_app.py</span>
+</span><span data-line="8"><span class="c1"># README.md</span>
+</span></pre></div>
+</div>
+</section>
+<section id="verifier-l-import">
+<h3>2. Vérifier l’import<a class="headerlink" href="#verifier-l-import" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Depuis un notebook HF ou script</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">src.proxy</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIProxyClient</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="n">client</span> <span class="o">=</span> <span class="n">APIProxyClient</span><span class="p">(</span><span class="n">api_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:8000&quot;</span><span class="p">)</span>
+</span><span data-line="5"><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Package proxy disponible&quot;</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="verifier-l-interface-principale">
+<h3>3. Vérifier l’interface principale<a class="headerlink" href="#verifier-l-interface-principale" title="Link to this heading">¶</a></h3>
+<p>Accéder à : https://francoisformation-oc-project8.hf.space</p>
+<p>Devrait afficher l’interface Gradio de prédiction ML.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="recommandations">
+<h2>🎓 Recommandations<a class="headerlink" href="#recommandations" title="Link to this heading">¶</a></h2>
+<section id="pour-huggingface-spaces">
+<h3>Pour HuggingFace Spaces<a class="headerlink" href="#pour-huggingface-spaces" title="Link to this heading">¶</a></h3>
+<p><strong>Utiliser l’interface principale</strong> (<code class="docutils literal notranslate"><span class="pre">src/ui/app.py</span></code>) qui est :</p>
+<ul class="simple">
+<li><p>Optimisée pour les utilisateurs finaux</p></li>
+<li><p>Déjà déployée et fonctionnelle</p></li>
+<li><p>Intégrée avec l’API et Redis</p></li>
+</ul>
+</section>
+<section id="pour-le-developpement-local">
+<h3>Pour le développement local<a class="headerlink" href="#pour-le-developpement-local" title="Link to this heading">¶</a></h3>
+<p><strong>Utiliser le package proxy</strong> (<code class="docutils literal notranslate"><span class="pre">src/proxy/</span></code>) pour :</p>
+<ul class="simple">
+<li><p>Tester tous les endpoints API</p></li>
+<li><p>Développer des scripts de monitoring</p></li>
+<li><p>Débugger l’API complète</p></li>
+<li><p>Automatiser des tâches</p></li>
+</ul>
+</section>
+<section id="pour-l-utilisation-programmatique">
+<h3>Pour l’utilisation programmatique<a class="headerlink" href="#pour-l-utilisation-programmatique" title="Link to this heading">¶</a></h3>
+<p><strong>Utiliser le client proxy</strong> (<code class="docutils literal notranslate"><span class="pre">APIProxyClient</span></code>) pour :</p>
+<ul class="simple">
+<li><p>Intégrer l’API dans d’autres applications</p></li>
+<li><p>Créer des scripts de batch predictions</p></li>
+<li><p>Monitorer la santé de l’API</p></li>
+<li><p>Gérer les logs programmatiquement</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Conclusion</strong> : Le package proxy sera bien déployé sur HuggingFace Spaces et sera <strong>utilisé automatiquement</strong> par l’interface principale via détection de l’environnement HF. En local, ce sont les fonctions proxy simples qui sont utilisées pour plus de légèreté.</p>
+<p><strong>Dernière mise à jour</strong> : 2025-01-21</p>
+</section>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

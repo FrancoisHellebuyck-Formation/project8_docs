@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Docker - Configuration et Déploiement - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Scripts du projet" href="scripts.html" /><link rel="prev" title="Logs Pipeline Module" href="../modules/logs_pipeline.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Docker - Configuration et Déploiement"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#fichiers-disponibles">&#128193; Fichiers disponibles</a><ul>
+<li><a class="reference internal" href="#dockerfile-api-fastapi-seule">1. <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> - API FastAPI seule</a></li>
+<li><a class="reference internal" href="#dockerfile-hf-conteneur-complet-pour-hugging-face-spaces">2. <code class="docutils literal notranslate">hf</span></code> - Conteneur complet pour Hugging Face Spaces</a></li>
+<li><a class="reference internal" href="#docker-compose-yml-architecture-multi-conteneurs">3. <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> - Architecture multi-conteneurs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#architecture-docker-compose">&#128230; Architecture docker-compose</a><ul>
+<li><a class="reference internal" href="#service-api-api">1. Service API (<code class="docutils literal notranslate"><span class="pre">api</span></code>)</a></li>
+<li><a class="reference internal" href="#service-redis-redis">2. Service Redis (<code class="docutils literal notranslate"><span class="pre">redis</span></code>)</a></li>
+<li><a class="reference internal" href="#service-ui-gradio-ui">3. Service UI Gradio (<code class="docutils literal notranslate"><span class="pre">ui</span></code>)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilisation">&#128640; Utilisation</a><ul>
+<li><a class="reference internal" href="#commandes-make-recommande">Commandes Make (recommand&#233;)</a></li>
+<li><a class="reference internal" href="#commandes-docker-compose-directes">Commandes Docker Compose directes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration">&#128295; Configuration</a><ul>
+<li><a class="reference internal" href="#variables-d-environnement">Variables d&#8217;environnement</a></li>
+<li><a class="reference internal" href="#personnalisation">Personnalisation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#monitoring-et-health-checks">&#128202; Monitoring et Health Checks</a><ul>
+<li><a class="reference internal" href="#health-check-api">Health Check API</a></li>
+<li><a class="reference internal" href="#health-check-docker">Health Check Docker</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#logs">&#128221; Logs</a><ul>
+<li><a class="reference internal" href="#consulter-les-logs">Consulter les logs</a></li>
+<li><a class="reference internal" href="#format-des-logs">Format des logs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#securite">&#128272; S&#233;curit&#233;</a><ul>
+<li><a class="reference internal" href="#bonnes-pratiques-implementees">Bonnes pratiques impl&#233;ment&#233;es</a></li>
+<li><a class="reference internal" href="#recommandations-pour-la-production">Recommandations pour la production</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#depannage">&#128736;&#65039; D&#233;pannage</a><ul>
+<li><a class="reference internal" href="#probleme-l-api-ne-demarre-pas">Probl&#232;me : L&#8217;API ne d&#233;marre pas</a></li>
+<li><a class="reference internal" href="#probleme-redis-non-accessible">Probl&#232;me : Redis non accessible</a></li>
+<li><a class="reference internal" href="#probleme-port-deja-utilise">Probl&#232;me : Port d&#233;j&#224; utilis&#233;</a></li>
+<li><a class="reference internal" href="#probleme-erreur-de-build">Probl&#232;me : Erreur de build</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#performance">&#128200; Performance</a><ul>
+<li><a class="reference internal" href="#configuration-redis">Configuration Redis</a></li>
+<li><a class="reference internal" href="#scalabilite">Scalabilit&#233;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mise-a-jour">&#128260; Mise &#224; jour</a><ul>
+<li><a class="reference internal" href="#mettre-a-jour-l-image">Mettre &#224; jour l&#8217;image</a></li>
+<li><a class="reference internal" href="#rolling-update-sans-downtime">Rolling update (sans downtime)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#deploiement-sur-hugging-face-spaces">&#128674; D&#233;ploiement sur Hugging Face Spaces</a><ul>
+<li><a class="reference internal" href="#utilisation-de-dockerfile-hf">Utilisation de Dockerfile.hf</a></li>
+<li><a class="reference internal" href="#tester-dockerfile-hf-localement">Tester Dockerfile.hf localement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#comparaison-des-configurations">&#128260; Comparaison des configurations</a></li>
+<li><a class="reference internal" href="#ressources">&#128218; Ressources</a></li>
+<li><a class="reference internal" href="#support">&#127384; Support</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Docker - Configuration et Déploiement</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="docker-configuration-et-deploiement">
+<h1>Docker - Configuration et Déploiement<a class="headerlink" href="#docker-configuration-et-deploiement" title="Link to this heading">¶</a></h1>
+<p>Ce répertoire contient les fichiers de configuration Docker pour déployer l’application ML avec différentes architectures.</p>
+<section id="fichiers-disponibles">
+<h2>📁 Fichiers disponibles<a class="headerlink" href="#fichiers-disponibles" title="Link to this heading">¶</a></h2>
+<section id="dockerfile-api-fastapi-seule">
+<h3>1. <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> - API FastAPI seule<a class="headerlink" href="#dockerfile-api-fastapi-seule" title="Link to this heading">¶</a></h3>
+<p>Dockerfile pour lancer uniquement l’API FastAPI avec le modèle ML.</p>
+<ul class="simple">
+<li><p><strong>Usage</strong> : Développement local, tests unitaires</p></li>
+<li><p><strong>Services</strong> : API FastAPI (port 8000)</p></li>
+<li><p><strong>Logs</strong> : stdout ou Redis (selon configuration)</p></li>
+</ul>
+</section>
+<section id="dockerfile-hf-conteneur-complet-pour-hugging-face-spaces">
+<h3>2. <code class="docutils literal notranslate"><span class="pre">Dockerfile.hf</span></code> - Conteneur complet pour Hugging Face Spaces<a class="headerlink" href="#dockerfile-hf-conteneur-complet-pour-hugging-face-spaces" title="Link to this heading">¶</a></h3>
+<p>Dockerfile all-in-one incluant Redis, API et UI Gradio dans un seul conteneur.</p>
+<ul class="simple">
+<li><p><strong>Usage</strong> : Déploiement sur Hugging Face Spaces</p></li>
+<li><p><strong>Services</strong> : Redis (6379) + API FastAPI (8000) + UI Gradio (7860)</p></li>
+<li><p><strong>Logs</strong> : Redis in-memory (256MB)</p></li>
+<li><p><strong>Démarrage</strong> : Script automatique avec health checks</p></li>
+</ul>
+</section>
+<section id="docker-compose-yml-architecture-multi-conteneurs">
+<h3>3. <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> - Architecture multi-conteneurs<a class="headerlink" href="#docker-compose-yml-architecture-multi-conteneurs" title="Link to this heading">¶</a></h3>
+<p>Configuration Docker Compose pour le développement et la production locale.</p>
+<ul class="simple">
+<li><p><strong>Usage</strong> : Développement local, déploiement on-premise</p></li>
+<li><p><strong>Services</strong> : Redis + API FastAPI + UI Gradio (3 conteneurs séparés)</p></li>
+<li><p><strong>Réseau</strong> : Network Docker interne</p></li>
+<li><p><strong>Volumes</strong> : Persistence Redis</p></li>
+</ul>
+</section>
+</section>
+<section id="architecture-docker-compose">
+<h2>📦 Architecture docker-compose<a class="headerlink" href="#architecture-docker-compose" title="Link to this heading">¶</a></h2>
+<p>L’application est déployée avec Docker Compose et comprend trois services :</p>
+<section id="service-api-api">
+<h3>1. Service API (<code class="docutils literal notranslate"><span class="pre">api</span></code>)<a class="headerlink" href="#service-api-api" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Image</strong> : Construite depuis <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code></p></li>
+<li><p><strong>Port</strong> : 8000</p></li>
+<li><p><strong>Fonction</strong> : API FastAPI + Modèle ML</p></li>
+<li><p><strong>Caractéristiques</strong> :</p>
+<ul>
+<li><p>Chargement du modèle au démarrage (Singleton)</p></li>
+<li><p>Logging configuré vers Redis</p></li>
+<li><p>Health check intégré</p></li>
+<li><p>Utilisateur non-root pour la sécurité</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="service-redis-redis">
+<h3>2. Service Redis (<code class="docutils literal notranslate"><span class="pre">redis</span></code>)<a class="headerlink" href="#service-redis-redis" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Image</strong> : <code class="docutils literal notranslate"><span class="pre">redis:7-alpine</span></code></p></li>
+<li><p><strong>Port</strong> : 6379</p></li>
+<li><p><strong>Fonction</strong> : Stockage des logs en mémoire</p></li>
+<li><p><strong>Configuration</strong> :</p>
+<ul>
+<li><p>Mémoire max : 256 MB</p></li>
+<li><p>Politique d’éviction : allkeys-lru</p></li>
+<li><p>Données persistées dans un volume Docker</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="service-ui-gradio-ui">
+<h3>3. Service UI Gradio (<code class="docutils literal notranslate"><span class="pre">ui</span></code>)<a class="headerlink" href="#service-ui-gradio-ui" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Image</strong> : Construite depuis <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code></p></li>
+<li><p><strong>Port</strong> : 7860</p></li>
+<li><p><strong>Fonction</strong> : Interface utilisateur Gradio</p></li>
+<li><p><strong>Caractéristiques</strong> :</p>
+<ul>
+<li><p>Interface interactive pour les prédictions</p></li>
+<li><p>Communication avec l’API via le réseau Docker</p></li>
+<li><p>Barre de progression colorée pour le risque</p></li>
+<li><p>Dépend du service API (attend son health check)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="utilisation">
+<h2>🚀 Utilisation<a class="headerlink" href="#utilisation" title="Link to this heading">¶</a></h2>
+<section id="commandes-make-recommande">
+<h3>Commandes Make (recommandé)<a class="headerlink" href="#commandes-make-recommande" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Construire les images</span>
+</span><span data-line="2">make<span class="w"> </span>docker-build
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Lancer les services</span>
+</span><span data-line="5">make<span class="w"> </span>docker-up
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Voir les logs</span>
+</span><span data-line="8">make<span class="w"> </span>docker-logs
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Arrêter les services</span>
+</span><span data-line="11">make<span class="w"> </span>docker-down
+</span></pre></div>
+</div>
+</section>
+<section id="commandes-docker-compose-directes">
+<h3>Commandes Docker Compose directes<a class="headerlink" href="#commandes-docker-compose-directes" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Depuis le répertoire docker/</span>
+</span><span data-line="2"><span class="nb">cd</span><span class="w"> </span>docker
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Construire les images</span>
+</span><span data-line="5">docker-compose<span class="w"> </span>build
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Lancer les services en arrière-plan</span>
+</span><span data-line="8">docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Voir les logs</span>
+</span><span data-line="11">docker-compose<span class="w"> </span>logs<span class="w"> </span>-f
+</span><span data-line="12">
+</span><span data-line="13"><span class="c1"># Arrêter les services</span>
+</span><span data-line="14">docker-compose<span class="w"> </span>down
+</span><span data-line="15">
+</span><span data-line="16"><span class="c1"># Arrêter et supprimer les volumes</span>
+</span><span data-line="17">docker-compose<span class="w"> </span>down<span class="w"> </span>-v
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="configuration">
+<h2>🔧 Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
+<section id="variables-d-environnement">
+<h3>Variables d’environnement<a class="headerlink" href="#variables-d-environnement" title="Link to this heading">¶</a></h3>
+<p>Les variables d’environnement sont définies dans <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> :</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nt">environment</span><span class="p">:</span>
+</span><span data-line="2"><span class="w">  </span><span class="c1"># API</span>
+</span><span data-line="3"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">API_HOST=0.0.0.0</span>
+</span><span data-line="4"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">API_PORT=8000</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="w">  </span><span class="c1"># Modèle</span>
+</span><span data-line="7"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MODEL_PATH=/app/model/model.pkl</span>
+</span><span data-line="8">
+</span><span data-line="9"><span class="w">  </span><span class="c1"># Redis</span>
+</span><span data-line="10"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REDIS_HOST=redis</span>
+</span><span data-line="11"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REDIS_PORT=6379</span>
+</span><span data-line="12"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REDIS_DB=0</span>
+</span><span data-line="13">
+</span><span data-line="14"><span class="w">  </span><span class="c1"># Logging</span>
+</span><span data-line="15"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LOG_LEVEL=INFO</span>
+</span><span data-line="16"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LOGGING_HANDLER=redis</span>
+</span><span data-line="17">
+</span><span data-line="18"><span class="w">  </span><span class="c1"># Environnement</span>
+</span><span data-line="19"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ENV=production</span>
+</span></pre></div>
+</div>
+</section>
+<section id="personnalisation">
+<h3>Personnalisation<a class="headerlink" href="#personnalisation" title="Link to this heading">¶</a></h3>
+<p>Pour personnaliser la configuration, modifiez <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> ou créez un fichier <code class="docutils literal notranslate"><span class="pre">.env</span></code> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># .env</span>
+</span><span data-line="2"><span class="nv">API_PORT</span><span class="o">=</span><span class="m">8080</span>
+</span><span data-line="3"><span class="nv">LOG_LEVEL</span><span class="o">=</span>DEBUG
+</span><span data-line="4"><span class="nv">REDIS_LOGS_MAX_SIZE</span><span class="o">=</span><span class="m">5000</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="monitoring-et-health-checks">
+<h2>📊 Monitoring et Health Checks<a class="headerlink" href="#monitoring-et-health-checks" title="Link to this heading">¶</a></h2>
+<section id="health-check-api">
+<h3>Health Check API<a class="headerlink" href="#health-check-api" title="Link to this heading">¶</a></h3>
+<p>L’API expose un endpoint de health check :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>http://localhost:8000/health
+</span></pre></div>
+</div>
+<p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;healthy&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;model_loaded&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;redis_connected&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span>
+</span><span data-line="6"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="health-check-docker">
+<h3>Health Check Docker<a class="headerlink" href="#health-check-docker" title="Link to this heading">¶</a></h3>
+<p>Les deux services ont des health checks configurés :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vérifier le statut des services</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>ps
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Exemple de sortie</span>
+</span><span data-line="5">NAME<span class="w">            </span>STATUS<span class="w">                     </span>PORTS
+</span><span data-line="6">ml-api<span class="w">          </span>Up<span class="w"> </span><span class="o">(</span>healthy<span class="o">)</span><span class="w">              </span><span class="m">0</span>.0.0.0:8000-&gt;8000/tcp
+</span><span data-line="7">ml-api-redis<span class="w">    </span>Up<span class="w"> </span><span class="o">(</span>healthy<span class="o">)</span><span class="w">              </span><span class="m">0</span>.0.0.0:6379-&gt;6379/tcp
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="logs">
+<h2>📝 Logs<a class="headerlink" href="#logs" title="Link to this heading">¶</a></h2>
+<section id="consulter-les-logs">
+<h3>Consulter les logs<a class="headerlink" href="#consulter-les-logs" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tous les services</span>
+</span><span data-line="2">make<span class="w"> </span>docker-logs
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># API uniquement</span>
+</span><span data-line="5">make<span class="w"> </span>docker-logs-api
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Redis uniquement</span>
+</span><span data-line="8">make<span class="w"> </span>docker-logs-redis
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Via l&#39;API</span>
+</span><span data-line="11">curl<span class="w"> </span>http://localhost:8000/logs?limit<span class="o">=</span><span class="m">50</span>
+</span></pre></div>
+</div>
+</section>
+<section id="format-des-logs">
+<h3>Format des logs<a class="headerlink" href="#format-des-logs" title="Link to this heading">¶</a></h3>
+<p>Les logs sont formatés de manière standard :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="mi">2024</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">10</span> <span class="mi">16</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span> <span class="o">-</span> <span class="n">api</span> <span class="o">-</span> <span class="n">INFO</span> <span class="o">-</span> <span class="n">Démarrage</span> <span class="n">de</span> <span class="n">l</span><span class="s1">&#39;API...</span>
+</span><span data-line="2"><span class="mi">2024</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">10</span> <span class="mi">16</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="o">-</span> <span class="n">api</span> <span class="o">-</span> <span class="n">INFO</span> <span class="o">-</span> <span class="n">Modèle</span> <span class="n">chargé</span> <span class="n">avec</span> <span class="n">succès</span>
+</span><span data-line="3"><span class="mi">2024</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">10</span> <span class="mi">16</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">15</span> <span class="o">-</span> <span class="n">api</span> <span class="o">-</span> <span class="n">INFO</span> <span class="o">-</span> <span class="n">Prédiction</span> <span class="n">effectuée</span><span class="p">:</span> <span class="mi">1</span> <span class="p">(</span><span class="n">prob</span><span class="o">=</span><span class="mf">0.85</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="securite">
+<h2>🔐 Sécurité<a class="headerlink" href="#securite" title="Link to this heading">¶</a></h2>
+<section id="bonnes-pratiques-implementees">
+<h3>Bonnes pratiques implémentées<a class="headerlink" href="#bonnes-pratiques-implementees" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Utilisateur non-root</strong> : L’application s’exécute avec l’utilisateur <code class="docutils literal notranslate"><span class="pre">appuser</span></code> (UID 1000)</p></li>
+<li><p><strong>Volumes limités</strong> : Seules les données nécessaires sont montées</p></li>
+<li><p><strong>Réseau isolé</strong> : Les services communiquent via un réseau Docker dédié</p></li>
+<li><p><strong>Limites de ressources</strong> : Redis est limité à 256 MB de mémoire</p></li>
+<li><p><strong>Health checks</strong> : Surveillance automatique de l’état des services</p></li>
+</ol>
+</section>
+<section id="recommandations-pour-la-production">
+<h3>Recommandations pour la production<a class="headerlink" href="#recommandations-pour-la-production" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Secrets</strong> : Utiliser Docker secrets ou un gestionnaire de secrets</p></li>
+<li><p><strong>TLS/SSL</strong> : Configurer HTTPS avec un reverse proxy (nginx, traefik)</p></li>
+<li><p><strong>Limites CPU/RAM</strong> : Ajouter des limites de ressources dans docker-compose.yml</p></li>
+<li><p><strong>Backup Redis</strong> : Configurer une persistence si nécessaire</p></li>
+<li><p><strong>Logging centralisé</strong> : Utiliser un système comme ELK ou Loki</p></li>
+</ol>
+</section>
+</section>
+<section id="depannage">
+<h2>🛠️ Dépannage<a class="headerlink" href="#depannage" title="Link to this heading">¶</a></h2>
+<section id="probleme-l-api-ne-demarre-pas">
+<h3>Problème : L’API ne démarre pas<a class="headerlink" href="#probleme-l-api-ne-demarre-pas" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Voir les logs de l&#39;API</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>logs<span class="w"> </span>api
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Vérifier si le modèle existe</span>
+</span><span data-line="5">docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>api<span class="w"> </span>ls<span class="w"> </span>-la<span class="w"> </span>/app/model/
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Redémarrer l&#39;API</span>
+</span><span data-line="8">docker-compose<span class="w"> </span>restart<span class="w"> </span>api
+</span></pre></div>
+</div>
+</section>
+<section id="probleme-redis-non-accessible">
+<h3>Problème : Redis non accessible<a class="headerlink" href="#probleme-redis-non-accessible" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vérifier que Redis est en cours d&#39;exécution</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>ps<span class="w"> </span>redis
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Tester la connexion Redis</span>
+</span><span data-line="5">docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>redis<span class="w"> </span>redis-cli<span class="w"> </span>ping
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Redémarrer Redis</span>
+</span><span data-line="8">docker-compose<span class="w"> </span>restart<span class="w"> </span>redis
+</span></pre></div>
+</div>
+</section>
+<section id="probleme-port-deja-utilise">
+<h3>Problème : Port déjà utilisé<a class="headerlink" href="#probleme-port-deja-utilise" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vérifier les ports utilisés</span>
+</span><span data-line="2">lsof<span class="w"> </span>-i<span class="w"> </span>:8000
+</span><span data-line="3">lsof<span class="w"> </span>-i<span class="w"> </span>:6379
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Modifier le port dans docker-compose.yml</span>
+</span><span data-line="6">ports:
+</span><span data-line="7"><span class="w">  </span>-<span class="w"> </span><span class="s2">&quot;8080:8000&quot;</span><span class="w">  </span><span class="c1"># API sur le port 8080</span>
+</span></pre></div>
+</div>
+</section>
+<section id="probleme-erreur-de-build">
+<h3>Problème : Erreur de build<a class="headerlink" href="#probleme-erreur-de-build" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Nettoyer les images et rebuild</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>down
+</span><span data-line="3">docker<span class="w"> </span>system<span class="w"> </span>prune<span class="w"> </span>-a
+</span><span data-line="4">make<span class="w"> </span>docker-build
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="performance">
+<h2>📈 Performance<a class="headerlink" href="#performance" title="Link to this heading">¶</a></h2>
+<section id="configuration-redis">
+<h3>Configuration Redis<a class="headerlink" href="#configuration-redis" title="Link to this heading">¶</a></h3>
+<p>Redis est configuré avec :</p>
+<ul class="simple">
+<li><p><strong>maxmemory</strong> : 256 MB (ajustable selon les besoins)</p></li>
+<li><p><strong>maxmemory-policy</strong> : allkeys-lru (éviction automatique des anciennes entrées)</p></li>
+</ul>
+<p>Pour augmenter la mémoire :</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru</span>
+</span></pre></div>
+</div>
+</section>
+<section id="scalabilite">
+<h3>Scalabilité<a class="headerlink" href="#scalabilite" title="Link to this heading">¶</a></h3>
+<p>Pour scaler l’API horizontalement :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Lancer plusieurs instances de l&#39;API</span>
+</span><span data-line="2">docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--scale<span class="w"> </span><span class="nv">api</span><span class="o">=</span><span class="m">3</span>
+</span></pre></div>
+</div>
+<p><strong>Note</strong> : Nécessite un load balancer (nginx, traefik) pour distribuer les requêtes.</p>
+</section>
+</section>
+<section id="mise-a-jour">
+<h2>🔄 Mise à jour<a class="headerlink" href="#mise-a-jour" title="Link to this heading">¶</a></h2>
+<section id="mettre-a-jour-l-image">
+<h3>Mettre à jour l’image<a class="headerlink" href="#mettre-a-jour-l-image" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># 1. Arrêter les services</span>
+</span><span data-line="2">make<span class="w"> </span>docker-down
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># 2. Mettre à jour le code</span>
+</span><span data-line="5">git<span class="w"> </span>pull
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># 3. Rebuilder les images</span>
+</span><span data-line="8">make<span class="w"> </span>docker-build
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># 4. Relancer les services</span>
+</span><span data-line="11">make<span class="w"> </span>docker-up
+</span></pre></div>
+</div>
+</section>
+<section id="rolling-update-sans-downtime">
+<h3>Rolling update (sans downtime)<a class="headerlink" href="#rolling-update-sans-downtime" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Avec Docker Swarm ou Kubernetes</span>
+</span><span data-line="2">docker<span class="w"> </span>stack<span class="w"> </span>deploy<span class="w"> </span>-c<span class="w"> </span>docker-compose.yml<span class="w"> </span>ml-api
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="deploiement-sur-hugging-face-spaces">
+<h2>🚢 Déploiement sur Hugging Face Spaces<a class="headerlink" href="#deploiement-sur-hugging-face-spaces" title="Link to this heading">¶</a></h2>
+<section id="utilisation-de-dockerfile-hf">
+<h3>Utilisation de Dockerfile.hf<a class="headerlink" href="#utilisation-de-dockerfile-hf" title="Link to this heading">¶</a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">Dockerfile.hf</span></code> est spécialement conçu pour Hugging Face Spaces et contient tout dans un seul conteneur.</p>
+<p><strong>Architecture interne :</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌────────────────────────────────────────┐
+</span><span data-line="2">│   HF Space Container (Dockerfile.hf)  │
+</span><span data-line="3">│                                        │
+</span><span data-line="4">│  1. Redis (daemon, port 6379)         │
+</span><span data-line="5">│  2. FastAPI API (background, 8000)    │
+</span><span data-line="6">│  3. Gradio UI (foreground, 7860) ◄────┼─── Public
+</span><span data-line="7">└────────────────────────────────────────┘
+</span></pre></div>
+</div>
+<p><strong>Séquence de démarrage :</strong></p>
+<ol class="arabic simple">
+<li><p>📦 Redis démarre en mode daemon</p></li>
+<li><p>⏳ Vérification que Redis répond (10 tentatives)</p></li>
+<li><p>🚀 API FastAPI démarre en arrière-plan</p></li>
+<li><p>⏳ Vérification que l’API répond (30 tentatives)</p></li>
+<li><p>🎨 UI Gradio démarre (processus principal)</p></li>
+</ol>
+<p><strong>Variables d’environnement :</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">REDIS_HOST=localhost</span></code> : Redis local</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REDIS_PORT=6379</span></code> : Port Redis</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LOGGING_HANDLER=redis</span></code> : Logs dans Redis</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">API_URL=http://localhost:8000</span></code> : URL API interne</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GRADIO_SERVER_PORT=7860</span></code> : Port public Gradio</p></li>
+</ul>
+<p><strong>Déploiement automatique :</strong>
+Le workflow GitHub Actions (<code class="docutils literal notranslate"><span class="pre">.github/workflows/cicd.yml</span></code>) déploie automatiquement sur HF Spaces quand :</p>
+<ul class="simple">
+<li><p>Branch: <code class="docutils literal notranslate"><span class="pre">main</span></code></p></li>
+<li><p>Workflow: <code class="docutils literal notranslate"><span class="pre">workflow_dispatch</span></code> avec <code class="docutils literal notranslate"><span class="pre">environment=production</span></code></p></li>
+<li><p>Tous les tests passent</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Le workflow copie automatiquement Dockerfile.hf vers Dockerfile</span>
+</span><span data-line="2">cp<span class="w"> </span>docker/Dockerfile.hf<span class="w"> </span>Dockerfile
+</span></pre></div>
+</div>
+</section>
+<section id="tester-dockerfile-hf-localement">
+<h3>Tester Dockerfile.hf localement<a class="headerlink" href="#tester-dockerfile-hf-localement" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Construire l&#39;image</span>
+</span><span data-line="2">docker<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>docker/Dockerfile.hf<span class="w"> </span>-t<span class="w"> </span>ml-app-hf<span class="w"> </span>.
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Lancer le conteneur</span>
+</span><span data-line="5">docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">7860</span>:7860<span class="w"> </span>ml-app-hf
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Accéder à l&#39;UI</span>
+</span><span data-line="8">open<span class="w"> </span>http://localhost:7860
+</span></pre></div>
+</div>
+<p><strong>Logs de démarrage :</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">📦 Démarrage de Redis en arrière-plan...
+</span><span data-line="2">⏳ Attente que Redis soit prêt...
+</span><span data-line="3">Tentative 1/10...
+</span><span data-line="4">✅ Redis prêt!
+</span><span data-line="5">🚀 Démarrage de l&#39;API FastAPI en arrière-plan...
+</span><span data-line="6">⏳ Attente que l&#39;API soit prête...
+</span><span data-line="7">Tentative 1/30...
+</span><span data-line="8">✅ API prête!
+</span><span data-line="9">🎨 Démarrage de l&#39;UI Gradio sur le port 7860...
+</span><span data-line="10">Running on local URL:  http://0.0.0.0:7860
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="comparaison-des-configurations">
+<h2>🔄 Comparaison des configurations<a class="headerlink" href="#comparaison-des-configurations" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Aspect</p></th>
+<th class="head"><p>Dockerfile</p></th>
+<th class="head"><p>Dockerfile.hf</p></th>
+<th class="head"><p>docker-compose.yml</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Usage</strong></p></td>
+<td><p>Dev/Tests</p></td>
+<td><p>HF Spaces</p></td>
+<td><p>Production locale</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Services</strong></p></td>
+<td><p>API seule</p></td>
+<td><p>Redis+API+UI</p></td>
+<td><p>3 conteneurs séparés</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Redis</strong></p></td>
+<td><p>Externe</p></td>
+<td><p>In-memory (256MB)</p></td>
+<td><p>Conteneur dédié</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>UI Gradio</strong></p></td>
+<td><p>Non incluse</p></td>
+<td><p>Incluse</p></td>
+<td><p>Conteneur séparé</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Ports</strong></p></td>
+<td><p>8000</p></td>
+<td><p>7860 (public)</p></td>
+<td><p>8000, 6379, 7860</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Logging</strong></p></td>
+<td><p>Configurable</p></td>
+<td><p>Redis forcé</p></td>
+<td><p>Redis par défaut</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Startup</strong></p></td>
+<td><p>Immédiat</p></td>
+<td><p>Multi-étapes</p></td>
+<td><p>Orchestré</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Complexité</strong></p></td>
+<td><p>Simple</p></td>
+<td><p>Moyenne</p></td>
+<td><p>Élevée</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Scalabilité</strong></p></td>
+<td><p>Manuelle</p></td>
+<td><p>Limitée</p></td>
+<td><p>Horizontale</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="ressources">
+<h2>📚 Ressources<a class="headerlink" href="#ressources" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.docker.com/compose/">Docker Compose Documentation</a></p></li>
+<li><p><a class="reference external" href="https://fastapi.tiangolo.com/deployment/">FastAPI Deployment</a></p></li>
+<li><p><a class="reference external" href="https://redis.io/docs/manual/config/">Redis Configuration</a></p></li>
+<li><p><a class="reference external" href="https://docs.docker.com/develop/dev-best-practices/">Docker Best Practices</a></p></li>
+<li><p><a class="reference external" href="https://huggingface.co/docs/hub/spaces-sdks-docker">Hugging Face Spaces Docker</a></p></li>
+<li><p><a class="reference external" href="https://gradio.app/guides/sharing-your-app/">Gradio Deployment</a></p></li>
+</ul>
+</section>
+<section id="support">
+<h2>🆘 Support<a class="headerlink" href="#support" title="Link to this heading">¶</a></h2>
+<p>Pour toute question ou problème :</p>
+<ol class="arabic simple">
+<li><p>Vérifier les logs : <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docker-logs</span></code></p></li>
+<li><p>Consulter la documentation : <a class="reference internal" href="../README.html"><span class="std std-doc">../README.md</span></a></p></li>
+<li><p>Vérifier les issues GitHub</p></li>
+<li><p>Pour HF Spaces : Consulter les logs dans l’interface HF</p></li>
+</ol>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../modules/logs_pipeline.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Logs Pipeline Module</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="scripts.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Scripts du projet</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

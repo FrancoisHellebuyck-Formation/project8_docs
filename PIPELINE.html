@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Pipeline d’Intégration des Logs - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Pipeline d’Intégration des Logs"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#vue-d-ensemble">Vue d&#8217;ensemble</a></li>
+<li><a class="reference internal" href="#table-des-matieres">Table des mati&#232;res</a></li>
+<li><a class="reference internal" href="#architecture-globale">Architecture Globale</a></li>
+<li><a class="reference internal" href="#composants-du-pipeline">Composants du Pipeline</a><ul>
+<li><a class="reference internal" href="#collector-src-logs-pipeline-collector-py">1. Collector (<code class="docutils literal notranslate"><span class="pre">src/logs_pipeline/collector.py</span></code>)</a></li>
+<li><a class="reference internal" href="#filter-src-logs-pipeline-filter-py">2. Filter (<code class="docutils literal notranslate"><span class="pre">src/logs_pipeline/filter.py</span></code>)</a></li>
+<li><a class="reference internal" href="#indexer-src-logs-pipeline-indexer-py">3. Indexer (<code class="docutils literal notranslate"><span class="pre">src/logs_pipeline/indexer.py</span></code>)</a></li>
+<li><a class="reference internal" href="#pipeline-orchestrator-src-logs-pipeline-pipeline-py">4. Pipeline Orchestrator (<code class="docutils literal notranslate"><span class="pre">src/logs_pipeline/pipeline.py</span></code>)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#flux-de-donnees">Flux de Donn&#233;es</a><ul>
+<li><a class="reference internal" href="#flux-1-pipeline-complet-mode-normal">Flux 1 : Pipeline Complet (Mode Normal)</a></li>
+<li><a class="reference internal" href="#flux-2-mode-gradio-huggingface-spaces">Flux 2 : Mode Gradio (HuggingFace Spaces)</a></li>
+<li><a class="reference internal" href="#flux-3-deduplication">Flux 3 : D&#233;duplication</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sources-de-logs">Sources de Logs</a><ul>
+<li><a class="reference internal" href="#source-1-redis-mode-local-docker">Source 1 : Redis (Mode Local/Docker)</a></li>
+<li><a class="reference internal" href="#source-2-gradio-mode-huggingface-spaces">Source 2 : Gradio (Mode HuggingFace Spaces)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indexation-multiple">Indexation Multiple</a><ul>
+<li><a class="reference internal" href="#index-1-ml-api-logs-tous-les-logs">Index 1 : ml-api-logs (Tous les logs)</a></li>
+<li><a class="reference internal" href="#index-2-ml-api-message-predictions">Index 2 : ml-api-message (Pr&#233;dictions)</a></li>
+<li><a class="reference internal" href="#index-3-ml-api-perfs-metriques-de-performance">Index 3 : ml-api-perfs (M&#233;triques de Performance)</a></li>
+<li><a class="reference internal" href="#index-4-ml-api-top-func-profiling-fonctions">Index 4 : ml-api-top-func (Profiling Fonctions)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li><a class="reference internal" href="#variables-d-environnement">Variables d&#8217;Environnement</a></li>
+<li><a class="reference internal" href="#fichier-de-configuration">Fichier de Configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilisation">Utilisation</a><ul>
+<li><a class="reference internal" href="#mode-1-execution-unique">Mode 1 : Ex&#233;cution Unique</a></li>
+<li><a class="reference internal" href="#mode-2-execution-continue">Mode 2 : Ex&#233;cution Continue</a></li>
+<li><a class="reference internal" href="#mode-3-avec-docker-compose">Mode 3 : Avec Docker Compose</a></li>
+<li><a class="reference internal" href="#mode-4-depuis-gradio">Mode 4 : Depuis Gradio</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#monitoring">Monitoring</a><ul>
+<li><a class="reference internal" href="#commandes-makefile">Commandes Makefile</a></li>
+<li><a class="reference internal" href="#kibana-dashboards">Kibana Dashboards</a></li>
+<li><a class="reference internal" href="#alertes-recommandees">Alertes Recommand&#233;es</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#probleme-1-pas-de-logs-collectes">Probl&#232;me 1 : Pas de logs collect&#233;s</a></li>
+<li><a class="reference internal" href="#probleme-2-erreurs-d-indexation">Probl&#232;me 2 : Erreurs d&#8217;indexation</a></li>
+<li><a class="reference internal" href="#probleme-3-doublons-dans-elasticsearch">Probl&#232;me 3 : Doublons dans Elasticsearch</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration-et-backup">Migration et Backup</a><ul>
+<li><a class="reference internal" href="#export-complet">Export complet</a></li>
+<li><a class="reference internal" href="#import-complet">Import complet</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#references">R&#233;f&#233;rences</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Pipeline d’Intégration des Logs</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="pipeline-d-integration-des-logs">
+<h1>Pipeline d’Intégration des Logs<a class="headerlink" href="#pipeline-d-integration-des-logs" title="Link to this heading">¶</a></h1>
+<section id="vue-d-ensemble">
+<h2>Vue d’ensemble<a class="headerlink" href="#vue-d-ensemble" title="Link to this heading">¶</a></h2>
+<p>Ce document décrit l’architecture complète du pipeline d’intégration des logs, permettant la collecte, le filtrage et l’indexation des logs de l’API ML dans Elasticsearch pour analyse et monitoring.</p>
+</section>
+<section id="table-des-matieres">
+<h2>Table des matières<a class="headerlink" href="#table-des-matieres" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#architecture-globale"><span class="xref myst">Architecture Globale</span></a></p></li>
+<li><p><a class="reference internal" href="#composants-du-pipeline"><span class="xref myst">Composants du Pipeline</span></a></p></li>
+<li><p><a class="reference internal" href="#flux-de-donn%C3%A9es"><span class="xref myst">Flux de Données</span></a></p></li>
+<li><p><a class="reference internal" href="#sources-de-logs"><span class="xref myst">Sources de Logs</span></a></p></li>
+<li><p><a class="reference internal" href="#indexation-multiple"><span class="xref myst">Indexation Multiple</span></a></p></li>
+<li><p><a class="reference internal" href="#configuration"><span class="xref myst">Configuration</span></a></p></li>
+<li><p><a class="reference internal" href="#utilisation"><span class="xref myst">Utilisation</span></a></p></li>
+<li><p><a class="reference internal" href="#monitoring"><span class="xref myst">Monitoring</span></a></p></li>
+</ul>
+</section>
+<section id="architecture-globale">
+<h2>Architecture Globale<a class="headerlink" href="#architecture-globale" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌─────────────────────────────────────────────────────────────────┐
+</span><span data-line="2">│                    SOURCES DE LOGS                              │
+</span><span data-line="3">├────────────────────────┬────────────────────────────────────────┤
+</span><span data-line="4">│    Redis (API logs)    │  Gradio (/logs_api endpoint)          │
+</span><span data-line="5">│    Port 6379           │  HuggingFace Spaces                    │
+</span><span data-line="6">└────────────────────────┴────────────────────────────────────────┘
+</span><span data-line="7">                              ↓
+</span><span data-line="8">                    ┌─────────────────┐
+</span><span data-line="9">                    │   COLLECTOR     │
+</span><span data-line="10">                    │  collector.py   │
+</span><span data-line="11">                    │                 │
+</span><span data-line="12">                    │  - Connexion    │
+</span><span data-line="13">                    │  - Récupération │
+</span><span data-line="14">                    │  - Déduplication│
+</span><span data-line="15">                    │  - Parsing JSON │
+</span><span data-line="16">                    └─────────────────┘
+</span><span data-line="17">                              ↓
+</span><span data-line="18">                    ┌─────────────────┐
+</span><span data-line="19">                    │     FILTER      │
+</span><span data-line="20">                    │    filter.py    │
+</span><span data-line="21">                    │                 │
+</span><span data-line="22">                    │  - Pattern match│
+</span><span data-line="23">                    │  - HTTP method  │
+</span><span data-line="24">                    │  - Validation   │
+</span><span data-line="25">                    └─────────────────┘
+</span><span data-line="26">                              ↓
+</span><span data-line="27">                    ┌─────────────────────────────────────┐
+</span><span data-line="28">                    │           INDEXER                   │
+</span><span data-line="29">                    │          indexer.py                 │
+</span><span data-line="30">                    │                                     │
+</span><span data-line="31">                    │  ┌───────────────────────────────┐ │
+</span><span data-line="32">                    │  │  ALL_DOCUMENTS (non filtrés)  │ │
+</span><span data-line="33">                    │  └───────────────────────────────┘ │
+</span><span data-line="34">                    │              ↓                      │
+</span><span data-line="35">                    │  ┌───────────────────────────────┐ │
+</span><span data-line="36">                    │  │    ml-api-logs (TOUS)         │ │
+</span><span data-line="37">                    │  └───────────────────────────────┘ │
+</span><span data-line="38">                    │                                     │
+</span><span data-line="39">                    │  ┌───────────────────────────────┐ │
+</span><span data-line="40">                    │  │ FILTERED_DOCUMENTS (filtrés)  │ │
+</span><span data-line="41">                    │  └───────────────────────────────┘ │
+</span><span data-line="42">                    │         ↓              ↓            │
+</span><span data-line="43">                    │  ┌─────────────┐ ┌──────────────┐ │
+</span><span data-line="44">                    │  │ml-api-message│ │ml-api-perfs │ │
+</span><span data-line="45">                    │  │             │ │              │ │
+</span><span data-line="46">                    │  │ml-api-top-  │ │              │ │
+</span><span data-line="47">                    │  │   func      │ │              │ │
+</span><span data-line="48">                    │  └─────────────┘ └──────────────┘ │
+</span><span data-line="49">                    └─────────────────────────────────────┘
+</span><span data-line="50">                              ↓
+</span><span data-line="51">                    ┌─────────────────┐
+</span><span data-line="52">                    │  ELASTICSEARCH  │
+</span><span data-line="53">                    │  Port 9200      │
+</span><span data-line="54">                    │  4 index créés  │
+</span><span data-line="55">                    └─────────────────┘
+</span><span data-line="56">                              ↓
+</span><span data-line="57">                    ┌─────────────────┐
+</span><span data-line="58">                    │    KIBANA       │
+</span><span data-line="59">                    │  Port 5601      │
+</span><span data-line="60">                    │  Visualisation  │
+</span><span data-line="61">                    └─────────────────┘
+</span></pre></div>
+</div>
+</section>
+<section id="composants-du-pipeline">
+<h2>Composants du Pipeline<a class="headerlink" href="#composants-du-pipeline" title="Link to this heading">¶</a></h2>
+<section id="collector-src-logs-pipeline-collector-py">
+<h3>1. Collector (<code class="docutils literal notranslate"><span class="pre">src/logs_pipeline/collector.py</span></code>)<a class="headerlink" href="#collector-src-logs-pipeline-collector-py" title="Link to this heading">¶</a></h3>
+<p><strong>Responsabilités</strong> :</p>
+<ul class="simple">
+<li><p>Connexion aux sources de logs (Redis ou Gradio)</p></li>
+<li><p>Récupération des logs bruts</p></li>
+<li><p>Déduplication basée sur le timestamp</p></li>
+<li><p>Parsing JSON et validation</p></li>
+</ul>
+<p><strong>Classe principale</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">LogCollector</span><span class="p">:</span>
+</span><span data-line="2">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;redis&quot;</span><span class="p">):</span>
+</span><span data-line="3"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="4"><span class="sd">        Args:</span>
+</span><span data-line="5"><span class="sd">            source: &quot;redis&quot; ou &quot;gradio&quot;</span>
+</span><span data-line="6"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="7">
+</span><span data-line="8">    <span class="k">def</span><span class="w"> </span><span class="nf">fetch_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+</span><span data-line="9"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Récupère les logs depuis la source.&quot;&quot;&quot;</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="k">def</span><span class="w"> </span><span class="nf">parse_log_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_entry</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+</span><span data-line="12"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse une entrée de log JSON.&quot;&quot;&quot;</span>
+</span></pre></div>
+</div>
+<p><strong>Sources supportées</strong> :</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Source</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Configuration</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">redis</span></code></p></td>
+<td><p>Cache Redis local</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">REDIS_HOST</span></code>, <code class="docutils literal notranslate"><span class="pre">REDIS_PORT</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gradio</span></code></p></td>
+<td><p>API Gradio HF Spaces</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GRADIO_URL</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Exemple d’utilisation</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Mode Redis</span>
+</span><span data-line="2"><span class="n">collector</span> <span class="o">=</span> <span class="n">LogCollector</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;redis&quot;</span><span class="p">)</span>
+</span><span data-line="3"><span class="n">logs</span> <span class="o">=</span> <span class="n">collector</span><span class="o">.</span><span class="n">fetch_logs</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Mode Gradio</span>
+</span><span data-line="6"><span class="n">collector</span> <span class="o">=</span> <span class="n">LogCollector</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;gradio&quot;</span><span class="p">)</span>
+</span><span data-line="7"><span class="n">logs</span> <span class="o">=</span> <span class="n">collector</span><span class="o">.</span><span class="n">fetch_logs</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="filter-src-logs-pipeline-filter-py">
+<h3>2. Filter (<code class="docutils literal notranslate"><span class="pre">src/logs_pipeline/filter.py</span></code>)<a class="headerlink" href="#filter-src-logs-pipeline-filter-py" title="Link to this heading">¶</a></h3>
+<p><strong>Responsabilités</strong> :</p>
+<ul class="simple">
+<li><p>Filtrage par pattern (regex)</p></li>
+<li><p>Filtrage par méthode HTTP</p></li>
+<li><p>Extraction des données structurées</p></li>
+<li><p>Validation des champs requis</p></li>
+</ul>
+<p><strong>Classe principale</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">LogFilter</span><span class="p">:</span>
+</span><span data-line="2">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;API Call - POST /predict&quot;</span><span class="p">):</span>
+</span><span data-line="3"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="4"><span class="sd">        Args:</span>
+</span><span data-line="5"><span class="sd">            pattern: Pattern regex pour filtrer les logs</span>
+</span><span data-line="6"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="7">
+</span><span data-line="8">    <span class="k">def</span><span class="w"> </span><span class="nf">filter_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+</span><span data-line="9"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Filtre les logs selon le pattern.&quot;&quot;&quot;</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="k">def</span><span class="w"> </span><span class="nf">extract_performance_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+</span><span data-line="12"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Extrait les métriques de performance.&quot;&quot;&quot;</span>
+</span></pre></div>
+</div>
+<p><strong>Patterns de filtrage</strong> :</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pattern</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">API</span> <span class="pre">Call</span> <span class="pre">-</span> <span class="pre">POST</span> <span class="pre">/predict</span></code></p></td>
+<td><p>Logs de prédiction</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">API</span> <span class="pre">Call</span> <span class="pre">-</span> <span class="pre">POST</span> <span class="pre">/predict_proba</span></code></p></td>
+<td><p>Logs de probabilités</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Performance</span> <span class="pre">metrics</span></code></p></td>
+<td><p>Métriques uniquement</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Exemple d’utilisation</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">log_filter</span> <span class="o">=</span> <span class="n">LogFilter</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="s2">&quot;API Call - POST /predict&quot;</span><span class="p">)</span>
+</span><span data-line="2"><span class="n">filtered_logs</span> <span class="o">=</span> <span class="n">log_filter</span><span class="o">.</span><span class="n">filter_logs</span><span class="p">(</span><span class="n">raw_logs</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="indexer-src-logs-pipeline-indexer-py">
+<h3>3. Indexer (<code class="docutils literal notranslate"><span class="pre">src/logs_pipeline/indexer.py</span></code>)<a class="headerlink" href="#indexer-src-logs-pipeline-indexer-py" title="Link to this heading">¶</a></h3>
+<p><strong>Responsabilités</strong> :</p>
+<ul class="simple">
+<li><p>Connexion à Elasticsearch</p></li>
+<li><p>Création et gestion des index</p></li>
+<li><p>Indexation en batch (bulk)</p></li>
+<li><p>Gestion des erreurs d’indexation</p></li>
+</ul>
+<p><strong>Classe principale</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">ElasticsearchIndexer</span><span class="p">:</span>
+</span><span data-line="2">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">9200</span><span class="p">):</span>
+</span><span data-line="3"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="4"><span class="sd">        Args:</span>
+</span><span data-line="5"><span class="sd">            host: Host Elasticsearch</span>
+</span><span data-line="6"><span class="sd">            port: Port Elasticsearch</span>
+</span><span data-line="7"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="8">
+</span><span data-line="9">    <span class="k">def</span><span class="w"> </span><span class="nf">create_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mapping</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+</span><span data-line="10"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Crée un index avec mapping.&quot;&quot;&quot;</span>
+</span><span data-line="11">
+</span><span data-line="12">    <span class="k">def</span><span class="w"> </span><span class="nf">index_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">logs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+</span><span data-line="13"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Indexe les logs en batch.&quot;&quot;&quot;</span>
+</span><span data-line="14">
+</span><span data-line="15">    <span class="k">def</span><span class="w"> </span><span class="nf">get_index_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+</span><span data-line="16"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Récupère les statistiques d&#39;un index.&quot;&quot;&quot;</span>
+</span></pre></div>
+</div>
+<p><strong>Index créés</strong> :</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Index</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Documents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ml-api-logs</span></code></p></td>
+<td><p>Tous les logs bruts</p></td>
+<td><p>ALL</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ml-api-message</span></code></p></td>
+<td><p>Logs avec données de prédiction</p></td>
+<td><p>FILTERED</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ml-api-perfs</span></code></p></td>
+<td><p>Logs avec métriques de performance</p></td>
+<td><p>FILTERED</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ml-api-top-func</span></code></p></td>
+<td><p>Top fonctions coûteuses</p></td>
+<td><p>FILTERED</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Exemple d’utilisation</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">indexer</span> <span class="o">=</span> <span class="n">ElasticsearchIndexer</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9200</span><span class="p">)</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="c1"># Indexer tous les logs</span>
+</span><span data-line="4"><span class="n">indexer</span><span class="o">.</span><span class="n">index_logs</span><span class="p">(</span><span class="s2">&quot;ml-api-logs&quot;</span><span class="p">,</span> <span class="n">all_logs</span><span class="p">)</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Indexer les logs filtrés</span>
+</span><span data-line="7"><span class="n">indexer</span><span class="o">.</span><span class="n">index_logs</span><span class="p">(</span><span class="s2">&quot;ml-api-message&quot;</span><span class="p">,</span> <span class="n">filtered_logs</span><span class="p">)</span>
+</span><span data-line="8"><span class="n">indexer</span><span class="o">.</span><span class="n">index_logs</span><span class="p">(</span><span class="s2">&quot;ml-api-perfs&quot;</span><span class="p">,</span> <span class="n">filtered_logs</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="pipeline-orchestrator-src-logs-pipeline-pipeline-py">
+<h3>4. Pipeline Orchestrator (<code class="docutils literal notranslate"><span class="pre">src/logs_pipeline/pipeline.py</span></code>)<a class="headerlink" href="#pipeline-orchestrator-src-logs-pipeline-pipeline-py" title="Link to this heading">¶</a></h3>
+<p><strong>Responsabilités</strong> :</p>
+<ul class="simple">
+<li><p>Orchestration du pipeline complet</p></li>
+<li><p>Gestion des erreurs</p></li>
+<li><p>Logging du processus</p></li>
+<li><p>Statistiques d’exécution</p></li>
+</ul>
+<p><strong>Classe principale</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="k">class</span><span class="w"> </span><span class="nc">LogPipeline</span><span class="p">:</span>
+</span><span data-line="2">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+</span><span data-line="3">        <span class="bp">self</span><span class="p">,</span>
+</span><span data-line="4">        <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;redis&quot;</span><span class="p">,</span>
+</span><span data-line="5">        <span class="n">es_host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+</span><span data-line="6">        <span class="n">es_port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">9200</span><span class="p">,</span>
+</span><span data-line="7">        <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+</span><span data-line="8">    <span class="p">):</span>
+</span><span data-line="9"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise le pipeline.&quot;&quot;&quot;</span>
+</span><span data-line="10">
+</span><span data-line="11">    <span class="k">def</span><span class="w"> </span><span class="nf">run_once</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+</span><span data-line="12"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Exécute le pipeline une seule fois.&quot;&quot;&quot;</span>
+</span><span data-line="13">
+</span><span data-line="14">    <span class="k">def</span><span class="w"> </span><span class="nf">run_continuous</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+</span><span data-line="15"><span class="w">        </span><span class="sd">&quot;&quot;&quot;Exécute le pipeline en continu.&quot;&quot;&quot;</span>
+</span></pre></div>
+</div>
+<p><strong>Exemple d’utilisation</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Exécution unique</span>
+</span><span data-line="2"><span class="n">pipeline</span> <span class="o">=</span> <span class="n">LogPipeline</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s2">&quot;redis&quot;</span><span class="p">)</span>
+</span><span data-line="3"><span class="n">stats</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">run_once</span><span class="p">()</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Exécution continue (toutes les 10 secondes)</span>
+</span><span data-line="6"><span class="n">pipeline</span><span class="o">.</span><span class="n">run_continuous</span><span class="p">(</span><span class="n">interval</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="flux-de-donnees">
+<h2>Flux de Données<a class="headerlink" href="#flux-de-donnees" title="Link to this heading">¶</a></h2>
+<section id="flux-1-pipeline-complet-mode-normal">
+<h3>Flux 1 : Pipeline Complet (Mode Normal)<a class="headerlink" href="#flux-1-pipeline-complet-mode-normal" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌──────────────┐
+</span><span data-line="2">│  API Request │
+</span><span data-line="3">└──────┬───────┘
+</span><span data-line="4">       │ 1. Génération log
+</span><span data-line="5">       ↓
+</span><span data-line="6">┌──────────────┐
+</span><span data-line="7">│ Redis Cache  │
+</span><span data-line="8">│ (api_logs)   │
+</span><span data-line="9">└──────┬───────┘
+</span><span data-line="10">       │ 2. Collecte (poll)
+</span><span data-line="11">       ↓
+</span><span data-line="12">┌──────────────┐
+</span><span data-line="13">│  Collector   │
+</span><span data-line="14">│  - Fetch     │
+</span><span data-line="15">│  - Parse     │
+</span><span data-line="16">│  - Dedupe    │
+</span><span data-line="17">└──────┬───────┘
+</span><span data-line="18">       │ 3. Documents bruts
+</span><span data-line="19">       ↓
+</span><span data-line="20">┌──────────────┐
+</span><span data-line="21">│   Filter     │
+</span><span data-line="22">│  - Pattern   │
+</span><span data-line="23">│  - Extract   │
+</span><span data-line="24">└──────┬───────┘
+</span><span data-line="25">       │ 4. Documents filtrés + tous
+</span><span data-line="26">       ↓
+</span><span data-line="27">┌──────────────────────────┐
+</span><span data-line="28">│      Indexer             │
+</span><span data-line="29">│                          │
+</span><span data-line="30">│  all_docs → ml-api-logs  │
+</span><span data-line="31">│                          │
+</span><span data-line="32">│  filtered_docs →         │
+</span><span data-line="33">│    ml-api-message        │
+</span><span data-line="34">│    ml-api-perfs          │
+</span><span data-line="35">│    ml-api-top-func       │
+</span><span data-line="36">└──────┬───────────────────┘
+</span><span data-line="37">       │ 5. Bulk insert
+</span><span data-line="38">       ↓
+</span><span data-line="39">┌──────────────┐
+</span><span data-line="40">│Elasticsearch │
+</span><span data-line="41">└──────────────┘
+</span></pre></div>
+</div>
+</section>
+<section id="flux-2-mode-gradio-huggingface-spaces">
+<h3>Flux 2 : Mode Gradio (HuggingFace Spaces)<a class="headerlink" href="#flux-2-mode-gradio-huggingface-spaces" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌──────────────────┐
+</span><span data-line="2">│  Gradio Space    │
+</span><span data-line="3">│  (Port 7860)     │
+</span><span data-line="4">│                  │
+</span><span data-line="5">│  /logs_api       │
+</span><span data-line="6">│  endpoint        │
+</span><span data-line="7">└──────┬───────────┘
+</span><span data-line="8">       │ 1. HTTP GET request
+</span><span data-line="9">       ↓
+</span><span data-line="10">┌──────────────┐
+</span><span data-line="11">│  Collector   │
+</span><span data-line="12">│  (gradio)    │
+</span><span data-line="13">└──────┬───────┘
+</span><span data-line="14">       │ 2. JSON logs
+</span><span data-line="15">       ↓
+</span><span data-line="16">┌──────────────┐
+</span><span data-line="17">│   Filter     │
+</span><span data-line="18">└──────┬───────┘
+</span><span data-line="19">       │ 3. Filtered docs
+</span><span data-line="20">       ↓
+</span><span data-line="21">┌──────────────┐
+</span><span data-line="22">│   Indexer    │
+</span><span data-line="23">└──────┬───────┘
+</span><span data-line="24">       │ 4. Bulk insert
+</span><span data-line="25">       ↓
+</span><span data-line="26">┌──────────────┐
+</span><span data-line="27">│Elasticsearch │
+</span><span data-line="28">└──────────────┘
+</span></pre></div>
+</div>
+</section>
+<section id="flux-3-deduplication">
+<h3>Flux 3 : Déduplication<a class="headerlink" href="#flux-3-deduplication" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">┌─────────────────────────────────────┐
+</span><span data-line="2">│          Collector                  │
+</span><span data-line="3">│                                     │
+</span><span data-line="4">│  seen_timestamps = set()            │
+</span><span data-line="5">│                                     │
+</span><span data-line="6">│  for log in raw_logs:               │
+</span><span data-line="7">│    timestamp = log[&quot;timestamp&quot;]     │
+</span><span data-line="8">│                                     │
+</span><span data-line="9">│    if timestamp in seen_timestamps: │
+</span><span data-line="10">│      skip  # ❌ Doublon             │
+</span><span data-line="11">│    else:                            │
+</span><span data-line="12">│      seen_timestamps.add(timestamp) │
+</span><span data-line="13">│      process  # ✅ Nouveau          │
+</span><span data-line="14">└─────────────────────────────────────┘
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="sources-de-logs">
+<h2>Sources de Logs<a class="headerlink" href="#sources-de-logs" title="Link to this heading">¶</a></h2>
+<section id="source-1-redis-mode-local-docker">
+<h3>Source 1 : Redis (Mode Local/Docker)<a class="headerlink" href="#source-1-redis-mode-local-docker" title="Link to this heading">¶</a></h3>
+<p><strong>Configuration</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nv">REDIS_HOST</span><span class="o">=</span>localhost
+</span><span data-line="2"><span class="nv">REDIS_PORT</span><span class="o">=</span><span class="m">6379</span>
+</span><span data-line="3"><span class="nv">REDIS_LOGS_KEY</span><span class="o">=</span>api_logs
+</span></pre></div>
+</div>
+<p><strong>Avantages</strong> :</p>
+<ul class="simple">
+<li><p>Latence faible</p></li>
+<li><p>Accès direct local</p></li>
+<li><p>Pas de dépendance réseau</p></li>
+</ul>
+<p><strong>Inconvénients</strong> :</p>
+<ul class="simple">
+<li><p>Nécessite Redis actif</p></li>
+<li><p>Logs volatils (max 1000)</p></li>
+</ul>
+<p><strong>Structure des logs Redis</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-11-22T10:30:45.123456&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;[uuid] POST /predict - 200 - 45ms - input - result&quot;</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="6"><span class="w">    </span><span class="nt">&quot;transaction_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;550e8400-e29b-41d4-a716-446655440000&quot;</span><span class="p">,</span>
+</span><span data-line="7"><span class="w">    </span><span class="nt">&quot;input_data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="8"><span class="w">      </span><span class="nt">&quot;AGE&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">65</span><span class="p">,</span>
+</span><span data-line="9"><span class="w">      </span><span class="nt">&quot;GENDER&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="10"><span class="w">      </span><span class="nt">&quot;SMOKING&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="11"><span class="w">      </span><span class="err">...</span>
+</span><span data-line="12"><span class="w">    </span><span class="p">},</span>
+</span><span data-line="13"><span class="w">    </span><span class="nt">&quot;result&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="14"><span class="w">      </span><span class="nt">&quot;prediction&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="15"><span class="w">      </span><span class="nt">&quot;probability&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.85</span><span class="p">,</span>
+</span><span data-line="16"><span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;YES - High probability&quot;</span>
+</span><span data-line="17"><span class="w">    </span><span class="p">},</span>
+</span><span data-line="18"><span class="w">    </span><span class="nt">&quot;performance_metrics&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="19"><span class="w">      </span><span class="nt">&quot;inference_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">12.5</span><span class="p">,</span>
+</span><span data-line="20"><span class="w">      </span><span class="nt">&quot;cpu_time_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">8.3</span><span class="p">,</span>
+</span><span data-line="21"><span class="w">      </span><span class="nt">&quot;memory_mb&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">245.6</span><span class="p">,</span>
+</span><span data-line="22"><span class="w">      </span><span class="err">...</span>
+</span><span data-line="23"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="24"><span class="w">  </span><span class="p">}</span>
+</span><span data-line="25"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="source-2-gradio-mode-huggingface-spaces">
+<h3>Source 2 : Gradio (Mode HuggingFace Spaces)<a class="headerlink" href="#source-2-gradio-mode-huggingface-spaces" title="Link to this heading">¶</a></h3>
+<p><strong>Configuration</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="nv">GRADIO_URL</span><span class="o">=</span>https://francoisformation-oc-project8.hf.space
+</span></pre></div>
+</div>
+<p><strong>Avantages</strong> :</p>
+<ul class="simple">
+<li><p>Accès à distance</p></li>
+<li><p>Pas de Redis nécessaire</p></li>
+<li><p>Logs persistants</p></li>
+</ul>
+<p><strong>Inconvénients</strong> :</p>
+<ul class="simple">
+<li><p>Latence réseau</p></li>
+<li><p>Dépendance HF Spaces</p></li>
+<li><p>Rate limiting possible</p></li>
+</ul>
+<p><strong>Endpoint</strong> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">GET {GRADIO_URL}/logs_api?limit=100&amp;offset=0
+</span></pre></div>
+</div>
+<p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;logs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span data-line="3"><span class="w">    </span><span class="p">{</span>
+</span><span data-line="4"><span class="w">      </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">      </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+</span><span data-line="6"><span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">,</span>
+</span><span data-line="7"><span class="w">      </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">...</span><span class="p">}</span>
+</span><span data-line="8"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="9"><span class="w">  </span><span class="p">],</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">523</span><span class="p">,</span>
+</span><span data-line="11"><span class="w">  </span><span class="nt">&quot;limit&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span>
+</span><span data-line="12"><span class="w">  </span><span class="nt">&quot;offset&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+</span><span data-line="13"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="indexation-multiple">
+<h2>Indexation Multiple<a class="headerlink" href="#indexation-multiple" title="Link to this heading">¶</a></h2>
+<section id="index-1-ml-api-logs-tous-les-logs">
+<h3>Index 1 : ml-api-logs (Tous les logs)<a class="headerlink" href="#index-1-ml-api-logs-tous-les-logs" title="Link to this heading">¶</a></h3>
+<p><strong>Objectif</strong> : Conservation de TOUS les logs sans filtrage</p>
+<p><strong>Mapping</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;mappings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="3"><span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="4"><span class="w">      </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;date&quot;</span><span class="p">},</span>
+</span><span data-line="5"><span class="w">      </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;keyword&quot;</span><span class="p">},</span>
+</span><span data-line="6"><span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="p">},</span>
+</span><span data-line="7"><span class="w">      </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;object&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}</span>
+</span><span data-line="8"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="9"><span class="w">  </span><span class="p">}</span>
+</span><span data-line="10"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Cas d’usage</strong> :</p>
+<ul class="simple">
+<li><p>Débogage complet</p></li>
+<li><p>Audit</p></li>
+<li><p>Recherche full-text</p></li>
+<li><p>Analyse des erreurs</p></li>
+</ul>
+</section>
+<section id="index-2-ml-api-message-predictions">
+<h3>Index 2 : ml-api-message (Prédictions)<a class="headerlink" href="#index-2-ml-api-message-predictions" title="Link to this heading">¶</a></h3>
+<p><strong>Objectif</strong> : Logs filtrés contenant les données de prédiction</p>
+<p><strong>Champs extraits</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2">  <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-11-22T10:30:45.123456&quot;</span><span class="p">,</span>
+</span><span data-line="3">  <span class="s2">&quot;transaction_id&quot;</span><span class="p">:</span> <span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
+</span><span data-line="4">  <span class="s2">&quot;input_data&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="5">    <span class="s2">&quot;AGE&quot;</span><span class="p">:</span> <span class="mi">65</span><span class="p">,</span>
+</span><span data-line="6">    <span class="s2">&quot;GENDER&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="7">    <span class="s2">&quot;SMOKING&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="8">    <span class="c1"># ... 14 features</span>
+</span><span data-line="9">  <span class="p">},</span>
+</span><span data-line="10">  <span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span data-line="11">    <span class="s2">&quot;prediction&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="12">    <span class="s2">&quot;probability&quot;</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">,</span>
+</span><span data-line="13">    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;YES - High probability&quot;</span>
+</span><span data-line="14">  <span class="p">}</span>
+</span><span data-line="15"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Cas d’usage</strong> :</p>
+<ul class="simple">
+<li><p>Analyse du drift de données</p></li>
+<li><p>Distribution des prédictions</p></li>
+<li><p>Analyse des patterns de patients</p></li>
+</ul>
+</section>
+<section id="index-3-ml-api-perfs-metriques-de-performance">
+<h3>Index 3 : ml-api-perfs (Métriques de Performance)<a class="headerlink" href="#index-3-ml-api-perfs-metriques-de-performance" title="Link to this heading">¶</a></h3>
+<p><strong>Objectif</strong> : Logs filtrés contenant les métriques de performance</p>
+<p><strong>Champs extraits</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2">  <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-11-22T10:30:45.123456&quot;</span><span class="p">,</span>
+</span><span data-line="3">  <span class="s2">&quot;transaction_id&quot;</span><span class="p">:</span> <span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
+</span><span data-line="4">  <span class="s2">&quot;inference_time_ms&quot;</span><span class="p">:</span> <span class="mf">12.5</span><span class="p">,</span>
+</span><span data-line="5">  <span class="s2">&quot;cpu_time_ms&quot;</span><span class="p">:</span> <span class="mf">8.3</span><span class="p">,</span>
+</span><span data-line="6">  <span class="s2">&quot;memory_mb&quot;</span><span class="p">:</span> <span class="mf">245.6</span><span class="p">,</span>
+</span><span data-line="7">  <span class="s2">&quot;memory_delta_mb&quot;</span><span class="p">:</span> <span class="mf">2.3</span><span class="p">,</span>
+</span><span data-line="8">  <span class="s2">&quot;function_calls&quot;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+</span><span data-line="9">  <span class="s2">&quot;latency_ms&quot;</span><span class="p">:</span> <span class="mf">45.2</span>
+</span><span data-line="10"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Cas d’usage</strong> :</p>
+<ul class="simple">
+<li><p>Optimisation du modèle</p></li>
+<li><p>Détection de dégradation</p></li>
+<li><p>Alerting sur latence</p></li>
+<li><p>Analyse de throughput</p></li>
+</ul>
+</section>
+<section id="index-4-ml-api-top-func-profiling-fonctions">
+<h3>Index 4 : ml-api-top-func (Profiling Fonctions)<a class="headerlink" href="#index-4-ml-api-top-func-profiling-fonctions" title="Link to this heading">¶</a></h3>
+<p><strong>Objectif</strong> : Top fonctions coûteuses par transaction</p>
+<p><strong>Champs extraits</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2">  <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-11-22T10:30:45.123456&quot;</span><span class="p">,</span>
+</span><span data-line="3">  <span class="s2">&quot;transaction_id&quot;</span><span class="p">:</span> <span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
+</span><span data-line="4">  <span class="s2">&quot;function_name&quot;</span><span class="p">:</span> <span class="s2">&quot;predict&quot;</span><span class="p">,</span>
+</span><span data-line="5">  <span class="s2">&quot;cumulative_time&quot;</span><span class="p">:</span> <span class="mf">8.5</span><span class="p">,</span>
+</span><span data-line="6">  <span class="s2">&quot;calls&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="7">  <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="s2">&quot;predictor.py&quot;</span><span class="p">,</span>
+</span><span data-line="8">  <span class="s2">&quot;line_number&quot;</span><span class="p">:</span> <span class="mi">42</span>
+</span><span data-line="9"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Cas d’usage</strong> :</p>
+<ul class="simple">
+<li><p>Profiling détaillé</p></li>
+<li><p>Optimisation du code</p></li>
+<li><p>Détection de bottlenecks</p></li>
+<li><p>Code review</p></li>
+</ul>
+</section>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
+<section id="variables-d-environnement">
+<h3>Variables d’Environnement<a class="headerlink" href="#variables-d-environnement" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Source des logs</span>
+</span><span data-line="2"><span class="nv">PIPELINE_SOURCE</span><span class="o">=</span>redis<span class="w">  </span><span class="c1"># ou &quot;gradio&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Configuration Redis (si source=redis)</span>
+</span><span data-line="5"><span class="nv">REDIS_HOST</span><span class="o">=</span>localhost
+</span><span data-line="6"><span class="nv">REDIS_PORT</span><span class="o">=</span><span class="m">6379</span>
+</span><span data-line="7"><span class="nv">REDIS_LOGS_KEY</span><span class="o">=</span>api_logs
+</span><span data-line="8">
+</span><span data-line="9"><span class="c1"># Configuration Gradio (si source=gradio)</span>
+</span><span data-line="10"><span class="nv">GRADIO_URL</span><span class="o">=</span>https://francoisformation-oc-project8.hf.space
+</span><span data-line="11">
+</span><span data-line="12"><span class="c1"># Configuration Elasticsearch</span>
+</span><span data-line="13"><span class="nv">ELASTICSEARCH_HOST</span><span class="o">=</span>localhost
+</span><span data-line="14"><span class="nv">ELASTICSEARCH_PORT</span><span class="o">=</span><span class="m">9200</span>
+</span><span data-line="15"><span class="nv">ELASTICSEARCH_INDEX</span><span class="o">=</span>ml-api-logs<span class="w">  </span><span class="c1"># Index de base</span>
+</span><span data-line="16">
+</span><span data-line="17"><span class="c1"># Configuration Pipeline</span>
+</span><span data-line="18"><span class="nv">PIPELINE_BATCH_SIZE</span><span class="o">=</span><span class="m">100</span>
+</span><span data-line="19"><span class="nv">PIPELINE_POLL_INTERVAL</span><span class="o">=</span><span class="m">10</span>
+</span><span data-line="20"><span class="nv">PIPELINE_FILTER_PATTERN</span><span class="o">=</span>API<span class="w"> </span>Call<span class="w"> </span>-<span class="w"> </span>POST<span class="w"> </span>/predict
+</span></pre></div>
+</div>
+</section>
+<section id="fichier-de-configuration">
+<h3>Fichier de Configuration<a class="headerlink" href="#fichier-de-configuration" title="Link to this heading">¶</a></h3>
+<p>Fichier : <code class="docutils literal notranslate"><span class="pre">.env</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Pipeline de logs</span>
+</span><span data-line="2"><span class="nv">PIPELINE_BATCH_SIZE</span><span class="o">=</span><span class="m">100</span>
+</span><span data-line="3"><span class="nv">PIPELINE_POLL_INTERVAL</span><span class="o">=</span><span class="m">10</span>
+</span><span data-line="4"><span class="nv">PIPELINE_FILTER_PATTERN</span><span class="o">=</span>API<span class="w"> </span>Call<span class="w"> </span>-<span class="w"> </span>POST<span class="w"> </span>/predict
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Elasticsearch</span>
+</span><span data-line="7"><span class="nv">ELASTICSEARCH_HOST</span><span class="o">=</span>localhost
+</span><span data-line="8"><span class="nv">ELASTICSEARCH_PORT</span><span class="o">=</span><span class="m">9200</span>
+</span><span data-line="9"><span class="nv">ELASTICSEARCH_INDEX</span><span class="o">=</span>ml-api-logs
+</span><span data-line="10">
+</span><span data-line="11"><span class="c1"># Gradio (optionnel)</span>
+</span><span data-line="12"><span class="nv">GRADIO_URL</span><span class="o">=</span>https://francoisformation-oc-project8.hf.space
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="utilisation">
+<h2>Utilisation<a class="headerlink" href="#utilisation" title="Link to this heading">¶</a></h2>
+<section id="mode-1-execution-unique">
+<h3>Mode 1 : Exécution Unique<a class="headerlink" href="#mode-1-execution-unique" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Depuis Redis</span>
+</span><span data-line="2">make<span class="w"> </span>pipeline-once
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Équivalent à :</span>
+</span><span data-line="5">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>src.logs_pipeline.pipeline<span class="w"> </span>--source<span class="w"> </span>redis<span class="w"> </span>--once
+</span></pre></div>
+</div>
+<p><strong>Sortie</strong> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">📊 Pipeline de logs - Exécution unique
+</span><span data-line="2">===========================================
+</span><span data-line="3">Source: redis
+</span><span data-line="4">Elasticsearch: localhost:9200
+</span><span data-line="5">Batch size: 100
+</span><span data-line="6">-------------------------------------------
+</span><span data-line="7">✅ Collecte: 42 logs récupérés
+</span><span data-line="8">✅ Filtrage: 38 logs filtrés
+</span><span data-line="9">✅ Indexation:
+</span><span data-line="10">   - ml-api-logs: 42 documents
+</span><span data-line="11">   - ml-api-message: 38 documents
+</span><span data-line="12">   - ml-api-perfs: 38 documents
+</span><span data-line="13">   - ml-api-top-func: 152 documents (4 par transaction)
+</span><span data-line="14">===========================================
+</span><span data-line="15">Durée totale: 1.23s
+</span></pre></div>
+</div>
+</section>
+<section id="mode-2-execution-continue">
+<h3>Mode 2 : Exécution Continue<a class="headerlink" href="#mode-2-execution-continue" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Mode continu (toutes les 10 secondes)</span>
+</span><span data-line="2">make<span class="w"> </span>pipeline-continuous
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Équivalent à :</span>
+</span><span data-line="5">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>src.logs_pipeline.pipeline<span class="w"> </span>--source<span class="w"> </span>redis<span class="w"> </span>--continuous<span class="w"> </span>--interval<span class="w"> </span><span class="m">10</span>
+</span></pre></div>
+</div>
+<p><strong>Sortie</strong> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">🔄 Pipeline de logs - Mode continu (interval: 10s)
+</span><span data-line="2">===========================================
+</span><span data-line="3">[2025-11-22 10:30:00] ✅ Batch #1: 42 logs indexés
+</span><span data-line="4">[2025-11-22 10:30:10] ✅ Batch #2: 15 logs indexés
+</span><span data-line="5">[2025-11-22 10:30:20] ✅ Batch #3: 0 logs (aucun nouveau)
+</span><span data-line="6">[2025-11-22 10:30:30] ✅ Batch #4: 23 logs indexés
+</span><span data-line="7">...
+</span></pre></div>
+</div>
+</section>
+<section id="mode-3-avec-docker-compose">
+<h3>Mode 3 : Avec Docker Compose<a class="headerlink" href="#mode-3-avec-docker-compose" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Lancer Elasticsearch + Kibana</span>
+</span><span data-line="2">make<span class="w"> </span>pipeline-elasticsearch-up
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Attendre le démarrage (30s)</span>
+</span><span data-line="5">sleep<span class="w"> </span><span class="m">30</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Lancer le pipeline</span>
+</span><span data-line="8">make<span class="w"> </span>pipeline-continuous
+</span></pre></div>
+</div>
+</section>
+<section id="mode-4-depuis-gradio">
+<h3>Mode 4 : Depuis Gradio<a class="headerlink" href="#mode-4-depuis-gradio" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Mode Gradio (HuggingFace Spaces)</span>
+</span><span data-line="2">uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>src.logs_pipeline.pipeline<span class="w"> </span>--source<span class="w"> </span>gradio<span class="w"> </span>--once
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Avec URL personnalisée</span>
+</span><span data-line="5"><span class="nv">GRADIO_URL</span><span class="o">=</span>https://custom-space.hf.space<span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>src.logs_pipeline.pipeline<span class="w"> </span>--source<span class="w"> </span>gradio<span class="w"> </span>--once
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="monitoring">
+<h2>Monitoring<a class="headerlink" href="#monitoring" title="Link to this heading">¶</a></h2>
+<section id="commandes-makefile">
+<h3>Commandes Makefile<a class="headerlink" href="#commandes-makefile" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vider tous les index</span>
+</span><span data-line="2">make<span class="w"> </span>pipeline-clear-indexes
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Statistiques Elasticsearch</span>
+</span><span data-line="5">curl<span class="w"> </span>http://localhost:9200/_cat/indices?v
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Compter les documents</span>
+</span><span data-line="8">curl<span class="w"> </span>http://localhost:9200/ml-api-logs/_count
+</span><span data-line="9">curl<span class="w"> </span>http://localhost:9200/ml-api-message/_count
+</span><span data-line="10">curl<span class="w"> </span>http://localhost:9200/ml-api-perfs/_count
+</span><span data-line="11">curl<span class="w"> </span>http://localhost:9200/ml-api-top-func/_count
+</span></pre></div>
+</div>
+</section>
+<section id="kibana-dashboards">
+<h3>Kibana Dashboards<a class="headerlink" href="#kibana-dashboards" title="Link to this heading">¶</a></h3>
+<p><strong>Accès</strong> : http://localhost:5601</p>
+<p><strong>Index Patterns à créer</strong> :</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ml-api-logs*</span></code> - Tous les logs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ml-api-message*</span></code> - Logs de prédictions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ml-api-perfs*</span></code> - Métriques de performance</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ml-api-top-func*</span></code> - Profiling fonctions</p></li>
+</ol>
+<p><strong>Visualisations recommandées</strong> :</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dashboard</p></th>
+<th class="head"><p>Visualisations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Vue d’ensemble</strong></p></td>
+<td><p>Nombre de logs par heure, Distribution des niveaux (INFO/ERROR), Top 10 endpoints</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Prédictions ML</strong></p></td>
+<td><p>Distribution YES/NO, Features moyennes, Probabilités (histogram), Drift de données</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Performance</strong></p></td>
+<td><p>Latence (p50, p95, p99), CPU usage, Mémoire utilisée, Top fonctions coûteuses</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Erreurs</strong></p></td>
+<td><p>Taux d’erreur, Types d’erreurs, Timeline des erreurs</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="alertes-recommandees">
+<h3>Alertes Recommandées<a class="headerlink" href="#alertes-recommandees" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Métrique</p></th>
+<th class="head"><p>Seuil Warning</p></th>
+<th class="head"><p>Seuil Critical</p></th>
+<th class="head"><p>Action</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Latence moyenne</p></td>
+<td><p>&gt; 100ms</p></td>
+<td><p>&gt; 200ms</p></td>
+<td><p>Vérifier le pool</p></td>
+</tr>
+<tr class="row-odd"><td><p>Taux d’erreur</p></td>
+<td><p>&gt; 5%</p></td>
+<td><p>&gt; 10%</p></td>
+<td><p>Vérifier les logs</p></td>
+</tr>
+<tr class="row-even"><td><p>CPU usage</p></td>
+<td><p>&gt; 80%</p></td>
+<td><p>&gt; 95%</p></td>
+<td><p>Scaler horizontalement</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mémoire</p></td>
+<td><p>&gt; 1GB</p></td>
+<td><p>&gt; 2GB</p></td>
+<td><p>Optimiser le pool</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<section id="probleme-1-pas-de-logs-collectes">
+<h3>Problème 1 : Pas de logs collectés<a class="headerlink" href="#probleme-1-pas-de-logs-collectes" title="Link to this heading">¶</a></h3>
+<p><strong>Diagnostic</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vérifier Redis</span>
+</span><span data-line="2">redis-cli<span class="w"> </span>-h<span class="w"> </span>localhost<span class="w"> </span>-p<span class="w"> </span><span class="m">6379</span><span class="w"> </span>LLEN<span class="w"> </span>api_logs
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Vérifier Gradio</span>
+</span><span data-line="5">curl<span class="w"> </span>https://francoisformation-oc-project8.hf.space/logs_api?limit<span class="o">=</span><span class="m">10</span>
+</span></pre></div>
+</div>
+<p><strong>Solutions</strong> :</p>
+<ul class="simple">
+<li><p>Vérifier que l’API génère des logs</p></li>
+<li><p>Vérifier la connexion Redis/Gradio</p></li>
+<li><p>Vérifier les variables d’environnement</p></li>
+</ul>
+</section>
+<section id="probleme-2-erreurs-d-indexation">
+<h3>Problème 2 : Erreurs d’indexation<a class="headerlink" href="#probleme-2-erreurs-d-indexation" title="Link to this heading">¶</a></h3>
+<p><strong>Diagnostic</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Vérifier Elasticsearch</span>
+</span><span data-line="2">curl<span class="w"> </span>http://localhost:9200/_cluster/health
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Vérifier les index</span>
+</span><span data-line="5">curl<span class="w"> </span>http://localhost:9200/_cat/indices?v
+</span></pre></div>
+</div>
+<p><strong>Solutions</strong> :</p>
+<ul class="simple">
+<li><p>Vérifier qu’Elasticsearch est démarré</p></li>
+<li><p>Vérifier le mapping des index</p></li>
+<li><p>Augmenter la taille du batch</p></li>
+</ul>
+</section>
+<section id="probleme-3-doublons-dans-elasticsearch">
+<h3>Problème 3 : Doublons dans Elasticsearch<a class="headerlink" href="#probleme-3-doublons-dans-elasticsearch" title="Link to this heading">¶</a></h3>
+<p><strong>Diagnostic</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Compter les documents</span>
+</span><span data-line="2">curl<span class="w"> </span>http://localhost:9200/ml-api-logs/_count
+</span></pre></div>
+</div>
+<p><strong>Solutions</strong> :</p>
+<ul class="simple">
+<li><p>Vérifier la déduplication dans le collector</p></li>
+<li><p>Ajouter un champ <code class="docutils literal notranslate"><span class="pre">_id</span></code> unique (transaction_id)</p></li>
+<li><p>Nettoyer les index et réindexer</p></li>
+</ul>
+</section>
+</section>
+<section id="migration-et-backup">
+<h2>Migration et Backup<a class="headerlink" href="#migration-et-backup" title="Link to this heading">¶</a></h2>
+<section id="export-complet">
+<h3>Export complet<a class="headerlink" href="#export-complet" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">python<span class="w"> </span>scripts/migrate_elasticsearch.py<span class="w"> </span><span class="nb">export</span><span class="w"> </span>--output<span class="w"> </span>./backup
+</span></pre></div>
+</div>
+</section>
+<section id="import-complet">
+<h3>Import complet<a class="headerlink" href="#import-complet" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">python<span class="w"> </span>scripts/migrate_elasticsearch.py<span class="w"> </span>import<span class="w"> </span>--input<span class="w"> </span>./backup/backup_YYYYMMDD_HHMMSS
+</span></pre></div>
+</div>
+<p>Documentation complète : <a class="reference internal" href="ELASTIC.html"><span class="std std-doc">ELASTIC.md</span></a></p>
+</section>
+</section>
+<section id="references">
+<h2>Références<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="ARCHITECTURE.html"><span class="std std-doc">Architecture globale</span></a></p></li>
+<li><p><a class="reference internal" href="API_DOCUMENTATION.html"><span class="std std-doc">Documentation API</span></a></p></li>
+<li><p><a class="reference internal" href="PERFORMANCE_METRICS.html"><span class="std std-doc">Métriques de performance</span></a></p></li>
+<li><p><a class="reference internal" href="ELASTIC.html"><span class="std std-doc">Migration Elasticsearch</span></a></p></li>
+<li><p><span class="xref myst">Code source pipeline</span></p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Version</strong> : 1.0.0
+<strong>Dernière mise à jour</strong> : 22 novembre 2025
+<strong>Projet</strong> : OpenClassrooms MLOps - Projet 8</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>

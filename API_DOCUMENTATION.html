@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Documentation de l’API - ML API Project 1.0.0 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Documentation de l’API"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>ML API Project</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Modules API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/api.html">API Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/model.html">Model Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ui.html">UI Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/simulator.html">Simulator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/logs_pipeline.html">Logs Pipeline Module</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Guides et Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/docker.html">Docker - Configuration et Déploiement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/scripts.html">Scripts du projet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/model.html">Répertoire du Modèle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/proxy.html">Package Proxy Gradio ↔ FastAPI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/jmeter.html">Tests de charge JMeter - ML API</a></li>
+</ul>
+<p class="caption" role="heading" aria-level="3"><span class="caption-text">Architecture:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture/architecture.html">Architecture Technique</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture/pipeline.html">Pipeline de Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#demarrage-de-l-api">D&#233;marrage de l&#8217;API</a><ul>
+<li><a class="reference internal" href="#prerequis">Pr&#233;requis</a></li>
+<li><a class="reference internal" href="#lancer-l-api">Lancer l&#8217;API</a></li>
+<li><a class="reference internal" href="#documentation-interactive">Documentation interactive</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#endpoints">Endpoints</a><ul>
+<li><a class="reference internal" href="#root">1. Root - <code class="docutils literal notranslate"><span class="pre">/</span></code></a></li>
+<li><a class="reference internal" href="#health-check-health">2. Health Check - <code class="docutils literal notranslate"><span class="pre">/health</span></code></a></li>
+<li><a class="reference internal" href="#prediction-predict">3. Pr&#233;diction - <code class="docutils literal notranslate"><span class="pre">/predict</span></code></a></li>
+<li><a class="reference internal" href="#prediction-avec-probabilites-predict-proba">4. Pr&#233;diction avec probabilit&#233;s - <code class="docutils literal notranslate"><span class="pre">/predict_proba</span></code></a></li>
+<li><a class="reference internal" href="#recuperer-les-logs-logs">5. R&#233;cup&#233;rer les logs - <code class="docutils literal notranslate"><span class="pre">/logs</span></code></a></li>
+<li><a class="reference internal" href="#supprimer-les-logs-logs">6. Supprimer les logs - <code class="docutils literal notranslate"><span class="pre">/logs</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#validation-des-donnees">Validation des donn&#233;es</a><ul>
+<li><a class="reference internal" href="#features-requises">Features requises</a></li>
+<li><a class="reference internal" href="#gestion-des-erreurs">Gestion des erreurs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#architecture">Architecture</a></li>
+<li><a class="reference internal" href="#logs">Logs</a></li>
+<li><a class="reference internal" href="#securite-et-performance">S&#233;curit&#233; et Performance</a><ul>
+<li><a class="reference internal" href="#cors">CORS</a></li>
+<li><a class="reference internal" href="#singleton-pattern">Singleton Pattern</a></li>
+<li><a class="reference internal" href="#limitations">Limitations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tests">Tests</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">ML API Project</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Documentation de l’API</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="documentation-de-l-api">
+<h1>Documentation de l’API<a class="headerlink" href="#documentation-de-l-api" title="Link to this heading">¶</a></h1>
+<p>Cette documentation décrit l’utilisation de l’API FastAPI pour le modèle de prédiction ML.</p>
+<section id="demarrage-de-l-api">
+<h2>Démarrage de l’API<a class="headerlink" href="#demarrage-de-l-api" title="Link to this heading">¶</a></h2>
+<section id="prerequis">
+<h3>Prérequis<a class="headerlink" href="#prerequis" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p><strong>Redis</strong> doit être en cours d’exécution :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Avec Docker</span>
+</span><span data-line="2">docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-p<span class="w"> </span><span class="m">6379</span>:6379<span class="w"> </span>redis:latest
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Ou avec redis-server</span>
+</span><span data-line="5">redis-server
+</span></pre></div>
+</div>
+</li>
+<li><p><strong>Variables d’environnement</strong> configurées dans <code class="docutils literal notranslate"><span class="pre">.env</span></code> :</p>
+<div class="highlight-env notranslate"><div class="highlight"><pre><span></span><span data-line="1">MODEL_PATH=./model/model.pkl
+</span><span data-line="2">API_HOST=0.0.0.0
+</span><span data-line="3">API_PORT=8000
+</span><span data-line="4">REDIS_HOST=localhost
+</span><span data-line="5">REDIS_PORT=6379
+</span><span data-line="6">REDIS_DB=0
+</span></pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="lancer-l-api">
+<h3>Lancer l’API<a class="headerlink" href="#lancer-l-api" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Méthode 1 : Avec uvicorn directement</span>
+</span><span data-line="2">uvicorn<span class="w"> </span>src.api.main:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span>--reload
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Méthode 2 : Avec Python</span>
+</span><span data-line="5">python<span class="w"> </span>-m<span class="w"> </span>src.api.main
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Méthode 3 : Via le module uvicorn</span>
+</span><span data-line="8">python<span class="w"> </span>-m<span class="w"> </span>uvicorn<span class="w"> </span>src.api.main:app<span class="w"> </span>--reload
+</span></pre></div>
+</div>
+<p>L’API sera accessible sur <code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code></p>
+</section>
+<section id="documentation-interactive">
+<h3>Documentation interactive<a class="headerlink" href="#documentation-interactive" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Swagger UI</strong> : <code class="docutils literal notranslate"><span class="pre">http://localhost:8000/docs</span></code></p></li>
+<li><p><strong>ReDoc</strong> : <code class="docutils literal notranslate"><span class="pre">http://localhost:8000/redoc</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="endpoints">
+<h2>Endpoints<a class="headerlink" href="#endpoints" title="Link to this heading">¶</a></h2>
+<section id="root">
+<h3>1. Root - <code class="docutils literal notranslate"><span class="pre">/</span></code><a class="headerlink" href="#root" title="Link to this heading">¶</a></h3>
+<p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p>
+<p>Retourne les informations de base de l’API.</p>
+<p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;API de Prédiction ML&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;endpoints&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="5"><span class="w">    </span><span class="nt">&quot;health&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/health&quot;</span><span class="p">,</span>
+</span><span data-line="6"><span class="w">    </span><span class="nt">&quot;predict&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/predict&quot;</span><span class="p">,</span>
+</span><span data-line="7"><span class="w">    </span><span class="nt">&quot;predict_proba&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/predict_proba&quot;</span><span class="p">,</span>
+</span><span data-line="8"><span class="w">    </span><span class="nt">&quot;logs&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/logs&quot;</span>
+</span><span data-line="9"><span class="w">  </span><span class="p">}</span>
+</span><span data-line="10"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="health-check-health">
+<h3>2. Health Check - <code class="docutils literal notranslate"><span class="pre">/health</span></code><a class="headerlink" href="#health-check-health" title="Link to this heading">¶</a></h3>
+<p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p>
+<p>Vérifie l’état de santé de l’API.</p>
+<p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;healthy&quot;</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;model_loaded&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;redis_connected&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1.0.0&quot;</span>
+</span><span data-line="6"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Exemple cURL</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>http://localhost:8000/health
+</span></pre></div>
+</div>
+</section>
+<section id="prediction-predict">
+<h3>3. Prédiction - <code class="docutils literal notranslate"><span class="pre">/predict</span></code><a class="headerlink" href="#prediction-predict" title="Link to this heading">¶</a></h3>
+<p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">POST</span></code></p>
+<p>Effectue une prédiction pour un patient.</p>
+<p><strong>Corps de la requête</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;AGE&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">65</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;GENDER&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;SMOKING&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">  </span><span class="nt">&quot;ALCOHOL CONSUMING&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="6"><span class="w">  </span><span class="nt">&quot;PEER_PRESSURE&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+</span><span data-line="7"><span class="w">  </span><span class="nt">&quot;YELLOW_FINGERS&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="8"><span class="w">  </span><span class="nt">&quot;ANXIETY&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+</span><span data-line="9"><span class="w">  </span><span class="nt">&quot;FATIGUE&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="10"><span class="w">  </span><span class="nt">&quot;ALLERGY&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+</span><span data-line="11"><span class="w">  </span><span class="nt">&quot;WHEEZING&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="12"><span class="w">  </span><span class="nt">&quot;COUGHING&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="13"><span class="w">  </span><span class="nt">&quot;SHORTNESS OF BREATH&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="14"><span class="w">  </span><span class="nt">&quot;SWALLOWING DIFFICULTY&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+</span><span data-line="15"><span class="w">  </span><span class="nt">&quot;CHEST PAIN&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+</span><span data-line="16"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;prediction&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;probability&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.85</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prédiction positive&quot;</span>
+</span><span data-line="5"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Exemple cURL</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;http://localhost:8000/predict&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="2"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span data-line="3"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+</span><span data-line="4"><span class="s1">    &quot;AGE&quot;: 65,</span>
+</span><span data-line="5"><span class="s1">    &quot;GENDER&quot;: 1,</span>
+</span><span data-line="6"><span class="s1">    &quot;SMOKING&quot;: 1,</span>
+</span><span data-line="7"><span class="s1">    &quot;ALCOHOL CONSUMING&quot;: 1,</span>
+</span><span data-line="8"><span class="s1">    &quot;PEER_PRESSURE&quot;: 0,</span>
+</span><span data-line="9"><span class="s1">    &quot;YELLOW_FINGERS&quot;: 1,</span>
+</span><span data-line="10"><span class="s1">    &quot;ANXIETY&quot;: 0,</span>
+</span><span data-line="11"><span class="s1">    &quot;FATIGUE&quot;: 1,</span>
+</span><span data-line="12"><span class="s1">    &quot;ALLERGY&quot;: 0,</span>
+</span><span data-line="13"><span class="s1">    &quot;WHEEZING&quot;: 1,</span>
+</span><span data-line="14"><span class="s1">    &quot;COUGHING&quot;: 1,</span>
+</span><span data-line="15"><span class="s1">    &quot;SHORTNESS OF BREATH&quot;: 1,</span>
+</span><span data-line="16"><span class="s1">    &quot;SWALLOWING DIFFICULTY&quot;: 0,</span>
+</span><span data-line="17"><span class="s1">    &quot;CHEST PAIN&quot;: 1</span>
+</span><span data-line="18"><span class="s1">  }&#39;</span>
+</span></pre></div>
+</div>
+<p><strong>Exemple Python</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+</span><span data-line="2">
+</span><span data-line="3"><span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="4">    <span class="s2">&quot;AGE&quot;</span><span class="p">:</span> <span class="mi">65</span><span class="p">,</span>
+</span><span data-line="5">    <span class="s2">&quot;GENDER&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="6">    <span class="s2">&quot;SMOKING&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="7">    <span class="s2">&quot;ALCOHOL CONSUMING&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="8">    <span class="s2">&quot;PEER_PRESSURE&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="9">    <span class="s2">&quot;YELLOW_FINGERS&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="10">    <span class="s2">&quot;ANXIETY&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="11">    <span class="s2">&quot;FATIGUE&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="12">    <span class="s2">&quot;ALLERGY&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="13">    <span class="s2">&quot;WHEEZING&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="14">    <span class="s2">&quot;COUGHING&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="15">    <span class="s2">&quot;SHORTNESS OF BREATH&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span data-line="16">    <span class="s2">&quot;SWALLOWING DIFFICULTY&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span data-line="17">    <span class="s2">&quot;CHEST PAIN&quot;</span><span class="p">:</span> <span class="mi">1</span>
+</span><span data-line="18"><span class="p">}</span>
+</span><span data-line="19">
+</span><span data-line="20"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;http://localhost:8000/predict&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</span><span data-line="21"><span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</span></pre></div>
+</div>
+</section>
+<section id="prediction-avec-probabilites-predict-proba">
+<h3>4. Prédiction avec probabilités - <code class="docutils literal notranslate"><span class="pre">/predict_proba</span></code><a class="headerlink" href="#prediction-avec-probabilites-predict-proba" title="Link to this heading">¶</a></h3>
+<p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">POST</span></code></p>
+<p>Effectue une prédiction avec les probabilités pour chaque classe.</p>
+<p><strong>Corps de la requête</strong> : Identique à <code class="docutils literal notranslate"><span class="pre">/predict</span></code></p>
+<p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;prediction&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;probabilities&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.15</span><span class="p">,</span><span class="w"> </span><span class="mf">0.85</span><span class="p">],</span>
+</span><span data-line="4"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prédiction positive&quot;</span>
+</span><span data-line="5"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+<section id="recuperer-les-logs-logs">
+<h3>5. Récupérer les logs - <code class="docutils literal notranslate"><span class="pre">/logs</span></code><a class="headerlink" href="#recuperer-les-logs-logs" title="Link to this heading">¶</a></h3>
+<p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">GET</span></code></p>
+<p>Récupère les logs de l’API stockés dans Redis avec pagination.</p>
+<p><strong>Paramètres de requête</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">limit</span></code> (optionnel) : Nombre de logs à récupérer (défaut: 100, max: 1000)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">offset</span></code> (optionnel) : Nombre de logs à sauter pour la pagination (défaut: 0)</p></li>
+</ul>
+<p><strong>Réponse</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;total&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span>
+</span><span data-line="3"><span class="w">  </span><span class="nt">&quot;logs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span data-line="4"><span class="w">    </span><span class="p">{</span>
+</span><span data-line="5"><span class="w">      </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-11-10T10:30:45.123456&quot;</span><span class="p">,</span>
+</span><span data-line="6"><span class="w">      </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+</span><span data-line="7"><span class="w">      </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prédiction effectuée : 1&quot;</span><span class="p">,</span>
+</span><span data-line="8"><span class="w">      </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span data-line="9"><span class="w">        </span><span class="nt">&quot;prediction&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span data-line="10"><span class="w">        </span><span class="nt">&quot;probability&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.85</span><span class="p">,</span>
+</span><span data-line="11"><span class="w">        </span><span class="nt">&quot;age&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">65</span>
+</span><span data-line="12"><span class="w">      </span><span class="p">}</span>
+</span><span data-line="13"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="14"><span class="w">  </span><span class="p">]</span>
+</span><span data-line="15"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Exemples cURL</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Récupérer les 50 premiers logs</span>
+</span><span data-line="2">curl<span class="w"> </span><span class="s2">&quot;http://localhost:8000/logs?limit=50&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Récupérer 50 logs en sautant les 100 premiers (pagination)</span>
+</span><span data-line="5">curl<span class="w"> </span><span class="s2">&quot;http://localhost:8000/logs?limit=50&amp;offset=100&quot;</span>
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Récupérer tous les logs (jusqu&#39;à 1000)</span>
+</span><span data-line="8">curl<span class="w"> </span><span class="s2">&quot;http://localhost:8000/logs?limit=1000&quot;</span>
+</span></pre></div>
+</div>
+</section>
+<section id="supprimer-les-logs-logs">
+<h3>6. Supprimer les logs - <code class="docutils literal notranslate"><span class="pre">/logs</span></code><a class="headerlink" href="#supprimer-les-logs-logs" title="Link to this heading">¶</a></h3>
+<p><strong>Méthode</strong> : <code class="docutils literal notranslate"><span class="pre">DELETE</span></code></p>
+<p>Vide complètement le cache des logs stockés dans Redis.</p>
+<p>⚠️ <strong>Important</strong> : Cet endpoint vide <strong>uniquement</strong> le cache Redis local. Les logs déjà indexés dans Elasticsearch ne sont <strong>pas affectés</strong>.</p>
+<p><strong>Réponse succès</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Logs supprimés avec succès&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Réponse erreur</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Échec de la suppression des logs&quot;</span>
+</span><span data-line="3"><span class="p">}</span>
+</span></pre></div>
+</div>
+<p><strong>Exemples d’utilisation</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Avec cURL</span>
+</span><span data-line="2">curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span><span class="s2">&quot;http://localhost:8000/logs&quot;</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Avec Makefile (recommandé)</span>
+</span><span data-line="5">make<span class="w"> </span>clear-logs
+</span><span data-line="6">
+</span><span data-line="7"><span class="c1"># Avec httpie</span>
+</span><span data-line="8">http<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8000/logs
+</span><span data-line="9">
+</span><span data-line="10"><span class="c1"># Avec Python</span>
+</span><span data-line="11">import<span class="w"> </span>requests
+</span><span data-line="12"><span class="nv">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>requests.delete<span class="o">(</span><span class="s2">&quot;http://localhost:8000/logs&quot;</span><span class="o">)</span>
+</span><span data-line="13">print<span class="o">(</span>response.json<span class="o">())</span>
+</span></pre></div>
+</div>
+<p><strong>Cas d’usage</strong> :</p>
+<ul class="simple">
+<li><p>Nettoyage après des tests de charge</p></li>
+<li><p>Maintenance périodique du cache Redis</p></li>
+<li><p>Reset avant un nouveau test de performance</p></li>
+</ul>
+<p><strong>Note</strong> : Pour supprimer à la fois le cache Redis ET les index Elasticsearch :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># 1. Vider le cache Redis</span>
+</span><span data-line="2">make<span class="w"> </span>clear-logs
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># 2. Vider les index Elasticsearch</span>
+</span><span data-line="5">make<span class="w"> </span>pipeline-clear-indexes
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="validation-des-donnees">
+<h2>Validation des données<a class="headerlink" href="#validation-des-donnees" title="Link to this heading">¶</a></h2>
+<section id="features-requises">
+<h3>Features requises<a class="headerlink" href="#features-requises" title="Link to this heading">¶</a></h3>
+<p>Les 14 features suivantes sont <strong>obligatoires</strong> :</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Valeurs</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AGE</p></td>
+<td><p>int</p></td>
+<td><p>0-120</p></td>
+<td><p>Âge du patient</p></td>
+</tr>
+<tr class="row-odd"><td><p>GENDER</p></td>
+<td><p>int</p></td>
+<td><p>0-1</p></td>
+<td><p>Genre (0=F, 1=M)</p></td>
+</tr>
+<tr class="row-even"><td><p>SMOKING</p></td>
+<td><p>int</p></td>
+<td><p>0-1</p></td>
+<td><p>Fumeur</p></td>
+</tr>
+<tr class="row-odd"><td><p>ALCOHOL CONSUMING</p></td>
+<td><p>int</p></td>
+<td><p>0-1</p></td>
+<td><p>Consommation d’alcool</p></td>
+</tr>
+<tr class="row-even"><td><p>PEER_PRESSURE</p></td>
+<td><p>int</p></td>
+<td><p>0-1</p></td>
+<td><p>Pression sociale</p></td>
+</tr>
+<tr class="row-odd"><td><p>YELLOW_FINGERS</p></td>
+<td><p>int</p></td>
+<td><p>0-1</p></td>
+<td><p>Doigts jaunes</p></td>
+</tr>
+<tr class="row-even"><td><p>ANXIETY</p></td>
+<td><p>int</p></td>
+<td><p>0-1</p></td>
+<td><p>Anxiété</p></td>
+</tr>
+<tr class="row-odd"><td><p>FATIGUE</p></td>
+<td><p>int</p></td>
+<td><p>0-1</p></td>
+<td><p>Fatigue</p></td>
+</tr>
+<tr class="row-even"><td><p>ALLERGY</p></td>
+<td><p>int</p></td>
+<td><p>0-1</p></td>
+<td><p>Allergie</p></td>
+</tr>
+<tr class="row-odd"><td><p>WHEEZING</p></td>
+<td><p>int</p></td>
+<td><p>0-1</p></td>
+<td><p>Respiration sifflante</p></td>
+</tr>
+<tr class="row-even"><td><p>COUGHING</p></td>
+<td><p>int</p></td>
+<td><p>0-1</p></td>
+<td><p>Toux</p></td>
+</tr>
+<tr class="row-odd"><td><p>SHORTNESS OF BREATH</p></td>
+<td><p>int</p></td>
+<td><p>0-1</p></td>
+<td><p>Essoufflement</p></td>
+</tr>
+<tr class="row-even"><td><p>SWALLOWING DIFFICULTY</p></td>
+<td><p>int</p></td>
+<td><p>0-1</p></td>
+<td><p>Difficulté à avaler</p></td>
+</tr>
+<tr class="row-odd"><td><p>CHEST PAIN</p></td>
+<td><p>int</p></td>
+<td><p>0-1</p></td>
+<td><p>Douleur thoracique</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="gestion-des-erreurs">
+<h3>Gestion des erreurs<a class="headerlink" href="#gestion-des-erreurs" title="Link to this heading">¶</a></h3>
+<p>L’API retourne des codes HTTP appropriés :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">200</span></code> : Succès</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">422</span></code> : Erreur de validation (données invalides)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">500</span></code> : Erreur serveur (modèle non chargé, erreur Redis, etc.)</p></li>
+</ul>
+<p><strong>Exemple d’erreur de validation</strong> :</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
+</span><span data-line="2"><span class="w">  </span><span class="nt">&quot;detail&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span data-line="3"><span class="w">    </span><span class="p">{</span>
+</span><span data-line="4"><span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;int_parsing&quot;</span><span class="p">,</span>
+</span><span data-line="5"><span class="w">      </span><span class="nt">&quot;loc&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;body&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;AGE&quot;</span><span class="p">],</span>
+</span><span data-line="6"><span class="w">      </span><span class="nt">&quot;msg&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Input should be a valid integer&quot;</span><span class="p">,</span>
+</span><span data-line="7"><span class="w">      </span><span class="nt">&quot;input&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;invalid&quot;</span>
+</span><span data-line="8"><span class="w">    </span><span class="p">}</span>
+</span><span data-line="9"><span class="w">  </span><span class="p">]</span>
+</span><span data-line="10"><span class="p">}</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span data-line="1">Client
+</span><span data-line="2">  ↓
+</span><span data-line="3">FastAPI (src/api/main.py)
+</span><span data-line="4">  ↓
+</span><span data-line="5">Predictor (src/model/predictor.py)
+</span><span data-line="6">  ↓
+</span><span data-line="7">FeatureEngineer → ModelLoader
+</span><span data-line="8">  ↓
+</span><span data-line="9">Modèle ML
+</span><span data-line="10">  ↓
+</span><span data-line="11">Prédiction
+</span><span data-line="12">  ↓
+</span><span data-line="13">RedisLogger → Redis (logs)
+</span></pre></div>
+</div>
+</section>
+<section id="logs">
+<h2>Logs<a class="headerlink" href="#logs" title="Link to this heading">¶</a></h2>
+<p>Tous les événements importants sont loggés dans Redis :</p>
+<ul class="simple">
+<li><p><strong>INFO</strong> : Prédictions réussies, health checks, démarrage/arrêt</p></li>
+<li><p><strong>ERROR</strong> : Erreurs de prédiction, erreurs de connexion</p></li>
+<li><p><strong>WARNING</strong> : Avertissements divers</p></li>
+</ul>
+<p>Les logs sont stockés avec :</p>
+<ul class="simple">
+<li><p><strong>timestamp</strong> : Horodatage UTC</p></li>
+<li><p><strong>level</strong> : Niveau du log</p></li>
+<li><p><strong>message</strong> : Message descriptif</p></li>
+<li><p><strong>data</strong> : Données additionnelles (optionnel)</p></li>
+</ul>
+</section>
+<section id="securite-et-performance">
+<h2>Sécurité et Performance<a class="headerlink" href="#securite-et-performance" title="Link to this heading">¶</a></h2>
+<section id="cors">
+<h3>CORS<a class="headerlink" href="#cors" title="Link to this heading">¶</a></h3>
+<p>L’API accepte les requêtes de toutes les origines. Pour la production, configurez :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="n">app</span><span class="o">.</span><span class="n">add_middleware</span><span class="p">(</span>
+</span><span data-line="2">    <span class="n">CORSMiddleware</span><span class="p">,</span>
+</span><span data-line="3">    <span class="n">allow_origins</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;https://votre-domaine.com&quot;</span><span class="p">],</span>
+</span><span data-line="4">    <span class="n">allow_credentials</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span data-line="5">    <span class="n">allow_methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">],</span>
+</span><span data-line="6">    <span class="n">allow_headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span>
+</span><span data-line="7"><span class="p">)</span>
+</span></pre></div>
+</div>
+</section>
+<section id="singleton-pattern">
+<h3>Singleton Pattern<a class="headerlink" href="#singleton-pattern" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Le <strong>modèle ML</strong> est chargé une seule fois au démarrage (pattern Singleton)</p></li>
+<li><p>Le <strong>RedisLogger</strong> utilise également le pattern Singleton</p></li>
+<li><p>Optimisation de la mémoire et des performances</p></li>
+</ul>
+</section>
+<section id="limitations">
+<h3>Limitations<a class="headerlink" href="#limitations" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Taille maximale des logs : Configurable via <code class="docutils literal notranslate"><span class="pre">REDIS_LOGS_MAX_SIZE</span></code> (défaut: 1000)</p></li>
+<li><p>Timeout des requêtes : Par défaut, pas de timeout (configurable dans uvicorn)</p></li>
+</ul>
+</section>
+</section>
+<section id="tests">
+<h2>Tests<a class="headerlink" href="#tests" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Tester l&#39;API avec pytest</span>
+</span><span data-line="2">pytest<span class="w"> </span>tests/test_api.py<span class="w"> </span>-v
+</span><span data-line="3">
+</span><span data-line="4"><span class="c1"># Tester avec httpx</span>
+</span><span data-line="5">python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+</span><span data-line="6"><span class="s2">import httpx</span>
+</span><span data-line="7"><span class="s2">response = httpx.get(&#39;http://localhost:8000/health&#39;)</span>
+</span><span data-line="8"><span class="s2">print(response.json())</span>
+</span><span data-line="9"><span class="s2">&quot;</span>
+</span></pre></div>
+</div>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, OpenClassrooms Project 8</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>
