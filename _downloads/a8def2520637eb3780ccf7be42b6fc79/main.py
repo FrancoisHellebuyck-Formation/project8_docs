@@ -368,9 +368,6 @@ async def predict(
         )
 
     try:
-        # Convertir les données Pydantic en dict
-        patient_dict = patient.model_dump(by_alias=True)
-
         # Déterminer le type de modèle à utiliser
         requested_type = None
         if model_type:
@@ -381,89 +378,54 @@ async def predict(
                     status_code=400,
                     detail=f"Type de modèle invalide: {model_type}. "
                            f"Types disponibles: {model_router.get_available_types()}"
-                )
+                ) from None
+
+        # Le reste de la logique de prédiction
+        # Convertir les données Pydantic en dict
+        patient_dict = patient.model_dump(by_alias=True)
 
         # Mode routeur (avec pools) - préféré
         if model_router:
-            # Utiliser le context manager pour acquérir/libérer le modèle
             async with model_router.acquire_model(requested_type) as model_instance:
-                # Profiler la prédiction si le monitoring est activé
                 with performance_monitor.profile():
-                    # Préparer les données avec feature engineering
-                    processed_data = feature_engineer.engineer_features(
-                        patient_dict
-                    )
-
-                    # Réordonner les colonnes si nécessaire
+                    processed_data = feature_engineer.engineer_features(patient_dict)
                     if hasattr(model_instance.model, 'feature_names_in_'):
-                        processed_data = processed_data[
-                            model_instance.model.feature_names_in_
-                        ]
-
-                    # Effectuer la prédiction
+                        processed_data = processed_data[model_instance.model.feature_names_in_]
                     prediction = model_instance.predict(processed_data)
                     pred_value = int(prediction[0])
-
-                    # Obtenir la probabilité si disponible
                     probability = None
                     try:
                         proba = model_instance.predict_proba(processed_data)
                         probability = float(proba[0][1])
                     except AttributeError:
-                        # Modèle ne supporte pas predict_proba
-                        logger.debug(
-                            "Modèle ne supporte pas predict_proba"
-                        )
+                        logger.debug("Modèle ne supporte pas predict_proba")
                     except Exception as e:
-                        # Erreur lors du calcul des probabilités
-                        logger.warning(
-                            f"Erreur lors du calcul de probabilité: {e}"
-                        )
+                        logger.warning(f"Erreur lors du calcul de probabilité: {e}")
 
         # Mode singleton (fallback)
         else:
             with performance_monitor.profile():
-                # Effectuer la prédiction
                 prediction = predictor.predict(patient_dict)
                 pred_value = int(prediction[0])
-
-                # Obtenir la probabilité si disponible
                 probability = None
                 try:
                     proba = predictor.predict_proba(patient_dict)
                     probability = float(proba[0][1])
                 except AttributeError:
-                    # Modèle ne supporte pas predict_proba
-                    logger.debug(
-                        "Modèle ne supporte pas predict_proba"
-                    )
+                    logger.debug("Modèle ne supporte pas predict_proba")
                 except Exception as e:
-                    # Erreur lors du calcul des probabilités
-                    logger.warning(
-                        f"Erreur lors du calcul de probabilité: {e}"
-                    )
+                    logger.warning(f"Erreur lors du calcul de probabilité: {e}")
 
-        # Récupérer le transaction_id si disponible
         transaction_id = getattr(request.state, 'transaction_id', None)
-
-        # Récupérer et logger les métriques de performance
         metrics = performance_monitor.get_metrics()
         if metrics:
             performance_monitor.log_metrics(metrics, transaction_id)
 
-        # Message de résultat
-        message = (
-            "Prédiction positive"
-            if pred_value == 1
-            else "Prédiction négative"
-        )
+        message = "Prédiction positive" if pred_value == 1 else "Prédiction négative"
+        return PredictionResponse(prediction=pred_value, probability=probability, message=message)
 
-        return PredictionResponse(
-            prediction=pred_value,
-            probability=probability,
-            message=message
-        )
-
+    except HTTPException:
+        raise
     except Exception as e:
         error_msg = f"Erreur lors de la prédiction : {str(e)}"
         logger.error(f"{error_msg} (patient age={patient.AGE})")
@@ -504,9 +466,6 @@ async def predict_proba(
         )
 
     try:
-        # Convertir les données Pydantic en dict
-        patient_dict = patient.model_dump(by_alias=True)
-
         # Déterminer le type de modèle à utiliser
         requested_type = None
         if model_type:
@@ -517,64 +476,37 @@ async def predict_proba(
                     status_code=400,
                     detail=f"Type de modèle invalide: {model_type}. "
                            f"Types disponibles: {model_router.get_available_types()}"
-                )
+                ) from None
 
-        # Mode routeur (avec pools) - préféré
+        # Le reste de la logique de prédiction
+        patient_dict = patient.model_dump(by_alias=True)
         if model_router:
-            # Utiliser le context manager pour acquérir/libérer le modèle
             async with model_router.acquire_model(requested_type) as model_instance:
-                # Profiler la prédiction si le monitoring est activé
                 with performance_monitor.profile():
-                    # Préparer les données avec feature engineering
-                    processed_data = feature_engineer.engineer_features(
-                        patient_dict
-                    )
-
-                    # Réordonner les colonnes si nécessaire
+                    processed_data = feature_engineer.engineer_features(patient_dict)
                     if hasattr(model_instance.model, 'feature_names_in_'):
-                        processed_data = processed_data[
-                            model_instance.model.feature_names_in_
-                        ]
-
-                    # Effectuer la prédiction avec probabilités
+                        processed_data = processed_data[model_instance.model.feature_names_in_]
                     probabilities = model_instance.predict_proba(processed_data)
                     proba_list = probabilities[0].tolist()
-
-                    # Obtenir la prédiction
                     prediction = model_instance.predict(processed_data)
                     pred_value = int(prediction[0])
-
-        # Mode singleton (fallback)
         else:
             with performance_monitor.profile():
-                # Effectuer la prédiction avec probabilités
                 probabilities = predictor.predict_proba(patient_dict)
                 proba_list = probabilities[0].tolist()
-
-                # Obtenir la prédiction
                 prediction = predictor.predict(patient_dict)
                 pred_value = int(prediction[0])
 
-        # Récupérer le transaction_id si disponible
         transaction_id = getattr(request.state, 'transaction_id', None)
-
-        # Récupérer et logger les métriques de performance
         metrics = performance_monitor.get_metrics()
         if metrics:
             performance_monitor.log_metrics(metrics, transaction_id)
 
-        message = (
-            "Prédiction positive"
-            if pred_value == 1
-            else "Prédiction négative"
-        )
+        message = "Prédiction positive" if pred_value == 1 else "Prédiction négative"
+        return PredictionProbabilityResponse(prediction=pred_value, probabilities=proba_list, message=message)
 
-        return PredictionProbabilityResponse(
-            prediction=pred_value,
-            probabilities=proba_list,
-            message=message
-        )
-
+    except HTTPException:
+        raise
     except Exception as e:
         error_msg = f"Erreur lors de la prédiction : {str(e)}"
         logger.error(f"{error_msg} (patient age={patient.AGE})")

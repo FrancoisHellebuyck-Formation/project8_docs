@@ -503,356 +503,288 @@ data-aria-dark="Switch to auto color mode">
 </span><span data-line="368">        <span class="p">)</span>
 </span><span data-line="369">
 </span><span data-line="370">    <span class="k">try</span><span class="p">:</span>
-</span><span data-line="371">        <span class="c1"># Convertir les données Pydantic en dict</span>
-</span><span data-line="372">        <span class="n">patient_dict</span> <span class="o">=</span> <span class="n">patient</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">by_alias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span data-line="373">
-</span><span data-line="374">        <span class="c1"># Déterminer le type de modèle à utiliser</span>
-</span><span data-line="375">        <span class="n">requested_type</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span data-line="376">        <span class="k">if</span> <span class="n">model_type</span><span class="p">:</span>
-</span><span data-line="377">            <span class="k">try</span><span class="p">:</span>
-</span><span data-line="378">                <span class="n">requested_type</span> <span class="o">=</span> <span class="n">ModelType</span><span class="p">(</span><span class="n">model_type</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-</span><span data-line="379">            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-</span><span data-line="380">                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
-</span><span data-line="381">                    <span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
-</span><span data-line="382">                    <span class="n">detail</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Type de modèle invalide: </span><span class="si">{</span><span class="n">model_type</span><span class="si">}</span><span class="s2">. &quot;</span>
-</span><span data-line="383">                           <span class="sa">f</span><span class="s2">&quot;Types disponibles: </span><span class="si">{</span><span class="n">model_router</span><span class="o">.</span><span class="n">get_available_types</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span data-line="384">                <span class="p">)</span>
-</span><span data-line="385">
-</span><span data-line="386">        <span class="c1"># Mode routeur (avec pools) - préféré</span>
-</span><span data-line="387">        <span class="k">if</span> <span class="n">model_router</span><span class="p">:</span>
-</span><span data-line="388">            <span class="c1"># Utiliser le context manager pour acquérir/libérer le modèle</span>
+</span><span data-line="371">        <span class="c1"># Déterminer le type de modèle à utiliser</span>
+</span><span data-line="372">        <span class="n">requested_type</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="373">        <span class="k">if</span> <span class="n">model_type</span><span class="p">:</span>
+</span><span data-line="374">            <span class="k">try</span><span class="p">:</span>
+</span><span data-line="375">                <span class="n">requested_type</span> <span class="o">=</span> <span class="n">ModelType</span><span class="p">(</span><span class="n">model_type</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+</span><span data-line="376">            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+</span><span data-line="377">                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+</span><span data-line="378">                    <span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+</span><span data-line="379">                    <span class="n">detail</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Type de modèle invalide: </span><span class="si">{</span><span class="n">model_type</span><span class="si">}</span><span class="s2">. &quot;</span>
+</span><span data-line="380">                           <span class="sa">f</span><span class="s2">&quot;Types disponibles: </span><span class="si">{</span><span class="n">model_router</span><span class="o">.</span><span class="n">get_available_types</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="381">                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+</span><span data-line="382">
+</span><span data-line="383">        <span class="c1"># Le reste de la logique de prédiction</span>
+</span><span data-line="384">        <span class="c1"># Convertir les données Pydantic en dict</span>
+</span><span data-line="385">        <span class="n">patient_dict</span> <span class="o">=</span> <span class="n">patient</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">by_alias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="386">
+</span><span data-line="387">        <span class="c1"># Mode routeur (avec pools) - préféré</span>
+</span><span data-line="388">        <span class="k">if</span> <span class="n">model_router</span><span class="p">:</span>
 </span><span data-line="389">            <span class="k">async</span> <span class="k">with</span> <span class="n">model_router</span><span class="o">.</span><span class="n">acquire_model</span><span class="p">(</span><span class="n">requested_type</span><span class="p">)</span> <span class="k">as</span> <span class="n">model_instance</span><span class="p">:</span>
-</span><span data-line="390">                <span class="c1"># Profiler la prédiction si le monitoring est activé</span>
-</span><span data-line="391">                <span class="k">with</span> <span class="n">performance_monitor</span><span class="o">.</span><span class="n">profile</span><span class="p">():</span>
-</span><span data-line="392">                    <span class="c1"># Préparer les données avec feature engineering</span>
-</span><span data-line="393">                    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">feature_engineer</span><span class="o">.</span><span class="n">engineer_features</span><span class="p">(</span>
-</span><span data-line="394">                        <span class="n">patient_dict</span>
-</span><span data-line="395">                    <span class="p">)</span>
-</span><span data-line="396">
-</span><span data-line="397">                    <span class="c1"># Réordonner les colonnes si nécessaire</span>
-</span><span data-line="398">                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_instance</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;feature_names_in_&#39;</span><span class="p">):</span>
-</span><span data-line="399">                        <span class="n">processed_data</span> <span class="o">=</span> <span class="n">processed_data</span><span class="p">[</span>
-</span><span data-line="400">                            <span class="n">model_instance</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">feature_names_in_</span>
-</span><span data-line="401">                        <span class="p">]</span>
-</span><span data-line="402">
-</span><span data-line="403">                    <span class="c1"># Effectuer la prédiction</span>
-</span><span data-line="404">                    <span class="n">prediction</span> <span class="o">=</span> <span class="n">model_instance</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
-</span><span data-line="405">                    <span class="n">pred_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-</span><span data-line="406">
-</span><span data-line="407">                    <span class="c1"># Obtenir la probabilité si disponible</span>
-</span><span data-line="408">                    <span class="n">probability</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span data-line="409">                    <span class="k">try</span><span class="p">:</span>
-</span><span data-line="410">                        <span class="n">proba</span> <span class="o">=</span> <span class="n">model_instance</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
-</span><span data-line="411">                        <span class="n">probability</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-</span><span data-line="412">                    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-</span><span data-line="413">                        <span class="c1"># Modèle ne supporte pas predict_proba</span>
-</span><span data-line="414">                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-</span><span data-line="415">                            <span class="s2">&quot;Modèle ne supporte pas predict_proba&quot;</span>
-</span><span data-line="416">                        <span class="p">)</span>
-</span><span data-line="417">                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-</span><span data-line="418">                        <span class="c1"># Erreur lors du calcul des probabilités</span>
-</span><span data-line="419">                        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-</span><span data-line="420">                            <span class="sa">f</span><span class="s2">&quot;Erreur lors du calcul de probabilité: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span data-line="421">                        <span class="p">)</span>
-</span><span data-line="422">
-</span><span data-line="423">        <span class="c1"># Mode singleton (fallback)</span>
-</span><span data-line="424">        <span class="k">else</span><span class="p">:</span>
-</span><span data-line="425">            <span class="k">with</span> <span class="n">performance_monitor</span><span class="o">.</span><span class="n">profile</span><span class="p">():</span>
-</span><span data-line="426">                <span class="c1"># Effectuer la prédiction</span>
-</span><span data-line="427">                <span class="n">prediction</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">patient_dict</span><span class="p">)</span>
-</span><span data-line="428">                <span class="n">pred_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-</span><span data-line="429">
-</span><span data-line="430">                <span class="c1"># Obtenir la probabilité si disponible</span>
-</span><span data-line="431">                <span class="n">probability</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span data-line="432">                <span class="k">try</span><span class="p">:</span>
-</span><span data-line="433">                    <span class="n">proba</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">patient_dict</span><span class="p">)</span>
-</span><span data-line="434">                    <span class="n">probability</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-</span><span data-line="435">                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-</span><span data-line="436">                    <span class="c1"># Modèle ne supporte pas predict_proba</span>
-</span><span data-line="437">                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-</span><span data-line="438">                        <span class="s2">&quot;Modèle ne supporte pas predict_proba&quot;</span>
-</span><span data-line="439">                    <span class="p">)</span>
-</span><span data-line="440">                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-</span><span data-line="441">                    <span class="c1"># Erreur lors du calcul des probabilités</span>
-</span><span data-line="442">                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-</span><span data-line="443">                        <span class="sa">f</span><span class="s2">&quot;Erreur lors du calcul de probabilité: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span data-line="444">                    <span class="p">)</span>
-</span><span data-line="445">
-</span><span data-line="446">        <span class="c1"># Récupérer le transaction_id si disponible</span>
-</span><span data-line="447">        <span class="n">transaction_id</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="s1">&#39;transaction_id&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-</span><span data-line="448">
-</span><span data-line="449">        <span class="c1"># Récupérer et logger les métriques de performance</span>
-</span><span data-line="450">        <span class="n">metrics</span> <span class="o">=</span> <span class="n">performance_monitor</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">()</span>
-</span><span data-line="451">        <span class="k">if</span> <span class="n">metrics</span><span class="p">:</span>
-</span><span data-line="452">            <span class="n">performance_monitor</span><span class="o">.</span><span class="n">log_metrics</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">transaction_id</span><span class="p">)</span>
-</span><span data-line="453">
-</span><span data-line="454">        <span class="c1"># Message de résultat</span>
-</span><span data-line="455">        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
-</span><span data-line="456">            <span class="s2">&quot;Prédiction positive&quot;</span>
-</span><span data-line="457">            <span class="k">if</span> <span class="n">pred_value</span> <span class="o">==</span> <span class="mi">1</span>
-</span><span data-line="458">            <span class="k">else</span> <span class="s2">&quot;Prédiction négative&quot;</span>
-</span><span data-line="459">        <span class="p">)</span>
-</span><span data-line="460">
-</span><span data-line="461">        <span class="k">return</span> <span class="n">PredictionResponse</span><span class="p">(</span>
-</span><span data-line="462">            <span class="n">prediction</span><span class="o">=</span><span class="n">pred_value</span><span class="p">,</span>
-</span><span data-line="463">            <span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">,</span>
-</span><span data-line="464">            <span class="n">message</span><span class="o">=</span><span class="n">message</span>
-</span><span data-line="465">        <span class="p">)</span>
-</span><span data-line="466">
-</span><span data-line="467">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-</span><span data-line="468">        <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Erreur lors de la prédiction : </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span data-line="469">        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2"> (patient age=</span><span class="si">{</span><span class="n">patient</span><span class="o">.</span><span class="n">AGE</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-</span><span data-line="470">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">error_msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
+</span><span data-line="390">                <span class="k">with</span> <span class="n">performance_monitor</span><span class="o">.</span><span class="n">profile</span><span class="p">():</span>
+</span><span data-line="391">                    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">feature_engineer</span><span class="o">.</span><span class="n">engineer_features</span><span class="p">(</span><span class="n">patient_dict</span><span class="p">)</span>
+</span><span data-line="392">                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_instance</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;feature_names_in_&#39;</span><span class="p">):</span>
+</span><span data-line="393">                        <span class="n">processed_data</span> <span class="o">=</span> <span class="n">processed_data</span><span class="p">[</span><span class="n">model_instance</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">feature_names_in_</span><span class="p">]</span>
+</span><span data-line="394">                    <span class="n">prediction</span> <span class="o">=</span> <span class="n">model_instance</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
+</span><span data-line="395">                    <span class="n">pred_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span><span data-line="396">                    <span class="n">probability</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="397">                    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="398">                        <span class="n">proba</span> <span class="o">=</span> <span class="n">model_instance</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
+</span><span data-line="399">                        <span class="n">probability</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+</span><span data-line="400">                    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+</span><span data-line="401">                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Modèle ne supporte pas predict_proba&quot;</span><span class="p">)</span>
+</span><span data-line="402">                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="403">                        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Erreur lors du calcul de probabilité: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="404">
+</span><span data-line="405">        <span class="c1"># Mode singleton (fallback)</span>
+</span><span data-line="406">        <span class="k">else</span><span class="p">:</span>
+</span><span data-line="407">            <span class="k">with</span> <span class="n">performance_monitor</span><span class="o">.</span><span class="n">profile</span><span class="p">():</span>
+</span><span data-line="408">                <span class="n">prediction</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">patient_dict</span><span class="p">)</span>
+</span><span data-line="409">                <span class="n">pred_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span><span data-line="410">                <span class="n">probability</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="411">                <span class="k">try</span><span class="p">:</span>
+</span><span data-line="412">                    <span class="n">proba</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">patient_dict</span><span class="p">)</span>
+</span><span data-line="413">                    <span class="n">probability</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">proba</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+</span><span data-line="414">                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+</span><span data-line="415">                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Modèle ne supporte pas predict_proba&quot;</span><span class="p">)</span>
+</span><span data-line="416">                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="417">                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Erreur lors du calcul de probabilité: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="418">
+</span><span data-line="419">        <span class="n">transaction_id</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="s1">&#39;transaction_id&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</span><span data-line="420">        <span class="n">metrics</span> <span class="o">=</span> <span class="n">performance_monitor</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">()</span>
+</span><span data-line="421">        <span class="k">if</span> <span class="n">metrics</span><span class="p">:</span>
+</span><span data-line="422">            <span class="n">performance_monitor</span><span class="o">.</span><span class="n">log_metrics</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">transaction_id</span><span class="p">)</span>
+</span><span data-line="423">
+</span><span data-line="424">        <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Prédiction positive&quot;</span> <span class="k">if</span> <span class="n">pred_value</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;Prédiction négative&quot;</span>
+</span><span data-line="425">        <span class="k">return</span> <span class="n">PredictionResponse</span><span class="p">(</span><span class="n">prediction</span><span class="o">=</span><span class="n">pred_value</span><span class="p">,</span> <span class="n">probability</span><span class="o">=</span><span class="n">probability</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>
+</span><span data-line="426">
+</span><span data-line="427">    <span class="k">except</span> <span class="n">HTTPException</span><span class="p">:</span>
+</span><span data-line="428">        <span class="k">raise</span>
+</span><span data-line="429">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="430">        <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Erreur lors de la prédiction : </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="431">        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2"> (patient age=</span><span class="si">{</span><span class="n">patient</span><span class="o">.</span><span class="n">AGE</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</span><span data-line="432">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">error_msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
 
-</span><span data-line="471">
-</span><span data-line="472">
+</span><span data-line="433">
+</span><span data-line="434">
 <div class="viewcode-block" id="predict_proba">
 <a class="viewcode-back" href="../../../modules/api.html#src.api.main.predict_proba">[docs]</a>
-</span><span data-line="473"><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-</span><span data-line="474">    <span class="s2">&quot;/predict_proba&quot;</span><span class="p">,</span>
-</span><span data-line="475">    <span class="n">response_model</span><span class="o">=</span><span class="n">PredictionProbabilityResponse</span><span class="p">,</span>
-</span><span data-line="476">    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Prediction&quot;</span><span class="p">]</span>
-</span><span data-line="477"><span class="p">)</span>
-</span><span data-line="478"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">predict_proba</span><span class="p">(</span>
-</span><span data-line="479">    <span class="n">patient</span><span class="p">:</span> <span class="n">PatientData</span><span class="p">,</span>
-</span><span data-line="480">    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
-</span><span data-line="481">    <span class="n">model_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span>
-</span><span data-line="482">        <span class="kc">None</span><span class="p">,</span>
-</span><span data-line="483">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Type de modèle (sklearn ou onnx). &quot;</span>
-</span><span data-line="484">                    <span class="s2">&quot;Si non spécifié, utilise le modèle par défaut.&quot;</span>
-</span><span data-line="485">    <span class="p">)</span>
-</span><span data-line="486"><span class="p">):</span>
-</span><span data-line="487"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="488"><span class="sd">    Effectue une prédiction avec probabilités pour un patient.</span>
-</span><span data-line="489">
-</span><span data-line="490"><span class="sd">    Args:</span>
-</span><span data-line="491"><span class="sd">        patient: Données du patient (14 features de base).</span>
-</span><span data-line="492"><span class="sd">        request: Objet Request pour accéder au transaction_id.</span>
-</span><span data-line="493"><span class="sd">        model_type: Type de modèle à utiliser (sklearn ou onnx).</span>
-</span><span data-line="494">
-</span><span data-line="495"><span class="sd">    Returns:</span>
-</span><span data-line="496"><span class="sd">        PredictionProbabilityResponse: Résultat avec probabilités.</span>
-</span><span data-line="497"><span class="sd">    &quot;&quot;&quot;</span>
-</span><span data-line="498">    <span class="c1"># Vérifier si le routeur ou le predictor est disponible</span>
-</span><span data-line="499">    <span class="k">if</span> <span class="n">model_router</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">predictor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span data-line="500">        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Ni routeur ni predictor initialisés&quot;</span><span class="p">)</span>
-</span><span data-line="501">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
-</span><span data-line="502">            <span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-</span><span data-line="503">            <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Le modèle n&#39;est pas chargé&quot;</span>
-</span><span data-line="504">        <span class="p">)</span>
-</span><span data-line="505">
-</span><span data-line="506">    <span class="k">try</span><span class="p">:</span>
-</span><span data-line="507">        <span class="c1"># Convertir les données Pydantic en dict</span>
-</span><span data-line="508">        <span class="n">patient_dict</span> <span class="o">=</span> <span class="n">patient</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">by_alias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span data-line="509">
-</span><span data-line="510">        <span class="c1"># Déterminer le type de modèle à utiliser</span>
-</span><span data-line="511">        <span class="n">requested_type</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span data-line="512">        <span class="k">if</span> <span class="n">model_type</span><span class="p">:</span>
-</span><span data-line="513">            <span class="k">try</span><span class="p">:</span>
-</span><span data-line="514">                <span class="n">requested_type</span> <span class="o">=</span> <span class="n">ModelType</span><span class="p">(</span><span class="n">model_type</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-</span><span data-line="515">            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-</span><span data-line="516">                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
-</span><span data-line="517">                    <span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
-</span><span data-line="518">                    <span class="n">detail</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Type de modèle invalide: </span><span class="si">{</span><span class="n">model_type</span><span class="si">}</span><span class="s2">. &quot;</span>
-</span><span data-line="519">                           <span class="sa">f</span><span class="s2">&quot;Types disponibles: </span><span class="si">{</span><span class="n">model_router</span><span class="o">.</span><span class="n">get_available_types</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span data-line="520">                <span class="p">)</span>
-</span><span data-line="521">
-</span><span data-line="522">        <span class="c1"># Mode routeur (avec pools) - préféré</span>
-</span><span data-line="523">        <span class="k">if</span> <span class="n">model_router</span><span class="p">:</span>
-</span><span data-line="524">            <span class="c1"># Utiliser le context manager pour acquérir/libérer le modèle</span>
-</span><span data-line="525">            <span class="k">async</span> <span class="k">with</span> <span class="n">model_router</span><span class="o">.</span><span class="n">acquire_model</span><span class="p">(</span><span class="n">requested_type</span><span class="p">)</span> <span class="k">as</span> <span class="n">model_instance</span><span class="p">:</span>
-</span><span data-line="526">                <span class="c1"># Profiler la prédiction si le monitoring est activé</span>
-</span><span data-line="527">                <span class="k">with</span> <span class="n">performance_monitor</span><span class="o">.</span><span class="n">profile</span><span class="p">():</span>
-</span><span data-line="528">                    <span class="c1"># Préparer les données avec feature engineering</span>
-</span><span data-line="529">                    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">feature_engineer</span><span class="o">.</span><span class="n">engineer_features</span><span class="p">(</span>
-</span><span data-line="530">                        <span class="n">patient_dict</span>
-</span><span data-line="531">                    <span class="p">)</span>
-</span><span data-line="532">
-</span><span data-line="533">                    <span class="c1"># Réordonner les colonnes si nécessaire</span>
-</span><span data-line="534">                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_instance</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;feature_names_in_&#39;</span><span class="p">):</span>
-</span><span data-line="535">                        <span class="n">processed_data</span> <span class="o">=</span> <span class="n">processed_data</span><span class="p">[</span>
-</span><span data-line="536">                            <span class="n">model_instance</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">feature_names_in_</span>
-</span><span data-line="537">                        <span class="p">]</span>
-</span><span data-line="538">
-</span><span data-line="539">                    <span class="c1"># Effectuer la prédiction avec probabilités</span>
-</span><span data-line="540">                    <span class="n">probabilities</span> <span class="o">=</span> <span class="n">model_instance</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
-</span><span data-line="541">                    <span class="n">proba_list</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-</span><span data-line="542">
-</span><span data-line="543">                    <span class="c1"># Obtenir la prédiction</span>
-</span><span data-line="544">                    <span class="n">prediction</span> <span class="o">=</span> <span class="n">model_instance</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
-</span><span data-line="545">                    <span class="n">pred_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-</span><span data-line="546">
-</span><span data-line="547">        <span class="c1"># Mode singleton (fallback)</span>
-</span><span data-line="548">        <span class="k">else</span><span class="p">:</span>
-</span><span data-line="549">            <span class="k">with</span> <span class="n">performance_monitor</span><span class="o">.</span><span class="n">profile</span><span class="p">():</span>
-</span><span data-line="550">                <span class="c1"># Effectuer la prédiction avec probabilités</span>
-</span><span data-line="551">                <span class="n">probabilities</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">patient_dict</span><span class="p">)</span>
-</span><span data-line="552">                <span class="n">proba_list</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-</span><span data-line="553">
-</span><span data-line="554">                <span class="c1"># Obtenir la prédiction</span>
-</span><span data-line="555">                <span class="n">prediction</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">patient_dict</span><span class="p">)</span>
-</span><span data-line="556">                <span class="n">pred_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-</span><span data-line="557">
-</span><span data-line="558">        <span class="c1"># Récupérer le transaction_id si disponible</span>
-</span><span data-line="559">        <span class="n">transaction_id</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="s1">&#39;transaction_id&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-</span><span data-line="560">
-</span><span data-line="561">        <span class="c1"># Récupérer et logger les métriques de performance</span>
-</span><span data-line="562">        <span class="n">metrics</span> <span class="o">=</span> <span class="n">performance_monitor</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">()</span>
-</span><span data-line="563">        <span class="k">if</span> <span class="n">metrics</span><span class="p">:</span>
-</span><span data-line="564">            <span class="n">performance_monitor</span><span class="o">.</span><span class="n">log_metrics</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">transaction_id</span><span class="p">)</span>
-</span><span data-line="565">
-</span><span data-line="566">        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
-</span><span data-line="567">            <span class="s2">&quot;Prédiction positive&quot;</span>
-</span><span data-line="568">            <span class="k">if</span> <span class="n">pred_value</span> <span class="o">==</span> <span class="mi">1</span>
-</span><span data-line="569">            <span class="k">else</span> <span class="s2">&quot;Prédiction négative&quot;</span>
-</span><span data-line="570">        <span class="p">)</span>
-</span><span data-line="571">
-</span><span data-line="572">        <span class="k">return</span> <span class="n">PredictionProbabilityResponse</span><span class="p">(</span>
-</span><span data-line="573">            <span class="n">prediction</span><span class="o">=</span><span class="n">pred_value</span><span class="p">,</span>
-</span><span data-line="574">            <span class="n">probabilities</span><span class="o">=</span><span class="n">proba_list</span><span class="p">,</span>
-</span><span data-line="575">            <span class="n">message</span><span class="o">=</span><span class="n">message</span>
-</span><span data-line="576">        <span class="p">)</span>
-</span><span data-line="577">
-</span><span data-line="578">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-</span><span data-line="579">        <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Erreur lors de la prédiction : </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span data-line="580">        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2"> (patient age=</span><span class="si">{</span><span class="n">patient</span><span class="o">.</span><span class="n">AGE</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-</span><span data-line="581">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">error_msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
+</span><span data-line="435"><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+</span><span data-line="436">    <span class="s2">&quot;/predict_proba&quot;</span><span class="p">,</span>
+</span><span data-line="437">    <span class="n">response_model</span><span class="o">=</span><span class="n">PredictionProbabilityResponse</span><span class="p">,</span>
+</span><span data-line="438">    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Prediction&quot;</span><span class="p">]</span>
+</span><span data-line="439"><span class="p">)</span>
+</span><span data-line="440"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">predict_proba</span><span class="p">(</span>
+</span><span data-line="441">    <span class="n">patient</span><span class="p">:</span> <span class="n">PatientData</span><span class="p">,</span>
+</span><span data-line="442">    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
+</span><span data-line="443">    <span class="n">model_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span>
+</span><span data-line="444">        <span class="kc">None</span><span class="p">,</span>
+</span><span data-line="445">        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Type de modèle (sklearn ou onnx). &quot;</span>
+</span><span data-line="446">                    <span class="s2">&quot;Si non spécifié, utilise le modèle par défaut.&quot;</span>
+</span><span data-line="447">    <span class="p">)</span>
+</span><span data-line="448"><span class="p">):</span>
+</span><span data-line="449"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="450"><span class="sd">    Effectue une prédiction avec probabilités pour un patient.</span>
+</span><span data-line="451">
+</span><span data-line="452"><span class="sd">    Args:</span>
+</span><span data-line="453"><span class="sd">        patient: Données du patient (14 features de base).</span>
+</span><span data-line="454"><span class="sd">        request: Objet Request pour accéder au transaction_id.</span>
+</span><span data-line="455"><span class="sd">        model_type: Type de modèle à utiliser (sklearn ou onnx).</span>
+</span><span data-line="456">
+</span><span data-line="457"><span class="sd">    Returns:</span>
+</span><span data-line="458"><span class="sd">        PredictionProbabilityResponse: Résultat avec probabilités.</span>
+</span><span data-line="459"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="460">    <span class="c1"># Vérifier si le routeur ou le predictor est disponible</span>
+</span><span data-line="461">    <span class="k">if</span> <span class="n">model_router</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">predictor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="462">        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Ni routeur ni predictor initialisés&quot;</span><span class="p">)</span>
+</span><span data-line="463">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+</span><span data-line="464">            <span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+</span><span data-line="465">            <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Le modèle n&#39;est pas chargé&quot;</span>
+</span><span data-line="466">        <span class="p">)</span>
+</span><span data-line="467">
+</span><span data-line="468">    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="469">        <span class="c1"># Déterminer le type de modèle à utiliser</span>
+</span><span data-line="470">        <span class="n">requested_type</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="471">        <span class="k">if</span> <span class="n">model_type</span><span class="p">:</span>
+</span><span data-line="472">            <span class="k">try</span><span class="p">:</span>
+</span><span data-line="473">                <span class="n">requested_type</span> <span class="o">=</span> <span class="n">ModelType</span><span class="p">(</span><span class="n">model_type</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+</span><span data-line="474">            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+</span><span data-line="475">                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+</span><span data-line="476">                    <span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+</span><span data-line="477">                    <span class="n">detail</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Type de modèle invalide: </span><span class="si">{</span><span class="n">model_type</span><span class="si">}</span><span class="s2">. &quot;</span>
+</span><span data-line="478">                           <span class="sa">f</span><span class="s2">&quot;Types disponibles: </span><span class="si">{</span><span class="n">model_router</span><span class="o">.</span><span class="n">get_available_types</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="479">                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+</span><span data-line="480">
+</span><span data-line="481">        <span class="c1"># Le reste de la logique de prédiction</span>
+</span><span data-line="482">        <span class="n">patient_dict</span> <span class="o">=</span> <span class="n">patient</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">by_alias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="483">        <span class="k">if</span> <span class="n">model_router</span><span class="p">:</span>
+</span><span data-line="484">            <span class="k">async</span> <span class="k">with</span> <span class="n">model_router</span><span class="o">.</span><span class="n">acquire_model</span><span class="p">(</span><span class="n">requested_type</span><span class="p">)</span> <span class="k">as</span> <span class="n">model_instance</span><span class="p">:</span>
+</span><span data-line="485">                <span class="k">with</span> <span class="n">performance_monitor</span><span class="o">.</span><span class="n">profile</span><span class="p">():</span>
+</span><span data-line="486">                    <span class="n">processed_data</span> <span class="o">=</span> <span class="n">feature_engineer</span><span class="o">.</span><span class="n">engineer_features</span><span class="p">(</span><span class="n">patient_dict</span><span class="p">)</span>
+</span><span data-line="487">                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model_instance</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;feature_names_in_&#39;</span><span class="p">):</span>
+</span><span data-line="488">                        <span class="n">processed_data</span> <span class="o">=</span> <span class="n">processed_data</span><span class="p">[</span><span class="n">model_instance</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">feature_names_in_</span><span class="p">]</span>
+</span><span data-line="489">                    <span class="n">probabilities</span> <span class="o">=</span> <span class="n">model_instance</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
+</span><span data-line="490">                    <span class="n">proba_list</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</span><span data-line="491">                    <span class="n">prediction</span> <span class="o">=</span> <span class="n">model_instance</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
+</span><span data-line="492">                    <span class="n">pred_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span><span data-line="493">        <span class="k">else</span><span class="p">:</span>
+</span><span data-line="494">            <span class="k">with</span> <span class="n">performance_monitor</span><span class="o">.</span><span class="n">profile</span><span class="p">():</span>
+</span><span data-line="495">                <span class="n">probabilities</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">patient_dict</span><span class="p">)</span>
+</span><span data-line="496">                <span class="n">proba_list</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</span><span data-line="497">                <span class="n">prediction</span> <span class="o">=</span> <span class="n">predictor</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">patient_dict</span><span class="p">)</span>
+</span><span data-line="498">                <span class="n">pred_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span><span data-line="499">
+</span><span data-line="500">        <span class="n">transaction_id</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="s1">&#39;transaction_id&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</span><span data-line="501">        <span class="n">metrics</span> <span class="o">=</span> <span class="n">performance_monitor</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">()</span>
+</span><span data-line="502">        <span class="k">if</span> <span class="n">metrics</span><span class="p">:</span>
+</span><span data-line="503">            <span class="n">performance_monitor</span><span class="o">.</span><span class="n">log_metrics</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">transaction_id</span><span class="p">)</span>
+</span><span data-line="504">
+</span><span data-line="505">        <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Prédiction positive&quot;</span> <span class="k">if</span> <span class="n">pred_value</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;Prédiction négative&quot;</span>
+</span><span data-line="506">        <span class="k">return</span> <span class="n">PredictionProbabilityResponse</span><span class="p">(</span><span class="n">prediction</span><span class="o">=</span><span class="n">pred_value</span><span class="p">,</span> <span class="n">probabilities</span><span class="o">=</span><span class="n">proba_list</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>
+</span><span data-line="507">
+</span><span data-line="508">    <span class="k">except</span> <span class="n">HTTPException</span><span class="p">:</span>
+</span><span data-line="509">        <span class="k">raise</span>
+</span><span data-line="510">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="511">        <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Erreur lors de la prédiction : </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="512">        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2"> (patient age=</span><span class="si">{</span><span class="n">patient</span><span class="o">.</span><span class="n">AGE</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</span><span data-line="513">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">error_msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
 
-</span><span data-line="582">
-</span><span data-line="583">
+</span><span data-line="514">
+</span><span data-line="515">
 <div class="viewcode-block" id="get_pool_stats">
 <a class="viewcode-back" href="../../../modules/api.html#src.api.main.get_pool_stats">[docs]</a>
-</span><span data-line="584"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/pool/stats&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Pool&quot;</span><span class="p">])</span>
-</span><span data-line="585"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_pool_stats</span><span class="p">():</span>
-</span><span data-line="586"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="587"><span class="sd">    Récupère les statistiques de tous les pools de modèles.</span>
-</span><span data-line="588">
-</span><span data-line="589"><span class="sd">    Returns:</span>
-</span><span data-line="590"><span class="sd">        dict: Statistiques de tous les pools (sklearn, onnx).</span>
-</span><span data-line="591"><span class="sd">    &quot;&quot;&quot;</span>
-</span><span data-line="592">    <span class="k">if</span> <span class="n">model_router</span><span class="p">:</span>
-</span><span data-line="593">        <span class="n">stats</span> <span class="o">=</span> <span class="n">model_router</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
-</span><span data-line="594">        <span class="k">return</span> <span class="p">{</span>
-</span><span data-line="595">            <span class="s2">&quot;router_enabled&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-</span><span data-line="596">            <span class="s2">&quot;stats&quot;</span><span class="p">:</span> <span class="n">stats</span>
-</span><span data-line="597">        <span class="p">}</span>
-</span><span data-line="598">    <span class="k">else</span><span class="p">:</span>
-</span><span data-line="599">        <span class="k">return</span> <span class="p">{</span>
-</span><span data-line="600">            <span class="s2">&quot;router_enabled&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-</span><span data-line="601">            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Routeur non initialisé (mode singleton actif)&quot;</span>
-</span><span data-line="602">        <span class="p">}</span></div>
+</span><span data-line="516"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/pool/stats&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Pool&quot;</span><span class="p">])</span>
+</span><span data-line="517"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_pool_stats</span><span class="p">():</span>
+</span><span data-line="518"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="519"><span class="sd">    Récupère les statistiques de tous les pools de modèles.</span>
+</span><span data-line="520">
+</span><span data-line="521"><span class="sd">    Returns:</span>
+</span><span data-line="522"><span class="sd">        dict: Statistiques de tous les pools (sklearn, onnx).</span>
+</span><span data-line="523"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="524">    <span class="k">if</span> <span class="n">model_router</span><span class="p">:</span>
+</span><span data-line="525">        <span class="n">stats</span> <span class="o">=</span> <span class="n">model_router</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+</span><span data-line="526">        <span class="k">return</span> <span class="p">{</span>
+</span><span data-line="527">            <span class="s2">&quot;router_enabled&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+</span><span data-line="528">            <span class="s2">&quot;stats&quot;</span><span class="p">:</span> <span class="n">stats</span>
+</span><span data-line="529">        <span class="p">}</span>
+</span><span data-line="530">    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="531">        <span class="k">return</span> <span class="p">{</span>
+</span><span data-line="532">            <span class="s2">&quot;router_enabled&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+</span><span data-line="533">            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Routeur non initialisé (mode singleton actif)&quot;</span>
+</span><span data-line="534">        <span class="p">}</span></div>
 
-</span><span data-line="603">
-</span><span data-line="604">
+</span><span data-line="535">
+</span><span data-line="536">
 <div class="viewcode-block" id="get_model_types">
 <a class="viewcode-back" href="../../../modules/api.html#src.api.main.get_model_types">[docs]</a>
-</span><span data-line="605"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/models/types&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Models&quot;</span><span class="p">])</span>
-</span><span data-line="606"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_model_types</span><span class="p">():</span>
-</span><span data-line="607"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="608"><span class="sd">    Récupère la liste des types de modèles disponibles.</span>
-</span><span data-line="609">
-</span><span data-line="610"><span class="sd">    Returns:</span>
-</span><span data-line="611"><span class="sd">        dict: Liste des types disponibles et type par défaut.</span>
-</span><span data-line="612"><span class="sd">    &quot;&quot;&quot;</span>
-</span><span data-line="613">    <span class="k">if</span> <span class="n">model_router</span><span class="p">:</span>
-</span><span data-line="614">        <span class="k">return</span> <span class="p">{</span>
-</span><span data-line="615">            <span class="s2">&quot;available_types&quot;</span><span class="p">:</span> <span class="n">model_router</span><span class="o">.</span><span class="n">get_available_types</span><span class="p">(),</span>
-</span><span data-line="616">            <span class="s2">&quot;default_type&quot;</span><span class="p">:</span> <span class="n">model_router</span><span class="o">.</span><span class="n">_default_type</span><span class="o">.</span><span class="n">value</span>
-</span><span data-line="617">        <span class="p">}</span>
-</span><span data-line="618">    <span class="k">else</span><span class="p">:</span>
-</span><span data-line="619">        <span class="k">return</span> <span class="p">{</span>
-</span><span data-line="620">            <span class="s2">&quot;available_types&quot;</span><span class="p">:</span> <span class="p">[],</span>
-</span><span data-line="621">            <span class="s2">&quot;default_type&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-</span><span data-line="622">            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Routeur non initialisé&quot;</span>
-</span><span data-line="623">        <span class="p">}</span></div>
+</span><span data-line="537"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/models/types&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Models&quot;</span><span class="p">])</span>
+</span><span data-line="538"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_model_types</span><span class="p">():</span>
+</span><span data-line="539"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="540"><span class="sd">    Récupère la liste des types de modèles disponibles.</span>
+</span><span data-line="541">
+</span><span data-line="542"><span class="sd">    Returns:</span>
+</span><span data-line="543"><span class="sd">        dict: Liste des types disponibles et type par défaut.</span>
+</span><span data-line="544"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="545">    <span class="k">if</span> <span class="n">model_router</span><span class="p">:</span>
+</span><span data-line="546">        <span class="k">return</span> <span class="p">{</span>
+</span><span data-line="547">            <span class="s2">&quot;available_types&quot;</span><span class="p">:</span> <span class="n">model_router</span><span class="o">.</span><span class="n">get_available_types</span><span class="p">(),</span>
+</span><span data-line="548">            <span class="s2">&quot;default_type&quot;</span><span class="p">:</span> <span class="n">model_router</span><span class="o">.</span><span class="n">_default_type</span><span class="o">.</span><span class="n">value</span>
+</span><span data-line="549">        <span class="p">}</span>
+</span><span data-line="550">    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="551">        <span class="k">return</span> <span class="p">{</span>
+</span><span data-line="552">            <span class="s2">&quot;available_types&quot;</span><span class="p">:</span> <span class="p">[],</span>
+</span><span data-line="553">            <span class="s2">&quot;default_type&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+</span><span data-line="554">            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Routeur non initialisé&quot;</span>
+</span><span data-line="555">        <span class="p">}</span></div>
 
-</span><span data-line="624">
-</span><span data-line="625">
+</span><span data-line="556">
+</span><span data-line="557">
 <div class="viewcode-block" id="get_logs">
 <a class="viewcode-back" href="../../../modules/api.html#src.api.main.get_logs">[docs]</a>
-</span><span data-line="626"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/logs&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">LogsResponse</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Logs&quot;</span><span class="p">])</span>
-</span><span data-line="627"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_logs</span><span class="p">(</span>
-</span><span data-line="628">    <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Nombre de logs&quot;</span><span class="p">),</span>
-</span><span data-line="629">    <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Offset pour la pagination&quot;</span><span class="p">)</span>
-</span><span data-line="630"><span class="p">):</span>
-</span><span data-line="631"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="632"><span class="sd">    Récupère les logs de l&#39;API depuis Redis avec pagination.</span>
-</span><span data-line="633">
-</span><span data-line="634"><span class="sd">    Args:</span>
-</span><span data-line="635"><span class="sd">        limit: Nombre maximum de logs à récupérer.</span>
-</span><span data-line="636"><span class="sd">        offset: Nombre de logs à sauter (pour la pagination).</span>
-</span><span data-line="637">
-</span><span data-line="638"><span class="sd">    Returns:</span>
-</span><span data-line="639"><span class="sd">        LogsResponse: Liste des logs avec métadonnées de pagination.</span>
-</span><span data-line="640"><span class="sd">    &quot;&quot;&quot;</span>
-</span><span data-line="641">    <span class="k">try</span><span class="p">:</span>
-</span><span data-line="642">        <span class="n">result</span> <span class="o">=</span> <span class="n">get_redis_logs</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
-</span><span data-line="643">        <span class="n">logs</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;logs&quot;</span><span class="p">]</span>
-</span><span data-line="644">        <span class="n">total</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span>
-</span><span data-line="645">
-</span><span data-line="646">        <span class="c1"># Parser les logs pour extraire les informations</span>
-</span><span data-line="647">        <span class="n">log_entries</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span data-line="648">        <span class="k">for</span> <span class="n">log_str</span> <span class="ow">in</span> <span class="n">logs</span><span class="p">:</span>
-</span><span data-line="649">            <span class="c1"># Le format est: &quot;timestamp - name - level - message&quot;</span>
-</span><span data-line="650">            <span class="n">parts</span> <span class="o">=</span> <span class="n">log_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; - &quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-</span><span data-line="651">            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
-</span><span data-line="652">                <span class="n">log_entries</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-</span><span data-line="653">                    <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-</span><span data-line="654">                    <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-</span><span data-line="655">                    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
-</span><span data-line="656">                    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="kc">None</span>
-</span><span data-line="657">                <span class="p">})</span>
-</span><span data-line="658">
-</span><span data-line="659">        <span class="k">return</span> <span class="n">LogsResponse</span><span class="p">(</span>
-</span><span data-line="660">            <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span>
-</span><span data-line="661">            <span class="n">logs</span><span class="o">=</span><span class="n">log_entries</span>
-</span><span data-line="662">        <span class="p">)</span>
-</span><span data-line="663">
-</span><span data-line="664">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-</span><span data-line="665">        <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Erreur lors de la récupération des logs : </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span data-line="666">        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
-</span><span data-line="667">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">error_msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
+</span><span data-line="558"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/logs&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">LogsResponse</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Logs&quot;</span><span class="p">])</span>
+</span><span data-line="559"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_logs</span><span class="p">(</span>
+</span><span data-line="560">    <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Nombre de logs&quot;</span><span class="p">),</span>
+</span><span data-line="561">    <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Offset pour la pagination&quot;</span><span class="p">)</span>
+</span><span data-line="562"><span class="p">):</span>
+</span><span data-line="563"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="564"><span class="sd">    Récupère les logs de l&#39;API depuis Redis avec pagination.</span>
+</span><span data-line="565">
+</span><span data-line="566"><span class="sd">    Args:</span>
+</span><span data-line="567"><span class="sd">        limit: Nombre maximum de logs à récupérer.</span>
+</span><span data-line="568"><span class="sd">        offset: Nombre de logs à sauter (pour la pagination).</span>
+</span><span data-line="569">
+</span><span data-line="570"><span class="sd">    Returns:</span>
+</span><span data-line="571"><span class="sd">        LogsResponse: Liste des logs avec métadonnées de pagination.</span>
+</span><span data-line="572"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="573">    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="574">        <span class="n">result</span> <span class="o">=</span> <span class="n">get_redis_logs</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
+</span><span data-line="575">        <span class="n">logs</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;logs&quot;</span><span class="p">]</span>
+</span><span data-line="576">        <span class="n">total</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span>
+</span><span data-line="577">
+</span><span data-line="578">        <span class="c1"># Parser les logs pour extraire les informations</span>
+</span><span data-line="579">        <span class="n">log_entries</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span data-line="580">        <span class="k">for</span> <span class="n">log_str</span> <span class="ow">in</span> <span class="n">logs</span><span class="p">:</span>
+</span><span data-line="581">            <span class="c1"># Le format est: &quot;timestamp - name - level - message&quot;</span>
+</span><span data-line="582">            <span class="n">parts</span> <span class="o">=</span> <span class="n">log_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; - &quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span><span data-line="583">            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+</span><span data-line="584">                <span class="n">log_entries</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+</span><span data-line="585">                    <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</span><span data-line="586">                    <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+</span><span data-line="587">                    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+</span><span data-line="588">                    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="kc">None</span>
+</span><span data-line="589">                <span class="p">})</span>
+</span><span data-line="590">
+</span><span data-line="591">        <span class="k">return</span> <span class="n">LogsResponse</span><span class="p">(</span>
+</span><span data-line="592">            <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span>
+</span><span data-line="593">            <span class="n">logs</span><span class="o">=</span><span class="n">log_entries</span>
+</span><span data-line="594">        <span class="p">)</span>
+</span><span data-line="595">
+</span><span data-line="596">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="597">        <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Erreur lors de la récupération des logs : </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="598">        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+</span><span data-line="599">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">error_msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
 
-</span><span data-line="668">
-</span><span data-line="669">
+</span><span data-line="600">
+</span><span data-line="601">
 <div class="viewcode-block" id="clear_logs">
 <a class="viewcode-back" href="../../../modules/api.html#src.api.main.clear_logs">[docs]</a>
-</span><span data-line="670"><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/logs&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Logs&quot;</span><span class="p">])</span>
-</span><span data-line="671"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">clear_logs</span><span class="p">():</span>
-</span><span data-line="672"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="673"><span class="sd">    Supprime tous les logs.</span>
-</span><span data-line="674">
-</span><span data-line="675"><span class="sd">    Returns:</span>
-</span><span data-line="676"><span class="sd">        dict: Message de confirmation.</span>
-</span><span data-line="677"><span class="sd">    &quot;&quot;&quot;</span>
-</span><span data-line="678">    <span class="k">try</span><span class="p">:</span>
-</span><span data-line="679">        <span class="n">success</span> <span class="o">=</span> <span class="n">clear_redis_logs</span><span class="p">()</span>
-</span><span data-line="680">
-</span><span data-line="681">        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
-</span><span data-line="682">            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Logs supprimés&quot;</span><span class="p">)</span>
-</span><span data-line="683">            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Logs supprimés avec succès&quot;</span><span class="p">}</span>
-</span><span data-line="684">        <span class="k">else</span><span class="p">:</span>
-</span><span data-line="685">            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
-</span><span data-line="686">                <span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-</span><span data-line="687">                <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Échec de la suppression des logs&quot;</span>
-</span><span data-line="688">            <span class="p">)</span>
-</span><span data-line="689">
-</span><span data-line="690">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-</span><span data-line="691">        <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Erreur lors de la suppression des logs : </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span data-line="692">        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
-</span><span data-line="693">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">error_msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
+</span><span data-line="602"><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/logs&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Logs&quot;</span><span class="p">])</span>
+</span><span data-line="603"><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">clear_logs</span><span class="p">():</span>
+</span><span data-line="604"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="605"><span class="sd">    Supprime tous les logs.</span>
+</span><span data-line="606">
+</span><span data-line="607"><span class="sd">    Returns:</span>
+</span><span data-line="608"><span class="sd">        dict: Message de confirmation.</span>
+</span><span data-line="609"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="610">    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="611">        <span class="n">success</span> <span class="o">=</span> <span class="n">clear_redis_logs</span><span class="p">()</span>
+</span><span data-line="612">
+</span><span data-line="613">        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+</span><span data-line="614">            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Logs supprimés&quot;</span><span class="p">)</span>
+</span><span data-line="615">            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Logs supprimés avec succès&quot;</span><span class="p">}</span>
+</span><span data-line="616">        <span class="k">else</span><span class="p">:</span>
+</span><span data-line="617">            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+</span><span data-line="618">                <span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+</span><span data-line="619">                <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Échec de la suppression des logs&quot;</span>
+</span><span data-line="620">            <span class="p">)</span>
+</span><span data-line="621">
+</span><span data-line="622">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span><span data-line="623">        <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Erreur lors de la suppression des logs : </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="624">        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+</span><span data-line="625">        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">error_msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
 
-</span><span data-line="694">
-</span><span data-line="695">
-</span><span data-line="696"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-</span><span data-line="697">    <span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
-</span><span data-line="698">
-</span><span data-line="699">    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-</span><span data-line="700">        <span class="s2">&quot;src.api.main:app&quot;</span><span class="p">,</span>
-</span><span data-line="701">        <span class="n">host</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">API_HOST</span><span class="p">,</span>
-</span><span data-line="702">        <span class="n">port</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">API_PORT</span><span class="p">,</span>
-</span><span data-line="703">        <span class="n">reload</span><span class="o">=</span><span class="kc">True</span>
-</span><span data-line="704">    <span class="p">)</span>
+</span><span data-line="626">
+</span><span data-line="627">
+</span><span data-line="628"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span data-line="629">    <span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
+</span><span data-line="630">
+</span><span data-line="631">    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+</span><span data-line="632">        <span class="s2">&quot;src.api.main:app&quot;</span><span class="p">,</span>
+</span><span data-line="633">        <span class="n">host</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">API_HOST</span><span class="p">,</span>
+</span><span data-line="634">        <span class="n">port</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">API_PORT</span><span class="p">,</span>
+</span><span data-line="635">        <span class="n">reload</span><span class="o">=</span><span class="kc">True</span>
+</span><span data-line="636">    <span class="p">)</span>
 </span></pre></div>
         </article><button class="back-to-top" type="button">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

@@ -11,6 +11,30 @@ Ce module teste tous les endpoints de l'API:
 """
 
 from fastapi import status
+from unittest.mock import MagicMock
+import pytest
+from contextlib import asynccontextmanager
+from fastapi.testclient import TestClient
+
+
+@pytest.fixture
+def singleton_client(monkeypatch):
+    """
+    Client de test qui force l'API en mode singleton
+    en désactivant le model_router.
+    """
+    from src.api.main import app
+
+    # Force le mode singleton
+    monkeypatch.setattr("src.api.main.model_router", None)
+
+    # Mock le lifespan pour éviter l'initialisation réelle
+    @asynccontextmanager
+    async def mock_lifespan(app):
+        yield
+    monkeypatch.setattr("src.api.main.lifespan", mock_lifespan)
+
+    return TestClient(app)
 
 
 class TestRootEndpoint:
@@ -76,7 +100,7 @@ class TestPredictEndpoint:
         assert "probability" in data
         assert "message" in data
         assert data["prediction"] in [0, 1]
-        assert isinstance(data["probability"], (float, type(None)))
+        assert data["probability"] == pytest.approx(0.8)
 
     def test_predict_returns_correct_message(
         self, api_client, sample_patient_data
@@ -172,6 +196,7 @@ class TestPredictProbaEndpoint:
         assert "probabilities" in data
         assert "message" in data
         assert len(data["probabilities"]) == 2  # Deux classes
+        assert data["probabilities"] == pytest.approx([0.2, 0.8])
 
     def test_predict_proba_probabilities_sum_to_one(
         self, api_client, sample_patient_data
@@ -367,3 +392,44 @@ class TestAPIErrorHandling:
             status.HTTP_200_OK,
             status.HTTP_500_INTERNAL_SERVER_ERROR
         ]
+
+class TestSingletonMode:
+    """Tests for the singleton fallback mode."""
+
+    def test_predict_singleton_mode(self, singleton_client, monkeypatch, sample_patient_data):
+        """Tests the /predict endpoint when the app is in singleton mode."""
+        import numpy as np
+        mock_predictor = MagicMock()
+        mock_predictor.predict.return_value = [1]
+        mock_predictor.predict_proba.return_value = np.array([[0.1, 0.9]])
+        monkeypatch.setattr("src.api.main.predictor", mock_predictor)
+        monkeypatch.setattr("src.api.main.feature_engineer", MagicMock())
+
+        response = singleton_client.post("/predict", json=sample_patient_data)
+        assert response.status_code == 200
+        data = response.json()
+        assert data["prediction"] == 1
+        assert data["probability"] == pytest.approx(0.9)
+        mock_predictor.predict.assert_called_once()
+
+    def test_predict_proba_singleton_mode(self, singleton_client, monkeypatch, sample_patient_data):
+        """Tests the /predict_proba endpoint when the app is in singleton mode."""
+        import numpy as np
+        mock_predictor = MagicMock()
+        mock_predictor.predict.return_value = [1]
+        mock_predictor.predict_proba.return_value = np.array([[0.1, 0.9]])
+        monkeypatch.setattr("src.api.main.predictor", mock_predictor)
+        monkeypatch.setattr("src.api.main.feature_engineer", MagicMock())
+
+        response = singleton_client.post("/predict_proba", json=sample_patient_data)
+        assert response.status_code == 200
+        data = response.json()
+        assert data["prediction"] == 1
+        assert data["probabilities"] == pytest.approx([0.1, 0.9])
+        mock_predictor.predict_proba.assert_called_once()
+
+    def test_predict_invalid_model_type(self, api_client, sample_patient_data):
+        """Tests that requesting an invalid model_type returns a 400 error."""
+        response = api_client.post("/predict?model_type=invalid_type", json=sample_patient_data)
+        assert response.status_code == 400
+        assert "Type de modèle invalide" in response.text
